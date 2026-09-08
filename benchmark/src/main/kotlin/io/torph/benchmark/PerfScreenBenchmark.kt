@@ -13,7 +13,8 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
-private const val PACKAGE = "io.torph.demo"
+/** The demo's `benchmark` build type carries an applicationIdSuffix so it coexists with the debug install. */
+private const val PACKAGE = "io.torph.demo.benchmark"
 
 /**
  * Frame timing while the Perf screen cycles 50 / 200 / 1000-character strings every 1.5 s.

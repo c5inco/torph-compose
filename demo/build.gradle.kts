@@ -25,6 +25,8 @@ android {
             signingConfig = signingConfigs.getByName("debug")
             matchingFallbacks += listOf("release")
             isDebuggable = false
+            // Own package so a benchmark run never replaces or uninstalls the debug install.
+            applicationIdSuffix = ".benchmark"
         }
     }
     compileOptions {

@@ -95,6 +95,9 @@ down from 80 KB before per-segment `Animatable`s were replaced by plain float ch
 ./gradlew :benchmark:connectedBenchmarkAndroidTest
 ```
 
+The benchmark variant installs as `io.torph.demo.benchmark`, so it coexists with the debug demo.
+(This needs androidx.benchmark 1.4.1+: on API 36, 1.3.x reads the 15-character kernel process name
+from `pgrep -l` and cannot match a package id longer than that.)
 Results (JSON + Perfetto traces) land in `benchmark/build/outputs/connected_android_test_additional_output/`.
 Frame timing is under `sampledMetrics`. Numbers from an arm64 API 36 emulator, so read them as
 relative, not absolute:
