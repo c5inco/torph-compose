@@ -82,13 +82,45 @@ contextual shaping survives. Above 300 segments any mode falls back to `WORD`.
 ```
 
 Instrumentation tests for the Compose layer: `./gradlew :torph-compose:connectedDebugAndroidTest`
-with an emulator running.
+with an emulator running. That suite includes `DrawAllocationTest`, which measures process-wide ART
+allocation per animated frame with ~200 live segments and fails above 16 KB/frame (a regression
+guard for per-segment lambdas or string building in the draw path; last measured 3.3 KB/frame,
+down from 80 KB before per-segment `Animatable`s were replaced by plain float channels).
+
+## Benchmarks
+
+`:benchmark` is a Macrobenchmark module targeting the demo's Perf screen:
+
+```bash
+./gradlew :benchmark:connectedBenchmarkAndroidTest
+```
+
+Results (JSON + Perfetto traces) land in `benchmark/build/outputs/connected_android_test_additional_output/`.
+Frame timing is under `sampledMetrics`. Numbers from an arm64 API 36 emulator, so read them as
+relative, not absolute:
+
+| benchmark | live segments | frame CPU P50 | P90 | P99 | overrun P50 |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| morph50 | ~50 | 3.9 ms | 7.9 ms | 21.1 ms | -9.6 ms |
+| morph200 | ~200 | 5.2 ms | 19.2 ms | 45.0 ms | -10.4 ms |
+| morph1000 (auto → word fallback) | ~360 | 18.9 ms | 21.6 ms | 31.5 ms | 2.8 ms |
+| morph1000Word | ~360 | 18.9 ms | 20.7 ms | 24.6 ms | 2.8 ms |
+
+Cold startup time to initial display: ~270 ms median on the same emulator.
+
+What the numbers say: per-frame cost is linear in live segments at roughly 50 µs per `drawText`
+on this emulator; the P99 spikes are the single frame per change that measures the new string and
+runs the diff (the JVM timing test puts segment+diff of 1000 chars at ~0.3 ms in word mode and
+~4 ms forced to graphemes, so most of that frame is text measurement). The next lever is drawing
+settled segments from a cached `GraphicsLayer` so per-frame work scales with *animating* segments
+only; it is not implemented yet.
 
 ## Status vs. plan
 
 - M1 core, M2 render, M3 parity, M4 scripts/perf: implemented.
 - M5: `maven-publish` is configured for both libraries (`publishToMavenLocal`); Maven Central
-  signing/credentials, Roborazzi screenshot tests and a Macrobenchmark module are not set up yet.
+  signing/credentials and Roborazzi screenshot tests are not set up yet. Macrobenchmark and the
+  draw-allocation guard are in place (see Benchmarks).
 - Number rolling is an odometer strip: a changed digit scrolls through every intermediate digit
   (wrapping 9 → 0) inside its clipped cell, up when the number grows and down when it shrinks. A
   digit interrupted mid-roll continues from where its strip is, with velocity preserved.

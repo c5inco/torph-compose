@@ -1,17 +1,14 @@
 package io.torph.compose
 
-import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.AnimationVector1D
-import androidx.compose.animation.core.VectorConverter
-import androidx.compose.animation.core.VisibilityThreshold
-import androidx.compose.ui.unit.constrain
+import androidx.compose.animation.core.FloatAnimationSpec
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.withFrameNanos
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
@@ -23,6 +20,7 @@ import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.LayoutDirection
+import androidx.compose.ui.unit.constrain
 import io.torph.core.DiffResult
 import io.torph.core.Segment
 import io.torph.core.SegmentKind
@@ -33,11 +31,9 @@ import io.torph.core.diffSegments
 import io.torph.core.segmentText
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
 import java.util.Locale
 import kotlin.math.ceil
-import kotlin.math.roundToInt
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 
@@ -65,38 +61,56 @@ public data class MorphOptions(
     val maxSegments: Int = 300,
 )
 
-/** One drawn segment with its animatables. Mutated only from the layout pass and the animation coroutines. */
+/**
+ * One drawn segment. All animation state is plain fields ([Channel]s) advanced by the state's frame
+ * loop; nothing here is snapshot state, so per-frame reads and writes allocate nothing.
+ */
 internal class LiveSegment(
     val id: Long,
     var segment: Segment,
     var layout: TextLayoutResult,
     var target: Offset,
     var cell: Rect,
-    initialOffset: Offset,
+    initial: Offset,
     initialAlpha: Float,
     initialScale: Float,
 ) {
-    var offset = Animatable(initialOffset, Offset.VectorConverter)
-    var alpha = Animatable(initialAlpha)
-    var scale = Animatable(initialScale)
+    val x = Channel(initial.x)
+    val y = Channel(initial.y)
+    val alpha = Channel(initialAlpha)
+    val scale = Channel(initialScale)
     var exiting = false
     var entering = false
-    /** Clip rect for rolling digits, null otherwise. */
+    /** Clip rect for a digit sliding in or out of its cell, null otherwise. */
     var clip: Rect? = null
     /** Odometer strip (old digit ... new digit) while a digit rolls; drawn instead of [layout]. */
     var strip: List<TextLayoutResult>? = null
     /** Index into [strip] (fractional) of the digit currently at the target position. */
-    var stripProgress: Animatable<Float, AnimationVector1D>? = null
+    val stripProgress = Channel(0f)
     var stripRoll: Int = 0
-    var job: Job? = null
-    /** Owns the strip roll; independent of [job] so a retarget never freezes a roll in progress. */
-    var stripJob: Job? = null
     val width: Float get() = layout.size.width.toFloat()
     val height: Float get() = layout.size.height.toFloat()
+
+    fun tick(now: Long): Boolean {
+        var active = x.tick(now)
+        active = y.tick(now) || active
+        active = alpha.tick(now) || active
+        active = scale.tick(now) || active
+        if (stripProgress.tick(now)) {
+            active = true
+        } else if (strip != null) {
+            strip = null
+            entering = false
+            clip = null
+        }
+        return active
+    }
+
+    val isActive: Boolean get() = x.active || y.active || alpha.active || scale.active || stripProgress.active
 }
 
 /**
- * Owns the segment list, animatables and layout cache behind [TextMorph]. Create with
+ * Owns the segment list, animation channels and layout cache behind [TextMorph]. Create with
  * [rememberTextMorphState] and attach with [Modifier.textMorph] for custom containers.
  */
 public class TextMorphState internal constructor(
@@ -132,15 +146,25 @@ public class TextMorphState internal constructor(
     /** Number of live (drawn) segments, including ones still exiting. */
     public val liveCount: Int get() = live.size
 
-    internal val live = mutableStateListOf<LiveSegment>()
-    internal val sizeAnim = Animatable(Size.Zero, Size.VectorConverter)
-    private var sizeTarget = Size.Zero
-    private var snapSizeUntilAnimated = true
+    internal val live = ArrayList<LiveSegment>()
+
+    /** Bumped once per animation frame (and per structural change); the draw lambda reads it. */
+    internal val frameTick = mutableIntStateOf(0)
+
+    /** Bumped only while the container size animates; the layout modifier reads it. */
+    private val sizeTick = mutableIntStateOf(0)
+    private val width = Channel(0f)
+    private val height = Channel(0f)
+
     private var nextId = 0L
-    private var generation = 0
     private var lastKey: LayoutKey? = null
-    private var layoutCache = HashMap<String, TextLayoutResult>()
+    private var lastTextForSegments: String? = null
+    private val layoutCache = HashMap<String, TextLayoutResult>()
     private var cacheStyle: TextStyle? = null
+
+    private var loop: Job? = null
+    private var lastFrameNanos = Channel.UNSET
+    private var generationAnimating = false
 
     private data class LayoutKey(
         val text: String,
@@ -164,13 +188,13 @@ public class TextMorphState internal constructor(
         if (key != prev) {
             lastKey = key
             val textChanged = prev != null && prev.text != key.text
-            apply(key, opts, morph = textChanged && !opts.snap, snapEverything = prev == null || !textChanged || opts.snap)
+            apply(key, opts, morph = textChanged && !opts.snap)
         }
-        val s = if (snapSizeUntilAnimated || opts.sizeMode == MorphSizeMode.Snap || opts.snap) sizeTarget else sizeAnim.value
-        return constraints.constrain(IntSize(ceil(s.width).toInt(), ceil(s.height).toInt()))
+        sizeTick.intValue // subscribe: re-measure while the size animates
+        return constraints.constrain(IntSize(ceil(width.value).toInt(), ceil(height.value).toInt()))
     }
 
-    private fun apply(key: LayoutKey, opts: MorphOptions, morph: Boolean, snapEverything: Boolean) {
+    private fun apply(key: LayoutKey, opts: MorphOptions, morph: Boolean) {
         val full = textMeasurer.measure(
             text = AnnotatedString(key.text),
             style = key.style,
@@ -184,24 +208,29 @@ public class TextMorphState internal constructor(
 
         if (!morph) {
             // Initial layout, re-wrap without a text change, or snapping: rebuild everything in place.
-            if (lastTextForSegments != key.text || segments.isEmpty() && key.text.isNotEmpty()) {
-                val diff = if (snapEverything && segments.isNotEmpty() && opts.snap) {
+            var changed = false
+            if (lastTextForSegments != key.text) {
+                val diff = if (segments.isNotEmpty() || lastTextForSegments != null) {
                     diffSegments(segments, segmentText(key.text, opts.locale, segmenter, segOptions, nextId), opts.locale)
                 } else null
                 segments = diff?.segments ?: segmentText(key.text, opts.locale, segmenter, segOptions, nextId)
                 nextId = diff?.nextId ?: ((segments.maxOfOrNull { it.id } ?: (nextId - 1)) + 1)
                 lastTextForSegments = key.text
-                if (diff != null) fireSnapCallbacks(diff)
+                changed = diff != null && !diff.isEmpty
             }
-            cancelAll()
+            finishGeneration(cancelled = true)
             live.clear()
             for (s in segments) {
                 val (target, cell) = place(s, full)
                 live.add(LiveSegment(s.id, s, segmentLayout(s), target, cell, target, 1f, 1f))
             }
-            sizeTarget = newSize
-            snapSizeUntilAnimated = true
-            scope.launch { sizeAnim.snapTo(newSize) }
+            width.snapTo(newSize.width)
+            height.snapTo(newSize.height)
+            frameTick.intValue++
+            if (changed) {
+                // Snapped morph: callbacks still fire, in order.
+                scope.launch { onAnimationStart?.invoke(); onAnimationComplete?.invoke() }
+            }
             return
         }
 
@@ -213,32 +242,16 @@ public class TextMorphState internal constructor(
         segments = diff.segments
         nextId = diff.nextId
         lastTextForSegments = key.text
-        if (diff.isEmpty && diff.persist.all { it.first.index == it.second.index }) {
-            // Same segments, same positions (e.g. only trailing whitespace measured differently): retarget silently.
-        }
         startMorph(diff, full, newSize, opts)
     }
 
-    private var lastTextForSegments: String? = null
-
-    private fun fireSnapCallbacks(diff: DiffResult) {
-        if (diff.isEmpty) return
-        scope.launch {
-            onAnimationStart?.invoke()
-            onAnimationComplete?.invoke()
-        }
-    }
-
     private fun startMorph(diff: DiffResult, full: TextLayoutResult, newSize: Size, opts: MorphOptions) {
-        val gen = ++generation
-        val jobs = ArrayList<Job>(diff.persist.size + diff.enter.size + diff.exit.size + 1)
+        val now = if (loop?.isActive == true) lastFrameNanos else Channel.UNSET
+        val moveSpec = opts.ease.toFloatSpec(opts.duration, 0.5f)
+        val fadeSpec = opts.ease.toFloatSpec(opts.duration, 0.001f)
+        val minScale = if (opts.scale) 0.5f else 1f
         val byId = HashMap<Long, LiveSegment>(live.size)
         for (ls in live) if (!ls.exiting) byId[ls.id] = ls
-
-        val offsetSpec = opts.ease.toSpec<Offset>(opts.duration, Offset.VisibilityThreshold)
-        val floatSpec = opts.ease.toSpec<Float>(opts.duration, 0.001f)
-        val sizeSpec = opts.ease.toSpec<Size>(opts.duration, Size.VisibilityThreshold)
-        val minScale = if (opts.scale) 0.5f else 1f
 
         // Persisting segments glide to their new rect.
         for ((old, new) in diff.persist) {
@@ -251,19 +264,11 @@ public class TextMorphState internal constructor(
             ls.segment = new
             ls.target = target
             ls.cell = cell
-            ls.clip = null
-            ls.job?.cancel()
-            ls.stripJob?.takeIf { it.isActive }?.let { jobs.add(it) }
-            val wasEntering = ls.entering && ls.strip == null
-            if (ls.strip == null) ls.entering = false
-            if (ls.offset.value != target || ls.alpha.value != 1f || ls.scale.value != 1f) {
-                ls.job = scope.launch {
-                    val a = launch { ls.offset.animateTo(target, offsetSpec) }
-                    val b = if (wasEntering || ls.alpha.value != 1f) launch { ls.alpha.animateTo(1f, floatSpec) } else null
-                    val c = if (wasEntering || ls.scale.value != 1f) launch { ls.scale.animateTo(1f, floatSpec) } else null
-                    a.join(); b?.join(); c?.join()
-                }.also { jobs.add(it) }
-            }
+            if (ls.strip == null) { ls.entering = false; ls.clip = null }
+            ls.x.animateTo(target.x, moveSpec, now)
+            ls.y.animateTo(target.y, moveSpec, now)
+            if (ls.alpha.value != 1f || ls.alpha.active) ls.alpha.animateTo(1f, fadeSpec, now)
+            if (ls.scale.value != 1f || ls.scale.active) ls.scale.animateTo(1f, fadeSpec, now)
         }
 
         // Rolling digits: an exit and an enter at the same place value become one odometer strip
@@ -288,110 +293,117 @@ public class TextMorphState internal constructor(
                 val strip = digitStrip(from.text, new.text, roll)
                 val ls = LiveSegment(new.id, new, layout, target, cell, target, 1f, 1f)
                 ls.entering = true
-                ls.clip = cell
                 ls.strip = strip
                 ls.stripRoll = roll
                 // If the old digit was itself mid-roll, continue from where its strip is drawn.
-                val prevProgress = previous?.stripProgress
-                val prevStrip = previous?.strip
-                val initial = if (prevProgress != null && prevStrip != null && previous.stripRoll == roll) {
-                    prevProgress.value - (prevStrip.size - 1)
-                } else 0f
-                val velocity = prevProgress?.velocity ?: 0f
-                val progress = Animatable(initial)
-                ls.stripProgress = progress
+                if (previous != null && previous.strip != null && previous.stripRoll == roll) {
+                    ls.stripProgress.snapTo(previous.stripProgress.value - (previous.strip!!.size - 1))
+                    ls.x.snapTo(previous.x.value); ls.y.snapTo(previous.y.value)
+                    ls.x.animateTo(target.x, moveSpec, now); ls.y.animateTo(target.y, moveSpec, now)
+                }
+                ls.stripProgress.animateTo((strip.size - 1).toFloat(), fadeSpec, now)
                 live.add(ls)
-                ls.stripJob = scope.launch {
-                    progress.animateTo((strip.size - 1).toFloat(), floatSpec, initialVelocity = velocity)
-                    ls.entering = false
-                    ls.clip = null
-                    ls.strip = null
-                    ls.stripProgress = null
-                }.also { jobs.add(it) }
                 continue
             }
-            val start = if (roll != 0) Offset(target.x, target.y + roll * cell.height) else target
-            val ls = LiveSegment(new.id, new, layout, target, cell, start, if (roll != 0) 1f else 0f, if (roll != 0) 1f else minScale)
+            val startY = if (roll != 0) target.y + roll * cell.height else target.y
+            val ls = LiveSegment(new.id, new, layout, target, cell, Offset(target.x, startY), if (roll != 0) 1f else 0f, if (roll != 0) 1f else minScale)
             ls.entering = true
             if (roll != 0) ls.clip = cell
             live.add(ls)
-            ls.job = scope.launch {
-                val a = if (ls.alpha.value != 1f) launch { ls.alpha.animateTo(1f, floatSpec) } else null
-                val b = if (start != target) launch { ls.offset.animateTo(target, offsetSpec) } else null
-                val c = if (ls.scale.value != 1f) launch { ls.scale.animateTo(1f, floatSpec) } else null
-                a?.join(); b?.join(); c?.join()
-                ls.entering = false
-                ls.clip = null
-            }.also { jobs.add(it) }
+            if (roll != 0) ls.y.animateTo(target.y, moveSpec, now)
+            ls.alpha.animateTo(1f, fadeSpec, now)
+            ls.scale.animateTo(1f, fadeSpec, now)
         }
 
-        // Exiting segments fade (digits roll) out, then leave the list.
+        // Exiting segments fade (digits roll) out, then leave the list when settled.
         for (old in diff.exit) {
             val ls = byId[old.id] ?: continue
-            ls.job?.cancel()
-            ls.stripJob?.cancel()
             if (old.id in claimed) {
-                // Its strip successor draws the old digit from here on.
-                live.remove(ls)
+                live.remove(ls) // its strip successor draws the old digit from here on
                 continue
             }
             ls.exiting = true
             ls.entering = false
             ls.strip = null
-            ls.stripProgress = null
+            ls.stripProgress.snapTo(0f)
             val roll = if (opts.numbers && old.kind == SegmentKind.DIGIT) old.roll else 0
-            val rollTarget = if (roll != 0) {
+            if (roll != 0) {
                 ls.clip = ls.cell
-                Offset(ls.offset.value.x, ls.offset.value.y - roll * ls.cell.height)
-            } else null
-            ls.job = scope.launch {
-                val a = if (rollTarget == null) launch { ls.alpha.animateTo(0f, floatSpec) } else null
-                val b = if (rollTarget != null) launch { ls.offset.animateTo(rollTarget, offsetSpec) } else null
-                val c = if (minScale != 1f && rollTarget == null) launch { ls.scale.animateTo(minScale, floatSpec) } else null
-                a?.join(); b?.join(); c?.join()
-                live.remove(ls)
-            }.also { jobs.add(it) }
+                ls.y.animateTo(ls.y.value - roll * ls.cell.height, moveSpec, now)
+            } else {
+                ls.alpha.animateTo(0f, fadeSpec, now)
+                if (minScale != 1f) ls.scale.animateTo(minScale, fadeSpec, now)
+            }
         }
 
         // Container size.
-        sizeTarget = newSize
         if (opts.sizeMode == MorphSizeMode.Snap) {
-            snapSizeUntilAnimated = true
-            jobs.add(scope.launch { sizeAnim.snapTo(newSize) })
+            width.snapTo(newSize.width); height.snapTo(newSize.height)
         } else {
-            if (snapSizeUntilAnimated) {
-                // First animated change: start from the size we've been reporting.
-                val from = sizeAnim.value
-                snapSizeUntilAnimated = false
-                jobs.add(scope.launch {
-                    if (from != sizeTarget) sizeAnim.animateTo(newSize, sizeSpec) else sizeAnim.snapTo(newSize)
-                })
-            } else {
-                jobs.add(scope.launch { sizeAnim.animateTo(newSize, sizeSpec) })
-            }
+            width.animateTo(newSize.width, moveSpec, now)
+            height.animateTo(newSize.height, moveSpec, now)
         }
 
-        // Exactly one of complete/cancel per morph.
-        scope.launch {
-            isAnimating = true
-            onAnimationStart?.invoke()
-            jobs.joinAll()
-            if (generation == gen) {
-                isAnimating = false
-                onAnimationComplete?.invoke()
-            } else {
-                onAnimationCancel?.invoke()
+        // Exactly one of complete/cancel per morph: a new morph cancels the one in flight.
+        finishGeneration(cancelled = true)
+        generationAnimating = true
+        isAnimating = true
+        frameTick.intValue++
+        val start = onAnimationStart
+        if (start != null) scope.launch { start() }
+        ensureLoop()
+    }
+
+    private fun finishGeneration(cancelled: Boolean) {
+        if (!generationAnimating) return
+        generationAnimating = false
+        isAnimating = false
+        val cb = if (cancelled) onAnimationCancel else onAnimationComplete
+        if (cb != null) scope.launch { cb() }
+    }
+
+    // endregion
+
+    // region frame loop
+
+    private fun ensureLoop() {
+        if (loop?.isActive == true) return
+        loop = scope.launch {
+            while (true) {
+                val active = withFrameNanos { now -> tick(now) }
+                if (!active) break
             }
+            lastFrameNanos = Channel.UNSET
+            finishGeneration(cancelled = false)
         }
     }
 
-    private fun cancelAll() {
-        for (ls in live) { ls.job?.cancel(); ls.stripJob?.cancel() }
-        if (isAnimating) {
-            generation++
-            isAnimating = false
+    /** Advance every channel to [now]; drop settled exits. Returns true while anything still moves. */
+    private fun tick(now: Long): Boolean {
+        lastFrameNanos = now
+        var active = false
+        var i = 0
+        while (i < live.size) {
+            val ls = live[i]
+            val moving = ls.tick(now)
+            if (!moving && ls.exiting) {
+                live.removeAt(i)
+                continue
+            }
+            active = active || moving
+            i++
         }
+        val wMoving = width.tick(now)
+        val hMoving = height.tick(now)
+        val sizeMoving = wMoving || hMoving
+        // One extra re-measure after settling so layout picks up the final value.
+        if (sizeMoving || lastSizeMoving) sizeTick.intValue++
+        lastSizeMoving = sizeMoving
+        frameTick.intValue++
+        return active || sizeMoving
     }
+
+    private var lastSizeMoving = false
 
     // endregion
 
@@ -442,8 +454,6 @@ public class TextMorphState internal constructor(
         )
     }
 
-    // endregion
-
     /** Layouts for every digit from [from] to [to] moving in [roll] direction (wrapping 9 -> 0), same script as [to]. */
     private fun digitStrip(from: String, to: String, roll: Int): List<TextLayoutResult> {
         val a = Character.getNumericValue(from[0]).coerceIn(0, 9)
@@ -462,6 +472,8 @@ public class TextMorphState internal constructor(
     }
 
     private fun rollKey(group: Int, place: Int): Long = (group.toLong() shl 32) or (place.toLong() and 0xFFFFFFFFL)
+
+    // endregion
 }
 
 /**
@@ -475,5 +487,3 @@ public fun rememberTextMorphState(): TextMorphState {
     val segmenter = remember { IcuSegmenter() }
     return remember(measurer) { TextMorphState(measurer, scope, segmenter) }
 }
-
-internal fun Float.roundPx(): Int = roundToInt()

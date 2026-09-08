@@ -13,4 +13,4 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "torph-compose"
-include(":torph-core", ":torph-compose", ":demo")
+include(":torph-core", ":torph-compose", ":demo", ":benchmark")
