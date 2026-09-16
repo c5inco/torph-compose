@@ -9,7 +9,7 @@ group = property("GROUP") as String
 version = property("VERSION_NAME") as String
 
 android {
-    namespace = "io.torph.compose"
+    namespace = "des.c5inco.torph.compose"
     compileSdk = libs.versions.compileSdk.get().toInt()
     defaultConfig {
         minSdk = libs.versions.minSdk.get().toInt()
@@ -51,6 +51,28 @@ afterEvaluate {
             create<MavenPublication>("release") {
                 from(components["release"])
                 artifactId = "torph-compose"
+                pom {
+                    name.set("Torph for Jetpack Compose")
+                    description.set("Morphing text for Jetpack Compose. An unofficial port of lochie/torph.")
+                    url.set("https://github.com/c5inco/torph-compose")
+                    licenses {
+                        license {
+                            name.set("MIT License")
+                            url.set("https://opensource.org/licenses/MIT")
+                        }
+                    }
+                    developers {
+                        developer {
+                            id.set("c5inco")
+                            name.set("Chris Sinco")
+                        }
+                    }
+                    scm {
+                        url.set("https://github.com/c5inco/torph-compose")
+                        connection.set("scm:git:https://github.com/c5inco/torph-compose.git")
+                        developerConnection.set("scm:git:ssh://git@github.com/c5inco/torph-compose.git")
+                    }
+                }
             }
         }
     }

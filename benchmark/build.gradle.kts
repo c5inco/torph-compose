@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "io.torph.benchmark"
+    namespace = "des.c5inco.torph.benchmark"
     compileSdk = libs.versions.compileSdk.get().toInt()
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17

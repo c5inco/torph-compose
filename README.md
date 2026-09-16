@@ -1,8 +1,13 @@
 # Torph for Jetpack Compose
 
-A port of [lochie/torph](https://github.com/lochie/torph) to Jetpack Compose: text that morphs
-between values. Characters shared between the old and new string glide to their new position,
-new ones fade in, removed ones fade out, and digits roll vertically by place value.
+An unofficial port of [torph](https://github.com/lochie/torph) to Jetpack Compose: text that
+morphs between values. Characters shared between the old and new string glide to their new
+position, new ones fade in, removed ones fade out, and digits roll vertically by place value.
+
+> **This is a personal project.** It is not a Google product, and it is not affiliated with,
+> endorsed by, or supported by Google or the Jetpack Compose team. It is also not affiliated with
+> or endorsed by the [torph](https://github.com/lochie/torph) project. See
+> [License and attribution](#license-and-attribution).
 
 ```kotlin
 TextMorph(text = "$1,234.50")          // change the string, get a morph
@@ -52,7 +57,7 @@ cssCubicBezier("cubic-bezier(0.19, 1, 0.22, 1)") // port torph configs verbatim
 ```
 
 Lower level: `rememberTextMorphState()` + `Modifier.textMorph(state)` for custom containers, and
-`segmentText` / `diffSegments` / `findNumericWords` / `settleTime` from `io.torph.core`.
+`segmentText` / `diffSegments` / `findNumericWords` / `settleTime` from `des.c5inco.torph.core`.
 
 ## How it works
 
@@ -97,7 +102,7 @@ down from 80 KB before per-segment `Animatable`s were replaced by plain float ch
 ./gradlew :benchmark:connectedBenchmarkAndroidTest
 ```
 
-The benchmark variant installs as `io.torph.demo.benchmark`, so it coexists with the debug demo.
+The benchmark variant installs as `des.c5inco.torph.demo.benchmark`, so it coexists with the debug demo.
 (This needs androidx.benchmark 1.4.1+: on API 36, 1.3.x reads the 15-character kernel process name
 from `pgrep -l` and cannot match a package id longer than that.)
 Results (JSON + Perfetto traces) land in
@@ -246,9 +251,9 @@ media directory works and `/sdcard/Download` does not:
 
 ```bash
 adb shell am instrument -w -r \
-  -e additionalTestOutputDir /sdcard/Android/media/io.torph.benchmark/bench-out \
-  -e class io.torph.benchmark.PerfScreenBenchmark \
-  io.torph.benchmark/androidx.test.runner.AndroidJUnitRunner
+  -e additionalTestOutputDir /sdcard/Android/media/des.c5inco.torph.benchmark/bench-out \
+  -e class des.c5inco.torph.benchmark.PerfScreenBenchmark \
+  des.c5inco.torph.benchmark/androidx.test.runner.AndroidJUnitRunner
 ```
 
 ## Status vs. plan
@@ -261,3 +266,20 @@ adb shell am instrument -w -r \
   (wrapping 9 → 0) inside its clipped cell, up when the number grows and down when it shrinks. A
   digit interrupted mid-roll continues from where its strip is, with velocity preserved.
 - `AnnotatedString`, selection and glyph-level (`drawGlyphs`) animation are out of scope, as planned.
+
+## License and attribution
+
+Torph for Jetpack Compose is MIT licensed. See [LICENSE](LICENSE).
+
+This is an **independent, unofficial port** of [torph](https://github.com/lochie/torph) by
+[Lochie Axon](https://github.com/lochie), used under the MIT License. The Kotlin here was written
+from scratch, but the API surface, option names, algorithms, and default values follow torph's so
+that configurations carry over directly. Upstream's full copyright notice is in [NOTICE](NOTICE).
+
+If you want the original, go use it: <https://torph.lochie.me>.
+
+### Not affiliated with Google
+
+This is a personal project by [Chris Sinco](https://github.com/c5inco). It is not a Google
+product and is not endorsed or supported by Google. "Android" and "Jetpack Compose" are trademarks
+of Google LLC, used here only to describe what this library targets.

@@ -5,3 +5,11 @@ local.properties
 *.iml
 .kotlin/
 .DS_Store
+
+# Android build and profiling output
+captures/
+.externalNativeBuild/
+.cxx/
+*.apk
+*.aab
+*.hprof

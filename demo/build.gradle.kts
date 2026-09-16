@@ -5,10 +5,10 @@ plugins {
 }
 
 android {
-    namespace = "io.torph.demo"
+    namespace = "des.c5inco.torph.demo"
     compileSdk = libs.versions.compileSdk.get().toInt()
     defaultConfig {
-        applicationId = "io.torph.demo"
+        applicationId = "des.c5inco.torph.demo"
         minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = libs.versions.compileSdk.get().toInt()
         versionCode = 1
