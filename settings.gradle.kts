@@ -21,15 +21,4 @@ dependencyResolutionManagement {
 }
 rootProject.name = "torph-compose"
 
-include(":torph-core", ":torph-compose")
-
-// The demo app and the benchmark module are only interesting when this build is the
-// one you are working on. When it is pulled into someone else's build with
-// `includeBuild`, leaving them out keeps their configuration time (and their Android
-// SDK requirements) to just the two library modules. Pass -Ptorph.samples=true to
-// include them anyway.
-val isIncludedBuild = gradle.parent != null
-val includeSamples = (startParameter.projectProperties["torph.samples"] ?: "").toBoolean()
-if (!isIncludedBuild || includeSamples) {
-    include(":demo", ":benchmark")
-}
+include(":torph-core", ":torph-compose", ":demo", ":benchmark")

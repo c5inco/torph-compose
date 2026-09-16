@@ -16,33 +16,17 @@ TextMorph(value = 1234.5, decimals = 2) // or hand it a number
 
 ## Use it in your project
 
-There is no Maven Central release yet, so you build the library from this repo. Pick whichever of
-these three fits your setup; all of them end with the same dependency line.
-
-```kotlin
-implementation("des.c5inco:torph-compose:0.1.0")  // Compose UI, brings :torph-core with it
-```
-
-`./gradlew torphCoordinates` prints that line, the current version, and the publish commands.
-
-**Option 1 — composite build.** Nothing to publish, and edits to the library show up in your app on
-the next build. Clone this repo next to your project and add it to your *settings*.gradle.kts:
-
-```kotlin
-// settings.gradle.kts
-includeBuild("../torph-compose")
-```
-
-Gradle substitutes `des.c5inco:torph-compose` and `des.c5inco:torph-core` for the modules in the
-included build, so the dependency line above is all your app module needs. The demo and benchmark
-modules are skipped when the build is included this way (pass `-Ptorph.samples=true` if you want
-them).
-
-**Option 2 — your local Maven repository.**
+There is no Maven Central release yet, so you build the library from this repo and resolve it from
+your local Maven repository:
 
 ```bash
+git clone https://github.com/c5inco/torph-compose.git
+cd torph-compose
 ./gradlew publishLocal    # installs both libraries into ~/.m2/repository
 ```
+
+That needs a JDK and an Android SDK with platform 36; see
+[Building from source](#building-from-source). Then, in the project that wants to use it:
 
 ```kotlin
 // settings.gradle.kts
@@ -55,24 +39,13 @@ dependencyResolutionManagement {
 }
 ```
 
-**Option 3 — a directory you can copy or check in.**
-
-```bash
-./gradlew publishLocalRepo    # writes a Maven repo to build/maven-repo
-```
-
 ```kotlin
-// settings.gradle.kts
-dependencyResolutionManagement {
-    repositories {
-        maven { url = uri("/path/to/torph-compose/build/maven-repo") }
-        google()
-        mavenCentral()
-    }
-}
+// app/build.gradle.kts
+implementation("des.c5inco:torph-compose:0.1.0")  // Compose UI, brings :torph-core with it
 ```
 
-Both publishing tasks take `-PVERSION_NAME=0.2.0-SNAPSHOT` if you want to stamp a different version.
+`./gradlew torphCoordinates` prints that dependency line for the version you have checked out, and
+`publishLocal` takes `-PVERSION_NAME=0.2.0-SNAPSHOT` if you want to stamp a different one.
 
 ### What your project needs
 
@@ -167,18 +140,10 @@ if your machine does not have one) and, for everything except `:torph-core`, an 
 platform 36 installed. Point at it with `ANDROID_HOME` or a `local.properties` containing
 `sdk.dir=/path/to/Android/sdk`.
 
-```bash
-git clone https://github.com/c5inco/torph-compose.git
-cd torph-compose
-./gradlew :torph-core:test          # no Android SDK needed
-./gradlew publishLocal              # build both libraries, install to ~/.m2
-```
-
 | Command | What it does |
 | --- | --- |
-| `./gradlew torphCoordinates` | Print the coordinates and the publish options. |
+| `./gradlew torphCoordinates` | Print the coordinates this checkout publishes. |
 | `./gradlew publishLocal` | Build both libraries into `~/.m2/repository`. |
-| `./gradlew publishLocalRepo` | Build both libraries into `build/maven-repo`. |
 | `./gradlew :torph-core:test` | Core unit tests. Pure JVM, no device or SDK. |
 | `./gradlew :torph-compose:assembleRelease` | Build the Android library AAR only. |
 | `./gradlew :demo:installDebug` | Install the demo app on a connected device or emulator. |
