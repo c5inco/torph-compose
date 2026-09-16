@@ -69,7 +69,9 @@ Per text change (never per frame):
 5. The container size animates (or snaps) to the new layout size.
 
 Per frame: one `drawText(cachedLayout, topLeft, alpha)` per live segment inside a `Canvas`-style
-`drawBehind`. Animatables are read only in the layout and draw phases, never in composition.
+`drawBehind`. Animatables are read only in the layout and draw phases, never in composition, and
+the traces confirm composition does not run per frame. Note that a *layout* pass does run per frame
+while the container size animates; use `sizeMode = Snap` to skip it.
 
 Complex scripts: `Segmentation.AUTO` detects Arabic, Hebrew, Indic, Thai, Lao, Khmer, Myanmar,
 Tibetan and Mongolian words via `Character.UnicodeScript` and morphs them as whole words so
@@ -117,15 +119,57 @@ Overrun is how late a frame finished against its deadline, so negative means it 
 Every size holds frame rate at P50 and P90, including 1000 characters. Sustained performance mode
 was off for these runs, so expect some thermal variance.
 
-What the numbers say: per-frame draw cost is close to flat from 50 to 1000 segments (4.6 → 6.2 ms
-P50), so drawing is no longer what dominates. The P99 spikes are the single frame per text change
-that measures the new string and runs the diff; the JVM timing test puts segment+diff of 1000 chars
-at ~0.3 ms in word mode and ~4 ms forced to graphemes, so most of that frame is text measurement,
-not diffing.
+### Where the time actually goes (from the Perfetto traces)
 
-If the P99 on long text ever needs to come down, the lever is caching settled segments in a
-`GraphicsLayer` so per-frame work scales with *animating* segments only. On this hardware it is not
-worth doing yet.
+Measured with Perfetto's `trace_processor` over the captured traces, not inferred:
+
+**The slow frames are the text-change frames.** In `morph1000` the four worst frames (22.9-24.4 ms)
+are spaced exactly 1.5 s apart, matching the Perf screen's cycle period. Every other frame is well
+under budget.
+
+**Almost none of that frame is text measurement.** On the worst frame, 16.1 ms of the 24.4 ms sits
+in Compose's `AndroidOwner:measureAndLayout`, and inside it:
+
+| part of the text-change frame | time |
+| --- | ---: |
+| `AndroidOwner:measureAndLayout` | 16.1 ms |
+| of which `Constructing StaticLayout` (text layout) | 0.46 ms |
+| remainder: segment + diff + `place()` + animation setup | ~15.6 ms |
+
+Only **one** `StaticLayout` is built on that frame, the full target string. The per-segment layouts
+hit the `layoutCache`, because the demo cycles strings drawn from one word list. So text measurement
+is about 3% of the cost, and the remaining ~15.6 ms is this library's own layout work. That part is
+not separately traced, so it cannot be split further without adding trace sections to the code.
+
+Worst measure/layout pass by size, showing the cost is sub-linear in characters (20x the text for
+3.7x the cost):
+
+| | 50 chars | 200 chars | 1000 chars |
+| --- | ---: | ---: | ---: |
+| worst measure/layout | 4.4 ms | 8.0 ms | 16.1 ms |
+
+**Composition never runs per frame**, which was the design goal:
+
+| run | frames | layout passes | recompositions | avg draw |
+| --- | ---: | ---: | ---: | ---: |
+| morph50 | 145 | 145 | 15 | 1.23 ms |
+| morph200 | 136 | 112 | 12 | 2.06 ms |
+| morph1000 | 108 | 14 | 14 | 3.09 ms |
+
+Recomposition happens per text change, not per frame. Draw works out to roughly **6 µs per segment**
+plus ~0.9 ms of fixed cost for the rest of the demo screen.
+
+**Layout, however, does run per frame while the container size animates.** `morph50` takes a layout
+pass on all 145 frames; `morph1000` takes only 14, because wrapped text of a fixed character count
+keeps the same height and the size animation has nothing to do. That pass does not re-measure text
+(the layout key is unchanged), but it is still ~0.3 ms of tree layout per frame. `sizeMode = Snap`
+avoids it entirely, which is the cheap win for fixed-width slots like counters.
+
+So the honest summary: drawing scales fine, composition is absent from the hot path, and the
+remaining cost is concentrated in one frame per text change, inside this library's own diff and
+placement work rather than in text measurement. Caching settled segments in a `GraphicsLayer` would
+not touch that frame, so it is the wrong lever; reducing per-segment work in `place()` is the right
+one. Neither is needed at current frame times.
 
 ### Emulator comparison (arm64, API 36)
 
