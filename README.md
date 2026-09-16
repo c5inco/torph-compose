@@ -14,6 +14,57 @@ TextMorph(text = "$1,234.50")          // change the string, get a morph
 TextMorph(value = 1234.5, decimals = 2) // or hand it a number
 ```
 
+## Use it in your project
+
+There is no Maven Central release yet, so you build the library from this repo and resolve it from
+your local Maven repository:
+
+```bash
+git clone https://github.com/c5inco/torph-compose.git
+cd torph-compose
+./gradlew publishLocal    # installs both libraries into ~/.m2/repository
+```
+
+That needs a JDK and an Android SDK with platform 36; see
+[Building from source](#building-from-source). Then, in the project that wants to use it:
+
+```kotlin
+// settings.gradle.kts
+dependencyResolutionManagement {
+    repositories {
+        mavenLocal()
+        google()
+        mavenCentral()
+    }
+}
+```
+
+```kotlin
+// app/build.gradle.kts
+implementation("des.c5inco:torph-compose:0.1.0")  // Compose UI, brings :torph-core with it
+```
+
+`./gradlew torphCoordinates` prints that dependency line for the version you have checked out, and
+`publishLocal` takes `-PVERSION_NAME=0.2.0-SNAPSHOT` if you want to stamp a different one.
+
+### What your project needs
+
+- `minSdk` 24 or higher, and `compileSdk` 36 or higher.
+- Java 17 bytecode (`compileOptions` / `jvmToolchain(17)`).
+- Compose: the library is built against Compose BOM 2026.01.01 and only depends on
+  foundation/animation/ui/ui-text, not Material.
+
+Then:
+
+```kotlin
+import des.c5inco.torph.compose.TextMorph
+
+TextMorph(text = "$1,234.50")
+```
+
+`:torph-core` is plain Kotlin/JVM (`des.c5inco:torph-core`) if you only want the segmentation and
+diff algorithms without Compose.
+
 ## Modules
 
 | Module | What | Depends on |
@@ -82,27 +133,32 @@ Complex scripts: `Segmentation.AUTO` detects Arabic, Hebrew, Indic, Thai, Lao, K
 Tibetan and Mongolian words via `Character.UnicodeScript` and morphs them as whole words so
 contextual shaping survives. Above 300 segments any mode falls back to `WORD`.
 
-## Building
+## Building from source
 
-```bash
-./gradlew :torph-core:test :demo:installDebug
-```
+You need a JDK to run Gradle (any recent one; the build uses a Java 17 toolchain and downloads it
+if your machine does not have one) and, for everything except `:torph-core`, an Android SDK with
+platform 36 installed. Point at it with `ANDROID_HOME` or a `local.properties` containing
+`sdk.dir=/path/to/Android/sdk`.
 
-Instrumentation tests for the Compose layer: `./gradlew :torph-compose:connectedDebugAndroidTest`
-with an emulator running. That suite includes `DrawAllocationTest`, a regression guard that fails
-if the draw path starts allocating per frame. See [docs/BENCHMARKS.md](docs/BENCHMARKS.md).
+| Command | What it does |
+| --- | --- |
+| `./gradlew torphCoordinates` | Print the coordinates this checkout publishes. |
+| `./gradlew publishLocal` | Build both libraries into `~/.m2/repository`. |
+| `./gradlew :torph-core:test` | Core unit tests. Pure JVM, no device or SDK. |
+| `./gradlew :torph-compose:assembleRelease` | Build the Android library AAR only. |
+| `./gradlew :demo:installDebug` | Install the demo app on a connected device or emulator. |
+| `./gradlew :torph-compose:connectedDebugAndroidTest` | Compose instrumentation tests (device needed). |
+| `./gradlew :benchmark:connectedBenchmarkAndroidTest` | Macrobenchmarks (device needed). |
+
+The instrumentation suite includes `DrawAllocationTest`, a regression guard that fails if the draw
+path starts allocating per frame. See [docs/BENCHMARKS.md](docs/BENCHMARKS.md).
 
 ## Benchmarks
 
 `:benchmark` is a Macrobenchmark module covering long text, number rolling, rapid interruption, and
-multi-line reflow:
-
-```bash
-./gradlew :benchmark:connectedBenchmarkAndroidTest
-```
-
-Results, the phase-by-phase breakdown of where a text change spends its time, and notes on running
-against a physical device are in [docs/BENCHMARKS.md](docs/BENCHMARKS.md).
+multi-line reflow (`./gradlew :benchmark:connectedBenchmarkAndroidTest`). Results, the
+phase-by-phase breakdown of where a text change spends its time, and notes on running against a
+physical device are in [docs/BENCHMARKS.md](docs/BENCHMARKS.md).
 
 Implementation status and known gaps are tracked in [docs/STATUS.md](docs/STATUS.md).
 
