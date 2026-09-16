@@ -162,6 +162,7 @@ public class TextMorphState internal constructor(
     private val layoutCache = HashMap<String, TextLayoutResult>()
     private var cacheStyle: TextStyle? = null
 
+    private val timings = MorphTimings()
     private var loop: Job? = null
     private var lastFrameNanos = Channel.UNSET
     private var generationAnimating = false
@@ -195,12 +196,17 @@ public class TextMorphState internal constructor(
     }
 
     private fun apply(key: LayoutKey, opts: MorphOptions, morph: Boolean) {
+        val diag = TextMorphDiagnostics.logTimings
+        if (diag) timings.reset()
+        val applyStart = if (diag) System.nanoTime() else 0L
+        var mark = applyStart
         val full = textMeasurer.measure(
             text = AnnotatedString(key.text),
             style = key.style,
             softWrap = true,
             constraints = if (key.maxWidth == Constraints.Infinity) Constraints() else Constraints(maxWidth = key.maxWidth),
         )
+        if (diag) { val n = System.nanoTime(); timings.measureText = n - mark; mark = n }
         layoutResult = full
         if (cacheStyle != key.style) { layoutCache.clear(); cacheStyle = key.style }
         val newSize = Size(full.size.width.toFloat(), full.size.height.toFloat())
@@ -234,15 +240,27 @@ public class TextMorphState internal constructor(
             return
         }
 
-        val diff = diffSegments(
-            segments,
-            segmentText(key.text, opts.locale, segmenter, segOptions, nextId),
-            opts.locale,
-        )
+        val incoming = segmentText(key.text, opts.locale, segmenter, segOptions, nextId)
+        if (diag) { val n = System.nanoTime(); timings.segment = n - mark; mark = n }
+        val diff = diffSegments(segments, incoming, opts.locale)
+        if (diag) { val n = System.nanoTime(); timings.diff = n - mark; mark = n }
         segments = diff.segments
         nextId = diff.nextId
         lastTextForSegments = key.text
         startMorph(diff, full, newSize, opts)
+        if (diag) {
+            val n = System.nanoTime()
+            // Placement and segment measuring happen inside startMorph; the rest is animation setup.
+            timings.animation = (n - mark) - timings.place - timings.segmentLayout
+            timings.log(
+                totalNs = n - applyStart,
+                chars = key.text.length,
+                segments = diff.segments.size,
+                persist = diff.persist.size,
+                enter = diff.enter.size,
+                exit = diff.exit.size,
+            )
+        }
     }
 
     private fun startMorph(diff: DiffResult, full: TextLayoutResult, newSize: Size, opts: MorphOptions) {
@@ -411,6 +429,17 @@ public class TextMorphState internal constructor(
 
     /** Top-left draw offset and the line cell (for clipping rolls) of [s] inside [full]. */
     private fun place(s: Segment, full: TextLayoutResult): Pair<Offset, Rect> {
+        if (!TextMorphDiagnostics.logTimings) return placeImpl(s, full)
+        val layoutBefore = timings.segmentLayout
+        val t0 = System.nanoTime()
+        val result = placeImpl(s, full)
+        // Exclude nested segment measuring so the two numbers don't double-count.
+        timings.place += (System.nanoTime() - t0) - (timings.segmentLayout - layoutBefore)
+        timings.placeCalls++
+        return result
+    }
+
+    private fun placeImpl(s: Segment, full: TextLayoutResult): Pair<Offset, Rect> {
         val textLen = full.layoutInput.text.length
         if (textLen == 0) return Offset.Zero to Rect.Zero
         val start = s.index.coerceIn(0, textLen - 1)
@@ -425,6 +454,8 @@ public class TextMorphState internal constructor(
         var left = Float.POSITIVE_INFINITY
         var right = Float.NEGATIVE_INFINITY
         val end = s.end.coerceAtMost(textLen)
+        val diag = TextMorphDiagnostics.logTimings
+        val boxStart = if (diag) System.nanoTime() else 0L
         var i = start
         while (i < end) {
             val box = full.getBoundingBox(i)
@@ -434,6 +465,7 @@ public class TextMorphState internal constructor(
             }
             i++
         }
+        if (diag) { timings.box += System.nanoTime() - boxStart; timings.boxCalls += end - start }
         if (left == Float.POSITIVE_INFINITY) {
             val r = full.getCursorRect(start)
             left = r.left; right = r.left
@@ -445,13 +477,19 @@ public class TextMorphState internal constructor(
         return Offset(x, y) to Rect(left, lineTop, right, lineBottom)
     }
 
-    private fun segmentLayout(s: Segment): TextLayoutResult = layoutCache.getOrPut(s.text) {
-        textMeasurer.measure(
+    private fun segmentLayout(s: Segment): TextLayoutResult {
+        layoutCache[s.text]?.let { return it }
+        val diag = TextMorphDiagnostics.logTimings
+        val t0 = if (diag) System.nanoTime() else 0L
+        val measured = textMeasurer.measure(
             text = AnnotatedString(if (s.kind == SegmentKind.NEWLINE) "" else s.text),
             style = style,
             softWrap = false,
             maxLines = 1,
         )
+        if (diag) { timings.segmentLayout += System.nanoTime() - t0; timings.layoutMisses++ }
+        layoutCache[s.text] = measured
+        return measured
     }
 
     /** Layouts for every digit from [from] to [to] moving in [roll] direction (wrapping 9 -> 0), same script as [to]. */

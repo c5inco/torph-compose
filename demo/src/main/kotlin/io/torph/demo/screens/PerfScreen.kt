@@ -25,6 +25,7 @@ import io.torph.demo.Stage
 import io.torph.demo.ToggleRow
 import io.torph.demo.cycling
 import kotlin.random.Random
+import io.torph.compose.TextMorphDiagnostics
 
 private val words = ("lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua " +
     "ut enim ad minim veniam quis nostrud exercitation ullamco laboris nisi aliquip ex ea commodo consequat").split(" ")
@@ -42,6 +43,12 @@ private fun lorem(chars: Int, seed: Int): String {
 
 @Composable
 fun PerfScreen() {
+    // Log a per-change timing breakdown to logcat (adb logcat -s TextMorphPerf) while this
+    // screen is open. Off elsewhere so it never distorts the other screens.
+    DisposableEffect(Unit) {
+        TextMorphDiagnostics.logTimings = true
+        onDispose { TextMorphDiagnostics.logTimings = false }
+    }
     var size by rememberSaveable { mutableIntStateOf(200) }
     var running by rememberSaveable { mutableStateOf(true) }
     var mode by rememberSaveable { mutableStateOf(Segmentation.AUTO) }

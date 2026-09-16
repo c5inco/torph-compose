@@ -28,11 +28,19 @@ import io.torph.demo.SectionTitle
 import io.torph.demo.Stage
 import io.torph.demo.ToggleRow
 import kotlin.random.Random
+import androidx.compose.runtime.DisposableEffect
+import io.torph.compose.TextMorphDiagnostics
 
 private val locales = listOf("en-US", "de-DE", "fr-FR", "ar-EG", "hi-IN")
 
 @Composable
 fun NumbersScreen() {
+    // Log a per-change timing breakdown to logcat (adb logcat -s TextMorphPerf) while this
+    // screen is open. Off elsewhere so it never distorts the other screens.
+    DisposableEffect(Unit) {
+        TextMorphDiagnostics.logTimings = true
+        onDispose { TextMorphDiagnostics.logTimings = false }
+    }
     var value by rememberSaveable { mutableDoubleStateOf(1234.5) }
     var decimals by rememberSaveable { mutableIntStateOf(2) }
     var localeTag by rememberSaveable { mutableStateOf("en-US") }

@@ -171,6 +171,52 @@ placement work rather than in text measurement. Caching settled segments in a `G
 not touch that frame, so it is the wrong lever; reducing per-segment work in `place()` is the right
 one. Neither is needed at current frame times.
 
+### Feature benchmarks
+
+`FeatureBenchmark` covers what `PerfScreenBenchmark` misses: digit rolling, retargeting under rapid
+updates, and multi-line reflow. Same device, 3 iterations each.
+
+| benchmark | what it drives | frames | P50 | P90 | P99 | overrun P99 |
+| --- | --- | ---: | ---: | ---: | ---: | ---: |
+| numberIncrement | +1 taps, one or two digits roll | 684 | 3.5 ms | 4.4 ms | 9.3 ms | -3.3 ms |
+| numberRolling | random jumps, most digits roll | 411 | 3.6 ms | 4.6 ms | 8.1 ms | -3.8 ms |
+| interruption | 80 ms timer + live typing | 338 | 5.0 ms | 8.6 ms | 10.9 ms | -3.3 ms |
+| multiLine | paragraph swap, lines re-flow | 455 | 5.0 ms | 6.1 ms | 12.2 ms | -2.3 ms |
+
+Overrun is negative at every percentile including P99, so **not one frame missed its deadline** in
+any of these. The features most likely to be expensive turn out to be the cheapest: digit rolling
+is the fastest thing here, and interrupting a morph every 80 ms costs nothing extra. Long text
+remains the only case that drops frames.
+
+### Where a text change spends its time
+
+Turn on `TextMorphDiagnostics.logTimings` and every change logs a phase breakdown
+(`adb logcat -s TextMorphPerf`). Medians on a Pixel 10 Pro:
+
+| chars | segments | total | position | of which per-char box | measure text | tokenize | diff | anim setup |
+| ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| 9 | 9 | 1.64 ms | 0.18 ms | 0.11 ms | 0.75 ms | 0.19 ms | 0.24 ms | 0.14 ms |
+| 50 | 50 | 3.93 ms | 0.80 ms | 0.65 ms | 1.04 ms | 0.42 ms | 1.03 ms | 0.43 ms |
+| 200 | 200 | 7.32 ms | 2.39 ms | 2.08 ms | 1.44 ms | 0.77 ms | 1.83 ms | 0.76 ms |
+| 1000 | 340 | 14.43 ms | 8.45 ms | 7.94 ms | 1.79 ms | 1.71 ms | 0.97 ms | 1.07 ms |
+
+(Column medians are taken independently, so they do not sum exactly to the total.)
+
+**Positioning dominates, and inside it the per-character bounding-box scan is the whole story.** At
+1000 characters it is 55% of the change. `place()` calls `TextLayoutResult.getBoundingBox` once per
+character to find each segment's left and right edge, at roughly 8 µs per call, so the cost is
+linear in characters no matter how few segments there are. Neither of the earlier guesses was right:
+text measurement is 12% and the diff is 7%.
+
+The obvious fix is to stop scanning every character. A segment that does not straddle a line break
+only needs its first and last character, which in word mode cuts 1000 calls to about 680. Getting
+further means a cheaper primitive than `getBoundingBox`, which allocates a `Rect` per call;
+`getHorizontalPosition` returns a float and may be cheaper, but that is untested.
+
+One caveat on these numbers: segment-layout measuring shows 0.00 ms because the demo cycles strings
+built from a single word list, so the layout cache always hits. Text with genuinely new words pays
+to measure each one the first time it appears.
+
 ### Emulator comparison (arm64, API 36)
 
 The same suite on an emulator, kept for reference. It overstates cost badly on long text, so treat
