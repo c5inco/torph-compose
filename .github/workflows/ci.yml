@@ -26,5 +26,7 @@ jobs:
         run: ./gradlew :torph-core:test
       - name: Build libraries, demo and benchmark
         run: ./gradlew :torph-compose:assembleRelease :demo:assembleDebug :benchmark:assembleBenchmark
-      - name: Validate publication metadata
-        run: ./gradlew :torph-core:generatePomFileForMavenPublication :torph-compose:generatePomFileForReleasePublication
+      # Publishing to a repository under build/ also validates the POMs, and keeps the
+      # source-build path people are told to use in the README working.
+      - name: Validate publishing
+        run: ./gradlew publishLocalRepo

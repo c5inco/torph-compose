@@ -45,6 +45,16 @@ dependencies {
     debugImplementation(libs.compose.ui.test.manifest)
 }
 
+publishing {
+    repositories {
+        // `./gradlew publishLocalRepo` collects both libraries here.
+        maven {
+            name = "localRepo"
+            url = uri(rootProject.layout.buildDirectory.dir("maven-repo"))
+        }
+    }
+}
+
 afterEvaluate {
     publishing {
         publications {

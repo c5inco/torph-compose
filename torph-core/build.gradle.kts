@@ -24,6 +24,13 @@ dependencies {
 tasks.test { useJUnit() }
 
 publishing {
+    repositories {
+        // `./gradlew publishLocalRepo` collects both libraries here.
+        maven {
+            name = "localRepo"
+            url = uri(rootProject.layout.buildDirectory.dir("maven-repo"))
+        }
+    }
     publications {
         create<MavenPublication>("maven") {
             from(components["java"])

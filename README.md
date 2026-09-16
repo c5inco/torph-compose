@@ -14,6 +14,84 @@ TextMorph(text = "$1,234.50")          // change the string, get a morph
 TextMorph(value = 1234.5, decimals = 2) // or hand it a number
 ```
 
+## Use it in your project
+
+There is no Maven Central release yet, so you build the library from this repo. Pick whichever of
+these three fits your setup; all of them end with the same dependency line.
+
+```kotlin
+implementation("des.c5inco:torph-compose:0.1.0")  // Compose UI, brings :torph-core with it
+```
+
+`./gradlew torphCoordinates` prints that line, the current version, and the publish commands.
+
+**Option 1 — composite build.** Nothing to publish, and edits to the library show up in your app on
+the next build. Clone this repo next to your project and add it to your *settings*.gradle.kts:
+
+```kotlin
+// settings.gradle.kts
+includeBuild("../torph-compose")
+```
+
+Gradle substitutes `des.c5inco:torph-compose` and `des.c5inco:torph-core` for the modules in the
+included build, so the dependency line above is all your app module needs. The demo and benchmark
+modules are skipped when the build is included this way (pass `-Ptorph.samples=true` if you want
+them).
+
+**Option 2 — your local Maven repository.**
+
+```bash
+./gradlew publishLocal    # installs both libraries into ~/.m2/repository
+```
+
+```kotlin
+// settings.gradle.kts
+dependencyResolutionManagement {
+    repositories {
+        mavenLocal()
+        google()
+        mavenCentral()
+    }
+}
+```
+
+**Option 3 — a directory you can copy or check in.**
+
+```bash
+./gradlew publishLocalRepo    # writes a Maven repo to build/maven-repo
+```
+
+```kotlin
+// settings.gradle.kts
+dependencyResolutionManagement {
+    repositories {
+        maven { url = uri("/path/to/torph-compose/build/maven-repo") }
+        google()
+        mavenCentral()
+    }
+}
+```
+
+Both publishing tasks take `-PVERSION_NAME=0.2.0-SNAPSHOT` if you want to stamp a different version.
+
+### What your project needs
+
+- `minSdk` 24 or higher, and `compileSdk` 36 or higher.
+- Java 17 bytecode (`compileOptions` / `jvmToolchain(17)`).
+- Compose: the library is built against Compose BOM 2026.01.01 and only depends on
+  foundation/animation/ui/ui-text, not Material.
+
+Then:
+
+```kotlin
+import des.c5inco.torph.compose.TextMorph
+
+TextMorph(text = "$1,234.50")
+```
+
+`:torph-core` is plain Kotlin/JVM (`des.c5inco:torph-core`) if you only want the segmentation and
+diff algorithms without Compose.
+
 ## Modules
 
 | Module | What | Depends on |
@@ -82,27 +160,40 @@ Complex scripts: `Segmentation.AUTO` detects Arabic, Hebrew, Indic, Thai, Lao, K
 Tibetan and Mongolian words via `Character.UnicodeScript` and morphs them as whole words so
 contextual shaping survives. Above 300 segments any mode falls back to `WORD`.
 
-## Building
+## Building from source
+
+You need a JDK to run Gradle (any recent one; the build uses a Java 17 toolchain and downloads it
+if your machine does not have one) and, for everything except `:torph-core`, an Android SDK with
+platform 36 installed. Point at it with `ANDROID_HOME` or a `local.properties` containing
+`sdk.dir=/path/to/Android/sdk`.
 
 ```bash
-./gradlew :torph-core:test :demo:installDebug
+git clone https://github.com/c5inco/torph-compose.git
+cd torph-compose
+./gradlew :torph-core:test          # no Android SDK needed
+./gradlew publishLocal              # build both libraries, install to ~/.m2
 ```
 
-Instrumentation tests for the Compose layer: `./gradlew :torph-compose:connectedDebugAndroidTest`
-with an emulator running. That suite includes `DrawAllocationTest`, a regression guard that fails
-if the draw path starts allocating per frame. See [docs/BENCHMARKS.md](docs/BENCHMARKS.md).
+| Command | What it does |
+| --- | --- |
+| `./gradlew torphCoordinates` | Print the coordinates and the publish options. |
+| `./gradlew publishLocal` | Build both libraries into `~/.m2/repository`. |
+| `./gradlew publishLocalRepo` | Build both libraries into `build/maven-repo`. |
+| `./gradlew :torph-core:test` | Core unit tests. Pure JVM, no device or SDK. |
+| `./gradlew :torph-compose:assembleRelease` | Build the Android library AAR only. |
+| `./gradlew :demo:installDebug` | Install the demo app on a connected device or emulator. |
+| `./gradlew :torph-compose:connectedDebugAndroidTest` | Compose instrumentation tests (device needed). |
+| `./gradlew :benchmark:connectedBenchmarkAndroidTest` | Macrobenchmarks (device needed). |
+
+The instrumentation suite includes `DrawAllocationTest`, a regression guard that fails if the draw
+path starts allocating per frame. See [docs/BENCHMARKS.md](docs/BENCHMARKS.md).
 
 ## Benchmarks
 
 `:benchmark` is a Macrobenchmark module covering long text, number rolling, rapid interruption, and
-multi-line reflow:
-
-```bash
-./gradlew :benchmark:connectedBenchmarkAndroidTest
-```
-
-Results, the phase-by-phase breakdown of where a text change spends its time, and notes on running
-against a physical device are in [docs/BENCHMARKS.md](docs/BENCHMARKS.md).
+multi-line reflow (`./gradlew :benchmark:connectedBenchmarkAndroidTest`). Results, the
+phase-by-phase breakdown of where a text change spends its time, and notes on running against a
+physical device are in [docs/BENCHMARKS.md](docs/BENCHMARKS.md).
 
 Implementation status and known gaps are tracked in [docs/STATUS.md](docs/STATUS.md).
 
