@@ -17,7 +17,7 @@ connected device:
 ./gradlew :torph-compose:connectedDebugAndroidTest
 ```
 
-Benchmarks live in `:benchmark`. See the Benchmarks section of the README,
+Benchmarks live in `:benchmark`. See [docs/BENCHMARKS.md](docs/BENCHMARKS.md),
 including the notes on running against a physical device.
 
 ## Code style
