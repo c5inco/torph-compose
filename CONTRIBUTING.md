@@ -6,9 +6,14 @@ issue before starting anything large.
 ## Building
 
 ```bash
-./gradlew :torph-core:test          # pure-Kotlin tests, no device needed
+./gradlew :torph-core:test          # pure-Kotlin tests, no device or Android SDK needed
 ./gradlew :demo:installDebug        # the demo app
+./gradlew publishLocal              # both libraries into ~/.m2, to try them in another project
 ```
+
+The full task list, the prerequisites, and the ways to consume a source build are in the README
+([Building from source](README.md#building-from-source) and
+[Use it in your project](README.md#use-it-in-your-project)).
 
 `:torph-compose` has instrumentation tests that need a running emulator or a
 connected device:

@@ -41,6 +41,12 @@ dependencies {
     testImplementation(libs.kotlin.test)
     androidTestImplementation(platform(libs.compose.bom))
     androidTestImplementation(libs.androidx.junit)
+    // Pin androidx.test above what ui-test-junit4 pulls in (espresso 3.5.0 / runner 1.5.0),
+    // which crashes on Android 17 (InputManager.getInstance was removed).
+    androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(libs.androidx.test.runner)
+    androidTestImplementation(libs.androidx.test.core)
+    androidTestImplementation(libs.androidx.test.monitor)
     androidTestImplementation(libs.compose.ui.test.junit4)
     debugImplementation(libs.compose.ui.test.manifest)
 }
