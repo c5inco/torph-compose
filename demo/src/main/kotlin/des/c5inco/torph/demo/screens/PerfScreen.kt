@@ -12,7 +12,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.text.font.FontFamily
 import des.c5inco.torph.compose.TextMorph
 import des.c5inco.torph.compose.rememberTextMorphState
 import des.c5inco.torph.core.Segmentation
@@ -21,6 +20,7 @@ import des.c5inco.torph.demo.Choice
 import des.c5inco.torph.demo.CodeBlock
 import des.c5inco.torph.demo.Gap
 import des.c5inco.torph.demo.SectionTitle
+import des.c5inco.torph.demo.DemoType
 import des.c5inco.torph.demo.Stage
 import des.c5inco.torph.demo.ToggleRow
 import des.c5inco.torph.demo.cycling
@@ -89,7 +89,7 @@ fun PerfScreen() {
 
     Text(
         "frame avg %.1f ms · max %.1f ms · live segments %d".format(avgMs, maxMs, state.liveCount),
-        fontFamily = FontFamily.Monospace,
+        fontFamily = DemoType.geistMono,
         style = MaterialTheme.typography.bodyMedium,
     )
     Gap(8)

@@ -58,6 +58,38 @@ class TextMorphTest {
     }
 
     @Test
+    fun digitRetargetedMidRollKeepsAVisibleDigitInItsStrip() {
+        // A stopwatch ticking faster than the roll settles: every change lands mid-roll.
+        var hundredths by mutableStateOf(0)
+        lateinit var state: TextMorphState
+        rule.mainClock.autoAdvance = false
+        rule.setContent {
+            state = rememberTextMorphState()
+            TextMorph(
+                text = "00.%02d".format(hundredths % 100),
+                state = state,
+                style = TextStyle(fontSize = 24.sp),
+                ease = MorphEase.Spring(stiffness = 220f, damping = 22f),
+                respectReducedMotion = false,
+            )
+        }
+        rule.mainClock.advanceTimeByFrame()
+        repeat(30) {
+            hundredths += 8
+            repeat(5) { // 80 ms at 16 ms frames
+                rule.mainClock.advanceTimeByFrame()
+                for (ls in state.live) {
+                    val strip = ls.strip ?: continue
+                    val p = ls.stripProgress.value
+                    // The draw pass shows strip digits within one cell of the progress; outside
+                    // [0, size - 1] by more than that, the digit renders blank.
+                    assertTrue("progress $p outside strip of ${strip.size}", p > -1f && p < strip.size)
+                }
+            }
+        }
+    }
+
+    @Test
     fun disabledSnapsAndStillFiresCallbacks() {
         var text by mutableStateOf("1")
         lateinit var state: TextMorphState

@@ -26,7 +26,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
@@ -69,13 +68,13 @@ fun CodeBlock(code: String) {
             .horizontalScroll(rememberScrollState())
             .padding(14.dp),
     ) {
-        Text(code.trimIndent(), fontFamily = FontFamily.Monospace, fontSize = 12.sp, lineHeight = 17.sp)
+        Text(code.trimIndent(), fontFamily = DemoType.geistMono, fontSize = 12.sp, lineHeight = 17.sp)
     }
 }
 
 /** A stage with a fixed minimum height so size animation of the morph doesn't shove controls around. */
 @Composable
-fun Stage(minHeight: Int = 96, content: @Composable () -> Unit) {
+fun Stage(minHeight: Int = 96, numbers: Boolean = false, content: @Composable () -> Unit) {
     Box(
         Modifier
             .fillMaxWidth()
@@ -84,7 +83,7 @@ fun Stage(minHeight: Int = 96, content: @Composable () -> Unit) {
             .padding(20.dp)
             .height(minHeight.dp),
         contentAlignment = Alignment.CenterStart,
-    ) { content() }
+    ) { if (numbers) NumberText(content) else content() }
 }
 
 @Composable
@@ -92,7 +91,7 @@ fun LabeledSlider(label: String, value: Float, range: ClosedFloatingPointRange<F
     Column {
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
             Text(label, style = MaterialTheme.typography.bodyMedium)
-            Text(format(value), style = MaterialTheme.typography.bodyMedium, fontFamily = FontFamily.Monospace)
+            Text(format(value), style = MaterialTheme.typography.bodyMedium, fontFamily = DemoType.geistMono)
         }
         Slider(value = value, onValueChange = onChange, valueRange = range)
     }

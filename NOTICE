@@ -39,3 +39,13 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+---
+
+The :demo app bundles the following fonts, each licensed under the SIL Open
+Font License, Version 1.1. Their license texts are in demo/licenses/.
+
+- Geist and Geist Mono, Copyright 2024 The Geist Project Authors
+  (https://github.com/vercel/geist-font)
+- Bitcount Single, Copyright The Bitcount Project Authors
+  (https://github.com/petrvanblokland/TYPETR-Bitcount)
