@@ -51,7 +51,7 @@ fun InterruptionScreen() {
     val timer = String.format(Locale.US, "%02d:%02d.%02d", minutes, seconds, hundredths)
 
     SectionTitle("Ticking timer (every $tickMs ms)")
-    Stage(88) {
+    Stage(88, numbers = true) {
         TextMorph(
             text = timer,
             style = MaterialTheme.typography.displaySmall.copy(fontFeatureSettings = "tnum"),

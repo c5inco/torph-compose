@@ -60,7 +60,7 @@ enum class Screen(val title: String, val blurb: String) {
 fun DemoApp() {
     val dark = isSystemInDarkTheme()
     val scheme = if (dark) darkColorScheme(primary = Color(0xFF9ECBFF)) else lightColorScheme(primary = Color(0xFF0B57D0))
-    MaterialTheme(colorScheme = scheme) {
+    MaterialTheme(colorScheme = scheme, typography = DemoType.typography) {
         var screen by rememberSaveable { mutableStateOf<Screen?>(null) }
         BackHandler(enabled = screen != null) { screen = null }
         Surface(Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {

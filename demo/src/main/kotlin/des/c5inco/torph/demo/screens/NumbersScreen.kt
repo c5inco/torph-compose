@@ -52,7 +52,7 @@ fun NumbersScreen() {
     val formatted = formatNumber(value, decimals, javaLocale)
     val text = if (currency) (if (localeTag.startsWith("en")) "$symbol$formatted" else "$formatted $symbol") else formatted
 
-    Stage(120) {
+    Stage(120, numbers = true) {
         TextMorph(
             text = text,
             style = MaterialTheme.typography.displayMedium.copy(fontFeatureSettings = "tnum"),

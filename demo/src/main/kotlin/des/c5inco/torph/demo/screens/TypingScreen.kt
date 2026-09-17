@@ -38,7 +38,7 @@ fun TypingScreen() {
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
     )
     SectionTitle("cursorIndex = ${field.selection.end}")
-    Stage(72) {
+    Stage(72, numbers = true) {
         TextMorph(
             text = field.text,
             cursorIndex = field.selection.end,
@@ -47,7 +47,7 @@ fun TypingScreen() {
         )
     }
     SectionTitle("cursorIndex = null (place matching)")
-    Stage(72) {
+    Stage(72, numbers = true) {
         TextMorph(
             text = field.text,
             style = MaterialTheme.typography.headlineLarge,
