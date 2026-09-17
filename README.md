@@ -14,6 +14,14 @@ TextMorph(text = "$1,234.50")          // change the string, get a morph
 TextMorph(value = 1234.5, decimals = 2) // or hand it a number
 ```
 
+| Numbers roll by place value | Shared letters glide into place |
+| :---: | :---: |
+| <img src="docs/media/numbers.gif" alt="A dollar amount changing, with each digit rolling vertically to its new value" width="360"> | <img src="docs/media/words.gif" alt="Hello world morphing into Hello there, Goodbye world and Hello, world 42" width="360"> |
+| **Updates faster than the roll keep rolling** | **Rapid updates never snap** |
+| <img src="docs/media/timer.gif" alt="A stopwatch ticking every 80 ms, its last digits rolling continuously like an odometer" width="360"> | <img src="docs/media/typing.gif" alt="A sentence being typed one character at a time, wrapping across lines" width="360"> |
+
+Recorded from the `:demo` app on a Pixel 10 Pro.
+
 ## Modules
 
 | Module | What | Depends on |
