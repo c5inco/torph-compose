@@ -25,14 +25,17 @@ internal class Channel(initial: Float) {
     private var start = UNSET
     private var duration = 0L
     private var spec: FloatAnimationSpec? = null
+    /** Velocity handed over by [snapTo] for the next [animateTo] to start with. */
+    private var carried = 0f
 
-    fun snapTo(v: Float) {
-        value = v; target = v; active = false; v0 = 0f
+    fun snapTo(v: Float, velocity: Float = 0f) {
+        value = v; target = v; active = false; v0 = 0f; carried = velocity
     }
 
     /** Retarget to [t]. [now] is the last frame time, or [UNSET] when no frame loop is running. */
     fun animateTo(t: Float, s: FloatAnimationSpec, now: Long) {
-        val vel = velocityAt(now)
+        val vel = if (active) velocityAt(now) else carried
+        carried = 0f
         from = value
         v0 = vel
         target = t

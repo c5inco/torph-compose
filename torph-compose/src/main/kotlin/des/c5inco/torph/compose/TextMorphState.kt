@@ -308,17 +308,24 @@ public class TextMorphState internal constructor(
             if (from != null && roll != 0) {
                 claimed.add(from.id)
                 val previous = byId[from.id]
-                val strip = digitStrip(from.text, new.text, roll)
+                val previousStrip = previous?.strip
                 val ls = LiveSegment(new.id, new, layout, target, cell, target, 1f, 1f)
                 ls.entering = true
-                ls.strip = strip
                 ls.stripRoll = roll
-                // If the old digit was itself mid-roll, continue from where its strip is drawn.
-                if (previous != null && previous.strip != null && previous.stripRoll == roll) {
-                    ls.stripProgress.snapTo(previous.stripProgress.value - (previous.strip!!.size - 1))
+                val strip: List<TextLayoutResult>
+                if (previous != null && previousStrip != null && previous.stripRoll == roll) {
+                    // The old digit is itself mid-roll: start the new strip at the digit currently on
+                    // screen, not the one it was heading to, so nothing blanks out while it catches up.
+                    val p = previous.stripProgress.value.coerceIn(0f, (previousStrip.size - 1).toFloat())
+                    val k = p.toInt()
+                    strip = digitStrip(previousStrip[k].layoutInput.text.text, new.text, roll)
+                    ls.stripProgress.snapTo(p - k, previous.stripProgress.velocityAt(now))
                     ls.x.snapTo(previous.x.value); ls.y.snapTo(previous.y.value)
                     ls.x.animateTo(target.x, moveSpec, now); ls.y.animateTo(target.y, moveSpec, now)
+                } else {
+                    strip = digitStrip(from.text, new.text, roll)
                 }
+                ls.strip = strip
                 ls.stripProgress.animateTo((strip.size - 1).toFloat(), fadeSpec, now)
                 live.add(ls)
                 continue
