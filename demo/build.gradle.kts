@@ -9,14 +9,17 @@ android {
     compileSdk = libs.versions.compileSdk.get().toInt()
     defaultConfig {
         applicationId = "des.c5inco.torph.demo"
-        minSdk = libs.versions.minSdk.get().toInt()
+        minSdk = 28
         targetSdk = libs.versions.compileSdk.get().toInt()
         versionCode = 1
         versionName = "0.1.0"
     }
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt")
+            )
             signingConfig = signingConfigs.getByName("debug")
         }
         // Release-like, debug-signed, profileable: the target of :benchmark.
