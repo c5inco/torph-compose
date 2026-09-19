@@ -1,11 +1,15 @@
 package des.c5inco.torph.compose
 
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.BlendMode
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.graphics.drawscope.clipRect
+import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.drawscope.scale
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextLayoutResult
@@ -32,15 +36,22 @@ internal fun TextMorphState.draw(scope: DrawScope) = with(scope) {
         val y = ls.y.value
         val strip = ls.strip
         if (strip != null) {
-            // The strip follows the segment's animated offset, so its clip is derived from it too.
             val h = ls.cell.height
-            clipRect(x - ls.width * 0.5f, y - 1f, x + ls.width * 1.5f, y + h + 1f) {
+            val padY = h * 0.25f
+            val bounds = Rect(x - ls.width * 0.5f, y - padY, x + ls.width * 1.5f, y + h + padY)
+            val fadeHeight = padY + h * 0.1f
+            drawWithSoftClip(bounds, fadeHeight) {
                 drawStrip(ls, strip, ls.stripProgress.value, x, y, alpha)
             }
         } else {
             val clip = ls.clip
             if (clip != null) {
-                clipRect(clip.left, clip.top - 1f, clip.right, clip.bottom + 1f) { drawSegment(ls, x, y, ls.scale.value, alpha) }
+                val padY = clip.height * 0.25f
+                val bounds = Rect(clip.left - ls.width * 0.5f, clip.top - padY, clip.right + ls.width * 0.5f, clip.bottom + padY)
+                val fadeHeight = padY + clip.height * 0.1f
+                drawWithSoftClip(bounds, fadeHeight) {
+                    drawSegment(ls, x, y, ls.scale.value, alpha)
+                }
             } else {
                 drawSegment(ls, x, y, ls.scale.value, alpha)
             }
@@ -71,6 +82,37 @@ private fun DrawScope.drawStrip(ls: LiveSegment, strip: List<TextLayoutResult>, 
         val dy = y + ls.stripRoll * (k - progress) * h
         drawText(layout, topLeft = Offset(centerX - layout.size.width / 2f, dy), alpha = alpha)
         k++
+    }
+}
+
+private val layerPaint = Paint()
+
+private inline fun DrawScope.drawWithSoftClip(
+    bounds: Rect,
+    fadeHeight: Float,
+    drawContent: DrawScope.() -> Unit,
+) {
+    drawIntoCanvas { canvas ->
+        canvas.saveLayer(bounds, layerPaint)
+        drawContent()
+        val top = bounds.top
+        val bottom = bounds.bottom
+        val h = bottom - top
+        val fadeFraction = (fadeHeight / h).coerceIn(0.01f, 0.49f)
+        drawRect(
+            brush = Brush.verticalGradient(
+                0.0f to Color.Transparent,
+                fadeFraction to Color.Black,
+                (1f - fadeFraction) to Color.Black,
+                1.0f to Color.Transparent,
+                startY = top,
+                endY = bottom,
+            ),
+            topLeft = bounds.topLeft,
+            size = bounds.size,
+            blendMode = BlendMode.DstIn,
+        )
+        canvas.restore()
     }
 }
 
