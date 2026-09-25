@@ -14,6 +14,12 @@ per-segment lambdas or string building creeping into the draw path. When last me
 3.3 KB per frame, down from 80 KB before per-segment `Animatable`s were replaced by plain float
 channels.
 
+Since then, rolling digits stopped rebuilding their fade gradient every frame (about 0.9 KB per
+rolling digit per frame). On an emulator, over a 600-frame window, that took the same scene from
+5.1 KB to 2.3 KB per frame, and one rolling digit on its own now allocates the same 2.3 KB as the
+200-segment scene: what remains is Compose's and the test clock's fixed per-frame cost, not
+per-segment work.
+
 ## Running the suite
 
 `:benchmark` is a Macrobenchmark module targeting the demo's Perf screen:
@@ -136,10 +142,20 @@ character to find each segment's left and right edge, at roughly 8 µs per call,
 linear in characters no matter how few segments there are. Neither of the earlier guesses was right:
 text measurement is 12% and the diff is 7%.
 
-The obvious fix is to stop scanning every character. A segment that does not straddle a line break
-only needs its first and last character, which in word mode cuts 1000 calls to about 680. Getting
-further means a cheaper primitive than `getBoundingBox`, which allocates a `Rect` per call;
-`getHorizontalPosition` returns a float and may be cheaper, but that is untested.
+**Update:** placement now fills every character's box in one `MultiParagraph.fillBoundingBoxes`
+call per layout instead of calling `getBoundingBox` per character (same boxes, no per-call `Rect`s,
+and neighbouring characters share an edge lookup), and the diff's LCS no longer boxes its indices.
+Emulator medians of the same breakdown (Perf-screen-style lorem text in a 380 dp column, 24 changes each), before and after; not
+yet re-measured on the Pixel:
+
+| chars | total | position | of which box | tokenize | diff |
+| ---: | ---: | ---: | ---: | ---: | ---: |
+| 200 | 4.28 → 2.40 ms | 1.05 → 0.72 ms | 0.77 → 0.41 ms | 0.23 → 0.24 ms | 1.79 → 0.21 ms |
+| 1000 | 6.96 → 4.38 ms | 3.66 → 1.90 ms | 3.39 → 1.62 ms | 0.89 → 0.49 ms | 0.51 → 0.29 ms |
+
+The box fill is still linear in characters, since each lookup walks its line. Scanning only each
+segment's first and last character would cut it further in word mode, but is not equivalent for
+bidirectional text.
 
 One caveat on these numbers: segment-layout measuring shows 0.00 ms because the demo cycles strings
 built from a single word list, so the layout cache always hits. Text with genuinely new words pays
