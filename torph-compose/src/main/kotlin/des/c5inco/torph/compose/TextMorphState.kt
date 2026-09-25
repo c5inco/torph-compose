@@ -84,6 +84,8 @@ internal class LiveSegment(
     var entering = false
     /** Clip rect for a digit sliding in or out of its cell, null otherwise. */
     var clip: Rect? = null
+    /** Layer bounds and fade mask for [clip] or [strip], kept while they hold still. */
+    var softClip: SoftClip? = null
     /** Odometer strip (old digit ... new digit) while a digit rolls; drawn instead of [layout]. */
     var strip: List<TextLayoutResult>? = null
     /** Index into [strip] (fractional) of the digit currently at the target position. */

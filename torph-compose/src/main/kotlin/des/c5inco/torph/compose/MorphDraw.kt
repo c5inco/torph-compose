@@ -38,18 +38,19 @@ internal fun TextMorphState.draw(scope: DrawScope) = with(scope) {
         if (strip != null) {
             val h = ls.cell.height
             val padY = h * 0.25f
-            val bounds = Rect(x - ls.width * 0.5f, y - padY, x + ls.width * 1.5f, y + h + padY)
-            val fadeHeight = padY + h * 0.1f
-            drawWithSoftClip(bounds, fadeHeight) {
+            val softClip = ls.softClip(x - ls.width * 0.5f, y - padY, x + ls.width * 1.5f, y + h + padY, padY + h * 0.1f)
+            drawWithSoftClip(softClip) {
                 drawStrip(ls, strip, ls.stripProgress.value, x, y, alpha)
             }
         } else {
             val clip = ls.clip
             if (clip != null) {
                 val padY = clip.height * 0.25f
-                val bounds = Rect(clip.left - ls.width * 0.5f, clip.top - padY, clip.right + ls.width * 0.5f, clip.bottom + padY)
-                val fadeHeight = padY + clip.height * 0.1f
-                drawWithSoftClip(bounds, fadeHeight) {
+                val softClip = ls.softClip(
+                    clip.left - ls.width * 0.5f, clip.top - padY, clip.right + ls.width * 0.5f, clip.bottom + padY,
+                    padY + clip.height * 0.1f,
+                )
+                drawWithSoftClip(softClip) {
                     drawSegment(ls, x, y, ls.scale.value, alpha)
                 }
             } else {
@@ -87,27 +88,40 @@ private fun DrawScope.drawStrip(ls: LiveSegment, strip: List<TextLayoutResult>, 
 
 private val layerPaint = Paint()
 
+/** A layer's bounds and the vertical gradient that fades its top and bottom [fadeHeight] out. */
+internal class SoftClip(val bounds: Rect, val fadeHeight: Float, val mask: Brush)
+
+/**
+ * The soft clip for these bounds, reusing the segment's previous one when nothing moved (the usual
+ * case: a roll's cell holds still), so the gradient and its shader aren't rebuilt every frame.
+ */
+private fun LiveSegment.softClip(left: Float, top: Float, right: Float, bottom: Float, fadeHeight: Float): SoftClip {
+    val cached = softClip
+    if (cached != null && cached.fadeHeight == fadeHeight && cached.bounds.left == left &&
+        cached.bounds.top == top && cached.bounds.right == right && cached.bounds.bottom == bottom
+    ) return cached
+    val fadeFraction = (fadeHeight / (bottom - top)).coerceIn(0.01f, 0.49f)
+    val mask = Brush.verticalGradient(
+        0.0f to Color.Transparent,
+        fadeFraction to Color.Black,
+        (1f - fadeFraction) to Color.Black,
+        1.0f to Color.Transparent,
+        startY = top,
+        endY = bottom,
+    )
+    return SoftClip(Rect(left, top, right, bottom), fadeHeight, mask).also { softClip = it }
+}
+
 private inline fun DrawScope.drawWithSoftClip(
-    bounds: Rect,
-    fadeHeight: Float,
+    softClip: SoftClip,
     drawContent: DrawScope.() -> Unit,
 ) {
     drawIntoCanvas { canvas ->
+        val bounds = softClip.bounds
         canvas.saveLayer(bounds, layerPaint)
         drawContent()
-        val top = bounds.top
-        val bottom = bounds.bottom
-        val h = bottom - top
-        val fadeFraction = (fadeHeight / h).coerceIn(0.01f, 0.49f)
         drawRect(
-            brush = Brush.verticalGradient(
-                0.0f to Color.Transparent,
-                fadeFraction to Color.Black,
-                (1f - fadeFraction) to Color.Black,
-                1.0f to Color.Transparent,
-                startY = top,
-                endY = bottom,
-            ),
+            brush = softClip.mask,
             topLeft = bounds.topLeft,
             size = bounds.size,
             blendMode = BlendMode.DstIn,
