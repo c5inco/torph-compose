@@ -108,10 +108,14 @@ public fun diffSegments(
     // --- 2. text runs between paired numeric words ---
     val oldRuns = runs(old, oldGroups, paired)
     val newRuns = runs(new, newGroups, paired)
+    val textCodes = HashMap<String, Int>()
     for (r in 0..paired) {
         val a = oldRuns[r]
         val b = newRuns[r]
-        val matches = lcs(a, b) { i, j -> sameText(old[a[i]], new[b[j]]) }
+        // The LCS compares every old segment with every new one, so compare int codes, not strings.
+        val oldCodes = IntArray(a.size) { sameTextCode(old[a[it]], textCodes) }
+        val newCodes = IntArray(b.size) { sameTextCode(new[b[it]], textCodes) }
+        val matches = lcs(a, b) { i, j -> oldCodes[i] == newCodes[j] }
         val bMatched = BooleanArray(b.size)
         for ((i, j) in matches) {
             val o = old[a[i]]
@@ -136,9 +140,14 @@ public fun diffSegments(
     return DiffResult(persist, enter, exit, segments, nextId)
 }
 
-private fun sameText(a: Segment, b: Segment): Boolean = a.kind == b.kind && a.text == b.text ||
-    // Unpaired numeric words fall back to plain text matching.
-    (a.kind != SegmentKind.NEWLINE && b.kind != SegmentKind.NEWLINE && a.text == b.text)
+/**
+ * Two segments get the same code when their text matches and neither or both are line breaks.
+ * Kind is otherwise ignored, so unpaired numeric words fall back to plain text matching.
+ */
+private fun sameTextCode(s: Segment, codes: HashMap<String, Int>): Int {
+    val code = codes.getOrPut(s.text) { codes.size + 1 }
+    return if (s.kind == SegmentKind.NEWLINE) -code else code
+}
 
 /** Indices of segments per numeric group, in group order. */
 private fun groupIndices(segments: List<Segment>): List<IntArray> {
@@ -188,24 +197,36 @@ private fun runs(segments: List<Segment>, groups: List<IntArray>, paired: Int): 
 /**
  * Left-biased LCS: returns matched (i, j) pairs in increasing order. Built from a suffix table and
  * walked from the front, so among equal-length subsequences the earliest possible matches win.
+ *
+ * Inline so [eq] is called without boxing its indices: it runs n * m times, and a boxed call
+ * allocated two `Integer`s per cell once indices passed 127 (16 MB for a 1000-segment diff).
  */
-internal fun lcs(a: IntArray, b: IntArray, eq: (Int, Int) -> Boolean): List<Pair<Int, Int>> {
+internal inline fun lcs(a: IntArray, b: IntArray, eq: (Int, Int) -> Boolean): List<Pair<Int, Int>> {
     val n = a.size
     val m = b.size
     if (n == 0 || m == 0) return emptyList()
-    val dp = Array(n + 1) { IntArray(m + 1) }
-    for (i in n - 1 downTo 0) {
-        for (j in m - 1 downTo 0) {
-            dp[i][j] = if (eq(i, j)) dp[i + 1][j + 1] + 1 else maxOf(dp[i + 1][j], dp[i][j + 1])
+    val out = ArrayList<Pair<Int, Int>>()
+    // The walk below always matches a shared prefix pairwise, so take it without building the table.
+    var p = 0
+    while (p < n && p < m && eq(p, p)) { out.add(p to p); p++ }
+    if (p == n || p == m) return out
+    // dp[(i - p) * w + (j - p)] is the LCS length of a[i..] and b[j..]; one flat array, not one per row.
+    val w = m - p + 1
+    val dp = IntArray((n - p + 1) * w)
+    for (i in n - 1 downTo p) {
+        val row = (i - p) * w
+        for (j in m - 1 downTo p) {
+            val c = row + (j - p)
+            dp[c] = if (eq(i, j)) dp[c + w + 1] + 1 else maxOf(dp[c + w], dp[c + 1])
         }
     }
-    val out = ArrayList<Pair<Int, Int>>(dp[0][0])
-    var i = 0
-    var j = 0
+    var i = p
+    var j = p
     while (i < n && j < m) {
+        val c = (i - p) * w + (j - p)
         when {
-            eq(i, j) && dp[i][j] == dp[i + 1][j + 1] + 1 -> { out.add(i to j); i++; j++ }
-            dp[i + 1][j] >= dp[i][j + 1] -> i++
+            eq(i, j) && dp[c] == dp[c + w + 1] + 1 -> { out.add(i to j); i++; j++ }
+            dp[c + w] >= dp[c + 1] -> i++
             else -> j++
         }
     }
