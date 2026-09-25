@@ -112,6 +112,9 @@ internal class LiveSegment(
     val isActive: Boolean get() = x.active || y.active || alpha.active || scale.active || stripProgress.active
 }
 
+/** Segment layouts kept across text changes: a few screens of distinct words. */
+private const val MAX_CACHED_LAYOUTS = 1024
+
 /**
  * Owns the segment list, animation channels and layout cache behind [TextMorph]. Create with
  * [rememberTextMorphState] and attach with [Modifier.textMorph] for custom containers.
@@ -214,7 +217,9 @@ public class TextMorphState internal constructor(
         )
         if (diag) { val n = System.nanoTime(); timings.measureText = n - mark; mark = n }
         layoutResult = full
-        if (cacheStyle != key.style) { layoutCache.clear(); cacheStyle = key.style }
+        // Text that keeps introducing new words would otherwise grow the cache without bound. Live
+        // segments hold their own layouts, so clearing only costs re-measuring the next change.
+        if (cacheStyle != key.style || layoutCache.size > MAX_CACHED_LAYOUTS) { layoutCache.clear(); cacheStyle = key.style }
         val newSize = Size(full.size.width.toFloat(), full.size.height.toFloat())
         val segOptions = SegmentOptions(opts.segmentation, opts.numbers, opts.cursorIndex, opts.maxSegments)
 
