@@ -13,6 +13,38 @@ val libraryProjects = listOf(":torph-core", ":torph-compose")
 val torphGroup = property("GROUP") as String
 val torphVersion = property("VERSION_NAME") as String
 
+// POM metadata both libraries share. Each module sets its own artifactId, name and description.
+libraryProjects.forEach { path ->
+    project(path) {
+        plugins.withId("maven-publish") {
+            configure<PublishingExtension> {
+                publications.withType<MavenPublication>().configureEach {
+                    pom {
+                        url.set("https://github.com/c5inco/torph-compose")
+                        licenses {
+                            license {
+                                name.set("MIT License")
+                                url.set("https://opensource.org/licenses/MIT")
+                            }
+                        }
+                        developers {
+                            developer {
+                                id.set("c5inco")
+                                name.set("Chris Sinco")
+                            }
+                        }
+                        scm {
+                            url.set("https://github.com/c5inco/torph-compose")
+                            connection.set("scm:git:https://github.com/c5inco/torph-compose.git")
+                            developerConnection.set("scm:git:ssh://git@github.com/c5inco/torph-compose.git")
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 tasks.register("publishLocal") {
     group = "torph"
     description = "Builds both libraries and installs them into ~/.m2/repository (mavenLocal)."

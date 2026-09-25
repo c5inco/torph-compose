@@ -25,7 +25,6 @@ android {
         // Release-like, debug-signed, profileable: the target of :benchmark.
         create("benchmark") {
             initWith(getByName("release"))
-            signingConfig = signingConfigs.getByName("debug")
             matchingFallbacks += listOf("release")
             isDebuggable = false
             // Own package so a benchmark run never replaces or uninstalls the debug install.
