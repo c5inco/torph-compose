@@ -45,12 +45,10 @@ class PerfScreenBenchmark {
 
     @Test fun morph200() = morph(200)
 
+    /** Over the 300-segment cap, so this also measures the automatic word-segmentation fallback. */
     @Test fun morph1000() = morph(1000)
 
-    /** Word segmentation at 1000 chars: what the >300-segment guard falls back to. */
-    @Test fun morph1000Word() = morph(1000, mode = "WORD")
-
-    private fun morph(chars: Int, mode: String? = null) = rule.measureRepeated(
+    private fun morph(chars: Int) = rule.measureRepeated(
         packageName = PACKAGE,
         metrics = listOf(FrameTimingMetric()),
         iterations = 3,
@@ -59,19 +57,18 @@ class PerfScreenBenchmark {
         setupBlock = {
             pressHome()
             startActivityAndWait()
-            openPerf(chars, mode)
+            openPerf(chars)
         },
     ) {
         // Three cycles of the 1.5 s rotation: ~4.5 s of continuous morphing.
         Thread.sleep(4_800)
     }
 
-    private fun MacrobenchmarkScope.openPerf(chars: Int, mode: String?) {
+    private fun MacrobenchmarkScope.openPerf(chars: Int) {
         device.wait(Until.hasObject(By.text("Perf")), 5_000)
         device.findObject(By.text("Perf")).click()
         device.wait(Until.hasObject(By.text("$chars chars")), 5_000)
         device.findObject(By.text("$chars chars")).click()
-        if (mode != null) device.findObject(By.text(mode))?.click()
         // Let the first layout and cycle settle before measuring.
         Thread.sleep(1_600)
     }

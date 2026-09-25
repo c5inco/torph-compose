@@ -36,13 +36,16 @@ Results (JSON + Perfetto traces) land in
 | morph50 | ~50 | 4.6 ms | 6.3 ms | 11.8 ms | -10.0 ms | -2.3 ms |
 | morph200 | ~200 | 5.6 ms | 7.6 ms | 16.1 ms | -9.3 ms | 1.0 ms |
 | morph1000 (auto → word fallback) | ~360 | 6.2 ms | 8.1 ms | 22.8 ms | -7.8 ms | 8.8 ms |
-| morph1000Word | ~360 | 6.4 ms | 8.7 ms | 23.1 ms | -7.6 ms | 9.6 ms |
 
 Cold startup time to initial display: 263 ms median.
 
 Overrun is how late a frame finished against its deadline, so negative means it finished early.
 Every size holds frame rate at P50 and P90, including 1000 characters. Sustained performance mode
 was off for these runs, so expect some thermal variance.
+
+There used to be a separate `morph1000Word` run forcing `Segmentation.WORD`. It measured within
+noise of `morph1000` (P50 6.4 ms, P99 23.1 ms) because `AUTO` already falls back to word
+segmentation above 300 segments, so it was dropped.
 
 ## Where the time actually goes (from the Perfetto traces)
 
@@ -152,7 +155,6 @@ emulator runs as a regression signal rather than a measurement:
 | morph50 | 3.9 ms | 7.9 ms | 21.1 ms | -9.6 ms |
 | morph200 | 5.2 ms | 19.2 ms | 45.0 ms | -10.4 ms |
 | morph1000 | 18.9 ms | 21.6 ms | 31.5 ms | 2.8 ms |
-| morph1000Word | 18.9 ms | 20.7 ms | 24.6 ms | 2.8 ms |
 
 ## Running on a physical device
 
