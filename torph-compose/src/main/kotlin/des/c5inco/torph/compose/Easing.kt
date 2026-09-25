@@ -1,13 +1,9 @@
 package des.c5inco.torph.compose
 
-import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.CubicBezierEasing
 import androidx.compose.animation.core.Easing
 import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.spring
-import androidx.compose.animation.core.tween
 import des.c5inco.torph.core.SpringParams
-import kotlin.time.Duration
 
 /** How segments travel. Mirrors torph's `ease` option: a timing curve or a physical spring. */
 public sealed interface MorphEase {
@@ -16,7 +12,8 @@ public sealed interface MorphEase {
 
     /**
      * Physical spring in torph's units (stiffness, damping coefficient, mass). Duration is ignored.
-     * `precision` is the settle threshold in pixels.
+     * `precision` is carried into [params] for settle-time estimates; the animation itself settles
+     * at fixed thresholds (half a pixel for movement, 0.001 for fades).
      */
     public data class Spring(
         val stiffness: Float = 100f,
@@ -68,14 +65,4 @@ public fun cssCubicBezier(css: String): Easing {
     val m = bezierRegex.matchEntire(s) ?: throw IllegalArgumentException("Not a cubic-bezier: $css")
     val (a, b, c, d) = m.destructured
     return CubicBezierEasing(a.toFloat(), b.toFloat(), c.toFloat(), d.toFloat())
-}
-
-/** Builds the Compose spec for one property. Spring visibility thresholds follow [precision]. */
-internal fun <T> MorphEase.toSpec(duration: Duration, threshold: T?): AnimationSpec<T> = when (this) {
-    is MorphEase.Curve -> tween(duration.inWholeMilliseconds.toInt().coerceAtLeast(0), easing = easing)
-    is MorphEase.Spring -> spring(
-        dampingRatio = params.dampingRatio.coerceAtLeast(0.01f),
-        stiffness = (stiffness / mass).coerceAtLeast(1f),
-        visibilityThreshold = threshold,
-    )
 }

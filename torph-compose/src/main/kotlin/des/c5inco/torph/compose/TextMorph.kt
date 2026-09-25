@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.isSpecified
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -75,7 +76,7 @@ public fun TextMorph(
         duration = duration,
         scale = scale,
         numbers = numbers,
-        locale = java.util.Locale.forLanguageTag(locale.toLanguageTag()),
+        locale = locale.toJavaLocale(),
         cursorIndex = cursorIndex,
         segmentation = segmentation,
         sizeMode = sizeMode,
@@ -123,9 +124,8 @@ public fun TextMorph(
     onAnimationCancel: (() -> Unit)? = null,
     state: TextMorphState = rememberTextMorphState(),
 ) {
-    val javaLocale = java.util.Locale.forLanguageTag(locale.toLanguageTag())
     TextMorph(
-        text = formatNumber(value, decimals, javaLocale),
+        text = formatNumber(value, decimals, locale.toJavaLocale()),
         modifier = modifier,
         style = style,
         color = color,
@@ -146,4 +146,4 @@ public fun TextMorph(
     )
 }
 
-private val Color.isSpecified: Boolean get() = this != Color.Unspecified
+private fun Locale.toJavaLocale(): java.util.Locale = java.util.Locale.forLanguageTag(toLanguageTag())
