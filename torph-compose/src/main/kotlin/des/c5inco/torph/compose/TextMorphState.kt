@@ -54,8 +54,10 @@ public class TextMorphState internal constructor(
     /** Resolved style, including colour. Changing it re-measures without morphing. */
     public var style: TextStyle by mutableStateOf(TextStyle.Default)
 
+    /** Timing, matching and rendering options. Read in the layout and draw passes. */
     public var options: MorphOptions by mutableStateOf(MorphOptions())
 
+    /** See the matching [TextMorph] parameters. Exactly one of complete/cancel follows each start. */
     public var onAnimationStart: (() -> Unit)? = null
     public var onAnimationComplete: (() -> Unit)? = null
     public var onAnimationCancel: (() -> Unit)? = null
