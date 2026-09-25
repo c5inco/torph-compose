@@ -31,7 +31,9 @@ kotlin { jvmToolchain(17) }
 
 dependencies {
     implementation(libs.androidx.junit)
-    implementation(libs.androidx.espresso.core)
+    // Nothing here uses Espresso, which was only here to lift androidx.test:runner. Pin the runner
+    // directly: left to benchmark-macro it resolves to 1.5.2, older than :torph-compose uses.
+    implementation(libs.androidx.test.runner)
     implementation(libs.androidx.uiautomator)
     implementation(libs.androidx.benchmark.macro)
 }

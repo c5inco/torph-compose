@@ -37,8 +37,6 @@ dependencies {
     implementation(libs.compose.ui.text)
     implementation(libs.kotlinx.coroutines.core)
 
-    testImplementation(libs.junit)
-    testImplementation(libs.kotlin.test)
     androidTestImplementation(platform(libs.compose.bom))
     androidTestImplementation(libs.androidx.junit)
     // Pin androidx.test above what ui-test-junit4 pulls in (espresso 3.5.0 / runner 1.5.0),
