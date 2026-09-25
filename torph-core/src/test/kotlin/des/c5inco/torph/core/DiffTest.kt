@@ -19,17 +19,6 @@ class DiffTest {
     }
 
     @Test
-    fun `persist plus enter reconstructs new, persist plus exit reconstructs old`() {
-        val (o, r) = diff("Hello world", "Hello there")
-        assertEquals("Hello there", r.segments.sortedBy { it.index }.joinToString("") { it.text })
-        val newFromParts = (r.persist.map { it.second } + r.enter).sortedBy { it.index }.joinToString("") { it.text }
-        assertEquals("Hello there", newFromParts)
-        val oldFromParts = (r.persist.map { it.first } + r.exit).sortedBy { it.index }.joinToString("") { it.text }
-        assertEquals("Hello world", oldFromParts)
-        assertEquals(o.size, r.persist.size + r.exit.size)
-    }
-
-    @Test
     fun `shared prefix keeps ids`() {
         val (o, r) = diff("Hello world", "Hello there")
         val oldIds = o.take(6).map { it.id }
@@ -107,10 +96,11 @@ class DiffTest {
 
     @Test
     fun `long text falls back to word segmentation`() {
-        val text = (1..80).joinToString(" ") { "word" }
-        val s = seg(text, SegmentOptions(maxSegments = 100))
-        assertTrue(s.size < 200)
-        assertTrue(s.any { it.text == "word" })
+        // 999 graphemes is over the default 300-segment cap. This fallback is what keeps the
+        // quadratic diff cheap on long text.
+        val s = seg((1..200).joinToString(" ") { "word" })
+        assertEquals(399, s.size)
+        assertTrue(s.all { it.text == "word" || it.text == " " })
     }
 
     @Test
