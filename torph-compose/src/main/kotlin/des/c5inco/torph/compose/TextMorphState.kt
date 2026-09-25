@@ -1,6 +1,5 @@
 package des.c5inco.torph.compose
 
-import androidx.compose.animation.core.FloatAnimationSpec
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -67,15 +66,15 @@ public data class MorphOptions(
  * loop; nothing here is snapshot state, so per-frame reads and writes allocate nothing.
  */
 internal class LiveSegment(
-    val id: Long,
     var segment: Segment,
     var layout: TextLayoutResult,
-    var target: Offset,
     var cell: Rect,
     initial: Offset,
-    initialAlpha: Float,
-    initialScale: Float,
+    initialAlpha: Float = 1f,
+    initialScale: Float = 1f,
 ) {
+    /** Stable across a persist: the diff hands the new segment the old id. */
+    val id: Long get() = segment.id
     val x = Channel(initial.x)
     val y = Channel(initial.y)
     val alpha = Channel(initialAlpha)
@@ -108,8 +107,6 @@ internal class LiveSegment(
         }
         return active
     }
-
-    val isActive: Boolean get() = x.active || y.active || alpha.active || scale.active || stripProgress.active
 }
 
 /** Segment layouts kept across text changes: a few screens of distinct words. */
@@ -161,10 +158,10 @@ public class TextMorphState internal constructor(
     private val sizeTick = mutableIntStateOf(0)
     private val width = Channel(0f)
     private val height = Channel(0f)
+    private var lastSizeMoving = false
 
     private var nextId = 0L
     private var lastKey: LayoutKey? = null
-    private var lastTextForSegments: String? = null
     private val layoutCache = HashMap<String, TextLayoutResult>()
     private var cacheStyle: TextStyle? = null
     /** Per-character (left, top, right, bottom) boxes of [charBoxesFor], filled once per layout for [place]. */
@@ -197,14 +194,17 @@ public class TextMorphState internal constructor(
         val prev = lastKey
         if (key != prev) {
             lastKey = key
-            val textChanged = prev != null && prev.text != key.text
-            apply(key, opts, morph = textChanged && !opts.snap)
+            apply(key, opts, prevText = prev?.text)
         }
         sizeTick.intValue // subscribe: re-measure while the size animates
         return constraints.constrain(IntSize(ceil(width.value).toInt(), ceil(height.value).toInt()))
     }
 
-    private fun apply(key: LayoutKey, opts: MorphOptions, morph: Boolean) {
+    /**
+     * Re-measures [key]. When its text differs from [prevText] (null on the first pass) the new
+     * text is diffed into [segments] and morphed to, or snapped to when [MorphOptions.snap] is set.
+     */
+    private fun apply(key: LayoutKey, opts: MorphOptions, prevText: String?) {
         val diag = TextMorphDiagnostics.logTimings
         if (diag) timings.reset()
         val applyStart = if (diag) System.nanoTime() else 0L
@@ -221,43 +221,25 @@ public class TextMorphState internal constructor(
         // segments hold their own layouts, so clearing only costs re-measuring the next change.
         if (cacheStyle != key.style || layoutCache.size > MAX_CACHED_LAYOUTS) { layoutCache.clear(); cacheStyle = key.style }
         val newSize = Size(full.size.width.toFloat(), full.size.height.toFloat())
-        val segOptions = SegmentOptions(opts.segmentation, opts.numbers, opts.cursorIndex, opts.maxSegments)
 
-        if (!morph) {
+        var diff: DiffResult? = null
+        if (key.text != prevText) {
+            val segOptions = SegmentOptions(opts.segmentation, opts.numbers, opts.cursorIndex, opts.maxSegments)
+            val incoming = segmentText(key.text, opts.locale, segmenter, segOptions, nextId)
+            if (diag) { val n = System.nanoTime(); timings.segment = n - mark; mark = n }
+            diff = diffSegments(segments, incoming, opts.locale)
+            if (diag) { val n = System.nanoTime(); timings.diff = n - mark; mark = n }
+            segments = diff.segments
+            nextId = diff.nextId
+        }
+
+        if (diff == null || prevText == null || opts.snap) {
             // Initial layout, re-wrap without a text change, or snapping: rebuild everything in place.
-            var changed = false
-            if (lastTextForSegments != key.text) {
-                val diff = if (segments.isNotEmpty() || lastTextForSegments != null) {
-                    diffSegments(segments, segmentText(key.text, opts.locale, segmenter, segOptions, nextId), opts.locale)
-                } else null
-                segments = diff?.segments ?: segmentText(key.text, opts.locale, segmenter, segOptions, nextId)
-                nextId = diff?.nextId ?: ((segments.maxOfOrNull { it.id } ?: (nextId - 1)) + 1)
-                lastTextForSegments = key.text
-                changed = diff != null && !diff.isEmpty
-            }
-            finishGeneration(cancelled = true)
-            live.clear()
-            for (s in segments) {
-                val (target, cell) = place(s, full)
-                live.add(LiveSegment(s.id, s, segmentLayout(s), target, cell, target, 1f, 1f))
-            }
-            width.snapTo(newSize.width)
-            height.snapTo(newSize.height)
-            frameTick.intValue++
-            if (changed) {
-                // Snapped morph: callbacks still fire, in order.
-                scope.launch { onAnimationStart?.invoke(); onAnimationComplete?.invoke() }
-            }
+            // A snapped text change still fires its callbacks, in order.
+            snapToLayout(full, newSize, notify = diff != null && prevText != null && !diff.isEmpty)
             return
         }
 
-        val incoming = segmentText(key.text, opts.locale, segmenter, segOptions, nextId)
-        if (diag) { val n = System.nanoTime(); timings.segment = n - mark; mark = n }
-        val diff = diffSegments(segments, incoming, opts.locale)
-        if (diag) { val n = System.nanoTime(); timings.diff = n - mark; mark = n }
-        segments = diff.segments
-        nextId = diff.nextId
-        lastTextForSegments = key.text
         startMorph(diff, full, newSize, opts)
         if (diag) {
             val n = System.nanoTime()
@@ -274,6 +256,19 @@ public class TextMorphState internal constructor(
         }
     }
 
+    private fun snapToLayout(full: TextLayoutResult, newSize: Size, notify: Boolean) {
+        finishGeneration(cancelled = true)
+        live.clear()
+        for (s in segments) {
+            val (target, cell) = place(s, full)
+            live.add(LiveSegment(s, segmentLayout(s), cell, target))
+        }
+        width.snapTo(newSize.width)
+        height.snapTo(newSize.height)
+        frameTick.intValue++
+        if (notify) scope.launch { onAnimationStart?.invoke(); onAnimationComplete?.invoke() }
+    }
+
     private fun startMorph(diff: DiffResult, full: TextLayoutResult, newSize: Size, opts: MorphOptions) {
         val now = if (loop?.isActive == true) lastFrameNanos else Channel.UNSET
         val moveSpec = opts.ease.toFloatSpec(opts.duration, 0.5f)
@@ -287,11 +282,10 @@ public class TextMorphState internal constructor(
             val ls = byId[old.id]
             val (target, cell) = place(new, full)
             if (ls == null) {
-                live.add(LiveSegment(new.id, new, segmentLayout(new), target, cell, target, 1f, 1f))
+                live.add(LiveSegment(new, segmentLayout(new), cell, target))
                 continue
             }
             ls.segment = new
-            ls.target = target
             ls.cell = cell
             if (ls.strip == null) { ls.entering = false; ls.clip = null }
             ls.x.animateTo(target.x, moveSpec, now)
@@ -304,8 +298,9 @@ public class TextMorphState internal constructor(
         // (old digit, every intermediate digit, new digit) that scrolls inside the digit's cell.
         val rollExits = HashMap<Long, Segment>()
         if (opts.numbers) {
-            for (old in diff.exit) if (old.kind == SegmentKind.DIGIT && old.roll != 0 && old.group != null && old.place != null) {
-                rollExits[rollKey(old.group!!, old.place!!)] = old
+            for (old in diff.exit) {
+                if (old.kind != SegmentKind.DIGIT || old.roll == 0) continue
+                rollExits[rollKey(old.group ?: continue, old.place ?: continue)] = old
             }
         }
         val claimed = HashSet<Long>()
@@ -315,12 +310,14 @@ public class TextMorphState internal constructor(
             val (target, cell) = place(new, full)
             val layout = segmentLayout(new)
             val roll = if (opts.numbers && new.kind == SegmentKind.DIGIT) new.roll else 0
-            val from = if (roll != 0 && new.group != null && new.place != null) rollExits[rollKey(new.group!!, new.place!!)] else null
-            if (from != null && roll != 0) {
+            val group = new.group
+            val place = new.place
+            val from = if (roll != 0 && group != null && place != null) rollExits[rollKey(group, place)] else null
+            if (from != null) {
                 claimed.add(from.id)
                 val previous = byId[from.id]
                 val previousStrip = previous?.strip
-                val ls = LiveSegment(new.id, new, layout, target, cell, target, 1f, 1f)
+                val ls = LiveSegment(new, layout, cell, target)
                 ls.entering = true
                 ls.stripRoll = roll
                 val strip: List<TextLayoutResult>
@@ -342,7 +339,7 @@ public class TextMorphState internal constructor(
                 continue
             }
             val startY = if (roll != 0) target.y + roll * cell.height else target.y
-            val ls = LiveSegment(new.id, new, layout, target, cell, Offset(target.x, startY), if (roll != 0) 1f else 0f, if (roll != 0) 1f else minScale)
+            val ls = LiveSegment(new, layout, cell, Offset(target.x, startY), if (roll != 0) 1f else 0f, if (roll != 0) 1f else minScale)
             ls.entering = true
             if (roll != 0) ls.clip = cell
             live.add(ls)
@@ -438,8 +435,6 @@ public class TextMorphState internal constructor(
         frameTick.intValue++
         return active || sizeMoving
     }
-
-    private var lastSizeMoving = false
 
     // endregion
 
