@@ -51,8 +51,10 @@ public fun segmentText(
     options: SegmentOptions = SegmentOptions(),
     firstId: Long = 0L,
 ): List<Segment> {
-    val result = segmentInternal(text, locale, segmenter, options, firstId)
-    if (options.segmentation != Segmentation.WORD && result.size > options.maxSegments) {
+    if (options.segmentation == Segmentation.WORD) return segmentInternal(text, locale, segmenter, options, firstId)
+    // Stops as soon as it passes maxSegments, so long text doesn't pay for a full pass it throws away.
+    val result = segmentInternal(text, locale, segmenter, options, firstId, limit = options.maxSegments)
+    if (result.size > options.maxSegments) {
         return segmentInternal(text, locale, segmenter, options.copy(segmentation = Segmentation.WORD), firstId)
     }
     return result
@@ -64,6 +66,8 @@ private fun segmentInternal(
     segmenter: Segmenter,
     options: SegmentOptions,
     firstId: Long,
+    /** Return early (with more than [limit] segments) once the result is known to exceed it. */
+    limit: Int = Int.MAX_VALUE,
 ): List<Segment> {
     val out = ArrayList<Segment>(text.length)
     var id = firstId
@@ -76,10 +80,10 @@ private fun segmentInternal(
     fun emitPlain(start: Int, end: Int) {
         if (end <= start) return
         var i = start
-        while (i < end) {
+        while (i < end && out.size <= limit) {
             val nl = text.indexOf('\n', i).let { if (it < 0 || it >= end) end else it }
             if (nl > i) {
-                for (r in splitPlain(text, i, nl, locale, segmenter, options.segmentation)) {
+                for (r in splitPlain(text, i, nl, locale, segmenter, options.segmentation, limit - out.size)) {
                     out.add(Segment(id++, text.substring(r.first, r.last + 1), r.first, SegmentKind.TEXT))
                 }
             }
@@ -94,6 +98,7 @@ private fun segmentInternal(
 
     for (word in numeric) {
         emitPlain(pos, word.start)
+        if (out.size > limit) return out
         // The numeric word holding the caret is matched positionally: emit as plain graphemes.
         val holdsCursor = cursor != null && cursor >= word.start && cursor <= word.end
         if (holdsCursor) {
@@ -125,6 +130,8 @@ private fun splitPlain(
     locale: Locale,
     segmenter: Segmenter,
     mode: Segmentation,
+    /** AUTO stops once it has more ranges than this; the caller then discards the result. */
+    limit: Int,
 ): List<IntRange> {
     val sub = text.substring(start, end)
     fun shift(ranges: List<IntRange>, base: Int) = ranges.map { (it.first + base)..(it.last + base) }
@@ -134,6 +141,7 @@ private fun splitPlain(
         Segmentation.AUTO -> {
             val out = ArrayList<IntRange>()
             for (w in segmenter.words(sub, locale)) {
+                if (out.size > limit) break
                 val wordText = sub.substring(w.first, w.last + 1)
                 if (needsWordSegmentation(wordText)) {
                     out.add((w.first + start)..(w.last + start))
