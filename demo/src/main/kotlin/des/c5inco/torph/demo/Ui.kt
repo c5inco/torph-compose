@@ -72,16 +72,16 @@ fun CodeBlock(code: String) {
     }
 }
 
-/** A stage with a fixed minimum height so size animation of the morph doesn't shove controls around. */
+/** A stage with a fixed height so size animation of the morph doesn't shove controls around. */
 @Composable
-fun Stage(minHeight: Int = 96, numbers: Boolean = false, content: @Composable () -> Unit) {
+fun Stage(height: Int = 96, numbers: Boolean = false, content: @Composable () -> Unit) {
     Box(
         Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(14.dp))
             .background(MaterialTheme.colorScheme.surfaceContainerLow)
             .padding(20.dp)
-            .height(minHeight.dp),
+            .height(height.dp),
         contentAlignment = Alignment.CenterStart,
     ) { if (numbers) NumberText(content) else content() }
 }

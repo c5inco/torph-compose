@@ -1,6 +1,5 @@
 package des.c5inco.torph.demo.screens
 
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
@@ -24,7 +23,7 @@ import des.c5inco.torph.demo.Stage
 
 @Composable
 fun TypingScreen() {
-    var field by rememberSaveable(stateSaver = androidx.compose.ui.text.input.TextFieldValue.Saver) {
+    var field by rememberSaveable(stateSaver = TextFieldValue.Saver) {
         mutableStateOf(TextFieldValue("1234", TextRange(4)))
     }
     Caption("Type digits. With cursorIndex the number under the caret is matched by position, so appending a digit doesn't shift every existing digit to a new place. Without it, place matching makes each digit exit and re-enter.")
@@ -61,5 +60,4 @@ fun TypingScreen() {
         TextMorph(text = field.text, cursorIndex = field.selection.end)
         """,
     )
-    Column {}
 }

@@ -7,17 +7,18 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.unit.dp
 import des.c5inco.torph.compose.MorphEase
 import des.c5inco.torph.compose.TextMorph
+import des.c5inco.torph.compose.TextMorphDiagnostics
 import des.c5inco.torph.core.formatNumber
 import des.c5inco.torph.demo.Caption
 import des.c5inco.torph.demo.Choice
@@ -28,8 +29,6 @@ import des.c5inco.torph.demo.SectionTitle
 import des.c5inco.torph.demo.Stage
 import des.c5inco.torph.demo.ToggleRow
 import kotlin.random.Random
-import androidx.compose.runtime.DisposableEffect
-import des.c5inco.torph.compose.TextMorphDiagnostics
 
 private val locales = listOf("en-US", "de-DE", "fr-FR", "ar-EG", "hi-IN")
 

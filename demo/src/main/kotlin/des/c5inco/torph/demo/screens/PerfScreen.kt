@@ -13,19 +13,19 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import des.c5inco.torph.compose.TextMorph
+import des.c5inco.torph.compose.TextMorphDiagnostics
 import des.c5inco.torph.compose.rememberTextMorphState
 import des.c5inco.torph.core.Segmentation
 import des.c5inco.torph.demo.Caption
 import des.c5inco.torph.demo.Choice
 import des.c5inco.torph.demo.CodeBlock
 import des.c5inco.torph.demo.Gap
-import des.c5inco.torph.demo.SectionTitle
 import des.c5inco.torph.demo.DemoType
+import des.c5inco.torph.demo.SectionTitle
 import des.c5inco.torph.demo.Stage
 import des.c5inco.torph.demo.ToggleRow
 import des.c5inco.torph.demo.cycling
 import kotlin.random.Random
-import des.c5inco.torph.compose.TextMorphDiagnostics
 
 private val words = ("lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua " +
     "ut enim ad minim veniam quis nostrud exercitation ullamco laboris nisi aliquip ex ea commodo consequat").split(" ")

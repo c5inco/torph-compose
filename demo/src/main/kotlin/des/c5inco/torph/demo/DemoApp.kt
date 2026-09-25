@@ -1,6 +1,7 @@
 package des.c5inco.torph.demo
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -43,7 +44,6 @@ import des.c5inco.torph.demo.screens.PerfScreen
 import des.c5inco.torph.demo.screens.PlaygroundScreen
 import des.c5inco.torph.demo.screens.ScriptsScreen
 import des.c5inco.torph.demo.screens.TypingScreen
-import androidx.compose.foundation.clickable
 
 enum class Screen(val title: String, val blurb: String) {
     Playground("Playground", "Type anything; tune duration, easing, springs, scale and numbers."),
