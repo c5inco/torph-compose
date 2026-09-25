@@ -1,8 +1,10 @@
 package des.c5inco.torph.core
 
 import kotlin.math.abs
+import kotlin.math.cos
 import kotlin.math.exp
 import kotlin.math.ln
+import kotlin.math.sin
 import kotlin.math.sqrt
 
 /**
@@ -35,12 +37,14 @@ public data class SpringParams(
 
 /**
  * Estimated time in milliseconds for a unit-displacement spring to stay within [SpringParams.precision]
- * of its target. Used to time `onAnimationComplete` for spring eases and to size reduced-motion fallbacks.
+ * of its target, or [Long.MAX_VALUE] for an undamped spring. An estimate for callers planning around
+ * a spring ease; the Compose renderer runs the spring itself and does not use it.
  */
 public fun settleTime(params: SpringParams): Long = settleTime(
     params.stiffness, params.damping, params.mass, params.precision,
 )
 
+/** [settleTime] for loose spring parameters. */
 public fun settleTime(stiffness: Float, damping: Float, mass: Float, precision: Float = 0.001f): Long {
     val p = SpringParams(stiffness, damping, mass, precision)
     val zeta = p.dampingRatio
@@ -80,7 +84,7 @@ public fun springPosition(params: SpringParams, timeMs: Long, initialVelocity: F
             val wd = w0 * sqrt(1 - zeta * zeta)
             val a = x0
             val b = (v0 + zeta * w0 * x0) / wd
-            (exp(-zeta * w0 * t) * (a * kotlin.math.cos(wd * t) + b * kotlin.math.sin(wd * t)))
+            (exp(-zeta * w0 * t) * (a * cos(wd * t) + b * sin(wd * t)))
         }
         abs(zeta - 1.0) < 1e-6 -> {
             (x0 + (v0 + w0 * x0) * t) * exp(-w0 * t)

@@ -20,6 +20,7 @@ public data class DiffResult(
     val segments: List<Segment>,
     val nextId: Long,
 ) {
+    /** True when nothing entered or exited: every segment persisted. */
     public val isEmpty: Boolean get() = enter.isEmpty() && exit.isEmpty()
 }
 
@@ -70,11 +71,7 @@ public fun diffSegments(
         val ni = newGroups[g]
         val oldValue = parseNumericWord(oi.joinToString("") { old[it].text }, symbols)
         val newValue = parseNumericWord(ni.joinToString("") { new[it].text }, symbols)
-        val roll = when {
-            newValue > oldValue -> 1
-            newValue < oldValue -> -1
-            else -> 1
-        }
+        val roll = if (newValue < oldValue) -1 else 1
         val oldKeys = HashMap<String, Int>()
         for (idx in oi) oldKeys[numberKey(old, oi, idx)] = idx
         for (idx in ni) {
@@ -180,10 +177,9 @@ private fun runs(segments: List<Segment>, groups: List<IntArray>, paired: Int): 
     var g = 0
     for (i in segments.indices) {
         if (i in pairedIdx) {
-            if (g < paired && groups[g].contains(i)) {
-                if (i == groups[g][0]) {
-                    out.add(current.toIntArray()); current = ArrayList(); g++
-                }
+            // The first index of the next paired group closes the current run.
+            if (g < paired && i == groups[g][0]) {
+                out.add(current.toIntArray()); current = ArrayList(); g++
             }
             continue
         }

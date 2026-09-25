@@ -32,7 +32,6 @@ public fun findNumericWords(text: String, symbols: NumberSymbols): List<NumericW
     var lastEnd = 0
     while (i < n) {
         if (!Character.isDigit(text[i])) { i++; continue }
-        // Expand left: separators between digits are handled going right, so only prefixes here.
         var start = i
         var end = i
         // Extend right over digits and inter-digit separators.
@@ -67,7 +66,7 @@ public fun findNumericWords(text: String, symbols: NumberSymbols): List<NumericW
 
 private fun isSeparator(ch: Char, s: NumberSymbols): Boolean =
     ch == s.decimalSeparator || ch == s.groupingSeparator || ch == '.' || ch == ',' ||
-        ch == ' ' || ch == ' ' || ch == '\'' || ch == '٫' || ch == '٬'
+        ch == '\u00A0' || ch == '\u202F' || ch == '\'' || ch == '٫' || ch == '٬'
 
 private fun isSpace(ch: Char): Boolean = ch == ' ' || ch == '\u00A0' || ch == '\u202F'
 
@@ -98,7 +97,11 @@ internal fun assignPlaces(word: String, symbols: NumberSymbols): IntArray {
     return places
 }
 
-/** Index of the decimal separator in [word], or -1. The locale's decimal char wins; a lone '.' or ',' followed by a non-3-digit run is treated as decimal too. */
+/**
+ * Index of the decimal separator in [word], or -1. Only the locale's decimal char counts, and only
+ * its last occurrence. When that char is '.' and appears more than once with exactly three digits
+ * after the last one ("1.234.567"), it is read as grouping and there is no decimal.
+ */
 internal fun decimalIndex(word: String, symbols: NumberSymbols): Int {
     val loc = word.lastIndexOf(symbols.decimalSeparator)
     if (loc >= 0 && symbols.decimalSeparator != symbols.groupingSeparator) {

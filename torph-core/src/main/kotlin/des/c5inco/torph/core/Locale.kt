@@ -60,7 +60,6 @@ internal fun parseNumericWord(text: String, symbols: NumberSymbols): Double {
             ch == symbols.minusSign || ch == '-' || ch == '−' -> negative = sb.isEmpty()
         }
     }
-    if (sb.isEmpty() || sb.toString() == ".") return 0.0
-    val v = sb.toString().toDoubleOrNull() ?: 0.0
+    val v = sb.toString().toDoubleOrNull() ?: return 0.0
     return if (negative) -v else v
 }
