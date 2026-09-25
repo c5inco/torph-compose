@@ -58,6 +58,30 @@ class TextMorphTest {
     }
 
     @Test
+    fun supersededMorphFiresCancelAndOnlyTheLatestCompletes() {
+        var text by mutableStateOf("one")
+        val events = ArrayList<String>()
+        rule.mainClock.autoAdvance = false
+        rule.setContent {
+            TextMorph(
+                text = text,
+                duration = 400.milliseconds,
+                respectReducedMotion = false,
+                onAnimationStart = { events += "start" },
+                onAnimationComplete = { events += "complete" },
+                onAnimationCancel = { events += "cancel" },
+            )
+        }
+        rule.mainClock.advanceTimeByFrame()
+        text = "two"
+        repeat(3) { rule.mainClock.advanceTimeByFrame() }
+        text = "three" // lands mid-morph
+        rule.mainClock.advanceTimeBy(1000)
+        rule.waitForIdle()
+        assertEquals(listOf("start", "cancel", "start", "complete"), events)
+    }
+
+    @Test
     fun digitRetargetedMidRollKeepsAVisibleDigitInItsStrip() {
         // A stopwatch ticking faster than the roll settles: every change lands mid-roll.
         var hundredths by mutableStateOf(0)
