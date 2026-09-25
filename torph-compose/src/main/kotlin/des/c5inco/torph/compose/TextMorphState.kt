@@ -15,6 +15,7 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.TextMeasurer
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.Constraints
@@ -161,6 +162,9 @@ public class TextMorphState internal constructor(
     private var lastTextForSegments: String? = null
     private val layoutCache = HashMap<String, TextLayoutResult>()
     private var cacheStyle: TextStyle? = null
+    /** Per-character (left, top, right, bottom) boxes of [charBoxesFor], filled once per layout for [place]. */
+    private var charBoxes = FloatArray(0)
+    private var charBoxesFor: TextLayoutResult? = null
 
     private val timings = MorphTimings()
     private var loop: Job? = null
@@ -450,6 +454,7 @@ public class TextMorphState internal constructor(
         val textLen = full.layoutInput.text.length
         if (textLen == 0) return Offset.Zero to Rect.Zero
         val start = s.index.coerceIn(0, textLen - 1)
+        val boxes = charBoxes(full)
         val line = full.getLineForOffset(start)
         val lineTop = full.getLineTop(line)
         val lineBottom = full.getLineBottom(line)
@@ -461,18 +466,16 @@ public class TextMorphState internal constructor(
         var left = Float.POSITIVE_INFINITY
         var right = Float.NEGATIVE_INFINITY
         val end = s.end.coerceAtMost(textLen)
-        val diag = TextMorphDiagnostics.logTimings
-        val boxStart = if (diag) System.nanoTime() else 0L
         var i = start
         while (i < end) {
-            val box = full.getBoundingBox(i)
-            if (box.width > 0f || box.left != 0f) {
-                if (box.left < left) left = box.left
-                if (box.right > right) right = box.right
+            val boxLeft = boxes[4 * i]
+            val boxRight = boxes[4 * i + 2]
+            if (boxRight - boxLeft > 0f || boxLeft != 0f) {
+                if (boxLeft < left) left = boxLeft
+                if (boxRight > right) right = boxRight
             }
             i++
         }
-        if (diag) { timings.box += System.nanoTime() - boxStart; timings.boxCalls += end - start }
         if (left == Float.POSITIVE_INFINITY) {
             val r = full.getCursorRect(start)
             left = r.left; right = r.left
@@ -482,6 +485,23 @@ public class TextMorphState internal constructor(
         // Centre the segment's own layout inside the measured box so kerning differences split evenly.
         val x = left + ((right - left) - seg.size.width) / 2f
         return Offset(x, y) to Rect(left, lineTop, right, lineBottom)
+    }
+
+    /**
+     * Every character's box in [full], filled in one batch on first use. Per-character
+     * `getBoundingBox` looked up the line and measured both edges on every call, and allocated two
+     * rects; the batch shares each edge between neighbouring characters and allocates nothing.
+     */
+    private fun charBoxes(full: TextLayoutResult): FloatArray {
+        if (charBoxesFor === full) return charBoxes
+        val diag = TextMorphDiagnostics.logTimings
+        val t0 = if (diag) System.nanoTime() else 0L
+        val textLen = full.layoutInput.text.length
+        if (charBoxes.size < textLen * 4) charBoxes = FloatArray(textLen * 4)
+        full.multiParagraph.fillBoundingBoxes(TextRange(0, textLen), charBoxes, 0)
+        charBoxesFor = full
+        if (diag) { timings.box += System.nanoTime() - t0; timings.boxCalls += textLen }
+        return charBoxes
     }
 
     private fun segmentLayout(s: Segment): TextLayoutResult {
