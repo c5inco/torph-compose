@@ -15,10 +15,11 @@ per-segment lambdas or string building creeping into the draw path. When last me
 channels.
 
 Since then, rolling digits stopped rebuilding their fade gradient every frame (about 0.9 KB per
-rolling digit per frame). On an emulator, over a 600-frame window, that took the same scene from
-5.1 KB to 2.3 KB per frame, and one rolling digit on its own now allocates the same 2.3 KB as the
-200-segment scene: what remains is Compose's and the test clock's fixed per-frame cost, not
-per-segment work.
+rolling digit per frame). On the Pixel, measured in one session with three runs per build, that
+took the test from 7.1-7.6 KB to 4.4-4.9 KB per frame (its 60-frame window only resolves steps of
+about 0.5 KB). On an emulator, over a 600-frame window, the same scene went from 5.1 KB to 2.3 KB
+per frame, and one rolling digit on its own now allocates the same 2.3 KB as the 200-segment scene:
+what remains is Compose's and the test clock's fixed per-frame cost, not per-segment work.
 
 ## Running the suite
 
@@ -52,6 +53,27 @@ was off for these runs, so expect some thermal variance.
 There used to be a separate `morph1000Word` run forcing `Segmentation.WORD`. It measured within
 noise of `morph1000` (P50 6.4 ms, P99 23.1 ms) because `AUTO` already falls back to word
 segmentation above 300 segments, so it was dropped.
+
+### Before and after the placement and diff work
+
+A same-session comparison on the same Pixel: the library before (`c09fd17`) and after (`5fe78ee`)
+the batched box fill, the unboxed LCS, the reused fade gradient and the early segmentation cutoff.
+Builds alternated before, after, after, before, two runs of three iterations each; values are means
+of the per-run percentiles. Frame times drift between sessions (this session's baseline `morph1000`
+P99 was about 28 ms, against 22.8 ms in the table above), so compare within this table only:
+
+| benchmark | frame CPU P50 | P90 | P99 |
+| --- | ---: | ---: | ---: |
+| morph50 | 4.7 → 4.7 ms | 7.2 → 7.2 ms | 16.5 → 14.9 ms |
+| morph200 | 6.4 → 6.5 ms | 8.2 → 8.7 ms | 16.3 → 14.4 ms |
+| morph1000 | 10.2 → 8.9 ms | 25.2 → 16.5 ms | 28.5 → 25.0 ms |
+| numberRolling | 4.5 → 4.4 ms | 5.5 → 5.4 ms | 10.3 → 9.7 ms |
+
+Typical frames do not move, because the draw path was already cheap. The gain is in the tail, which
+is the text-change frames. The P99 improvement held in every run (`morph1000` 28.2 and 28.8 ms
+before, 26.3 and 23.7 ms after; `morph200` 16.2 and 16.3 ms before, 14.6 and 14.2 ms after). The
+`morph1000` P90 varied too much between the two runs after (21.6 and 11.4 ms) to quote as one
+number. 1000 characters still misses frames on a change, just less often and by less.
 
 ## Where the time actually goes (from the Perfetto traces)
 
@@ -145,13 +167,18 @@ text measurement is 12% and the diff is 7%.
 **Update:** placement now fills every character's box in one `MultiParagraph.fillBoundingBoxes`
 call per layout instead of calling `getBoundingBox` per character (same boxes, no per-call `Rect`s,
 and neighbouring characters share an edge lookup), and the diff's LCS no longer boxes its indices.
-Emulator medians of the same breakdown (Perf-screen-style lorem text in a 380 dp column, 24 changes each), before and after; not
-yet re-measured on the Pixel:
+The same breakdown on the same Pixel, before and after, from the comparison runs above (55-65
+changes per size per build):
 
-| chars | total | position | of which box | tokenize | diff |
-| ---: | ---: | ---: | ---: | ---: | ---: |
-| 200 | 4.28 → 2.40 ms | 1.05 → 0.72 ms | 0.77 → 0.41 ms | 0.23 → 0.24 ms | 1.79 → 0.21 ms |
-| 1000 | 6.96 → 4.38 ms | 3.66 → 1.90 ms | 3.39 → 1.62 ms | 0.89 → 0.49 ms | 0.51 → 0.29 ms |
+| chars | total | position | of which box | measure text | tokenize | diff | anim setup |
+| ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| 50 | 3.46 → 2.43 ms | 0.81 → 0.48 ms | 0.60 → 0.34 ms | 0.90 → 0.82 ms | 0.35 → 0.41 ms | 0.69 → 0.19 ms | 0.32 → 0.30 ms |
+| 200 | 6.77 → 4.11 ms | 2.33 → 1.38 ms | 1.97 → 1.08 ms | 0.55 → 0.67 ms | 0.56 → 0.64 ms | 1.89 → 0.51 ms | 0.61 → 0.54 ms |
+| 1000 | 14.34 → 9.93 ms | 8.23 → 5.26 ms | 7.80 → 4.94 ms | 1.74 → 1.76 ms | 1.98 → 1.18 ms | 0.91 → 0.67 ms | 0.84 → 0.60 ms |
+
+That is 30-39% off a change at every size. The before column reproduces the table above (14.34
+against 14.43 ms at 1000 characters), so the two are comparable. Positioning is still about half
+of a long change.
 
 The box fill is still linear in characters, since each lookup walks its line. Scanning only each
 segment's first and last character would cut it further in word mode, but is not equivalent for
@@ -174,7 +201,7 @@ emulator runs as a regression signal rather than a measurement:
 
 ## Running on a physical device
 
-Two things bite on a personal phone:
+Three things bite on a personal phone:
 
 - **Play Protect blocks the install.** Sideloading the ~46 MB test APK trips
   `INSTALL_FAILED_VERIFICATION_FAILURE` and waits on an on-device prompt. Approve it once, or turn
@@ -182,6 +209,11 @@ Two things bite on a personal phone:
 - **Anything else holding UiAutomation makes every test fail** with `UiAutomation not connected`.
   Layout Inspector, a CLI instrumentation server, or an accessibility automation tool will do it.
   Check with `adb shell dumpsys activity | grep -A2 "Active instrumentation"` and stop the owner.
+- **A copy in a work profile blocks the install.** Gradle installs for every user, so a benchmark
+  build left in another profile, signed with a different key, fails with
+  `INSTALL_FAILED_UPDATE_INCOMPATIBLE`, and `adb uninstall` cannot reach that profile. Build with
+  `./gradlew :demo:assembleBenchmark :benchmark:assembleBenchmark`, install both APKs with
+  `adb install --user 0 -r -t`, and run with `am instrument --user 0` as below.
 
 To rerun without reinstalling (useful when installs are slow or gated), drive the instrumentation
 directly. `additionalTestOutputDir` must be a directory the app itself can write, so an app-owned
