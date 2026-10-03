@@ -9,7 +9,8 @@ Performance measurements for Torph for Jetpack Compose, and how to reproduce the
 ## Allocation guard
 
 `DrawAllocationTest` in `:torph-compose` measures process-wide ART allocation per animated frame with
-about 200 live segments, and fails above 16 KB per frame. It is a regression guard against
+about 200 live segments, and fails above 12 KB per frame (lowered from 16 KB once the draw path
+stopped allocating; the noisiest phone here, the Pixel 4a, has measured up to 9.3 KB). It is a regression guard against
 per-segment lambdas or string building creeping into the draw path. When last measured it allocated
 3.3 KB per frame, down from 80 KB before per-segment `Animatable`s were replaced by plain float
 channels.

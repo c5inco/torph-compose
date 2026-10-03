@@ -57,7 +57,7 @@ class DrawAllocationTest {
         val perFrame = (allocatedBytes() - before) / frames
         Log.i("DrawAllocationTest", "live=${state.liveCount} bytes/frame=$perFrame")
         assertTrue("segments should still be animating", state.isAnimating)
-        assertTrue("allocated $perFrame bytes/frame for ${state.liveCount} live segments", perFrame < 16 * 1024)
+        assertTrue("allocated $perFrame bytes/frame for ${state.liveCount} live segments", perFrame < 12 * 1024)
     }
 
     private fun allocatedBytes(): Long = Debug.getRuntimeStat("art.gc.bytes-allocated")?.toLongOrNull() ?: 0L
