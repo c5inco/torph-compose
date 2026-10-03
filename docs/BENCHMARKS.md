@@ -135,11 +135,17 @@ The slower the phone, the larger the gain: 58% off a 1000-character change here,
 the Pixel 7 and 31% on the Pixel 10 Pro. `DrawAllocationTest` was noisier here (3.0-9.0 KB per frame after, 5.7-9.9 KB before; medians
 about 3.3 and 5.9 KB).
 
-This phone also shows a cost the Pixel 10 Pro hides: it cannot hold frame rate on long text even
-between changes. A typical `morph1000` frame takes about 30 ms, so every frame misses its deadline,
-and `morph200` sits right at the 16.7 ms budget. That is the per-frame draw of a few hundred
-segments, not the diff or placement. On mid-range hardware, caching settled segments (for example
-in a `GraphicsLayer`) is worth revisiting, despite the conclusion below drawn from the Pixel 10 Pro.
+The high P50 frame times here do not mean the animation drops to 30 fps. Frames are only rendered
+while a morph animates (about 27 frames per 400 ms morph), and the main thread and RenderThread work
+in parallel, so frames still come out at close to 60 fps. Android's frame timeline in the traces
+classes almost all of them as *Buffer Stuffing*: the app is queuing frames ahead, so each one is
+presented a vsync later than scheduled, but at a steady rate. That is why overrun is positive at P50.
+
+Real missed deadlines (*App Deadline Missed*) are 4-7 frames per 4.8 s iteration, which covers about
+three text changes, and nearly all of them fall at the start of a morph: the text-change frame (22-55 ms at 200
+characters, 22-92 ms at 1000). In `morph1000` a few more land about 80 ms into the morph, which is
+not yet explained. So on mid-range hardware too, the lever is the text-change frame (placement, or
+moving segmentation and the diff off the main thread), not the per-frame draw.
 
 ## Where the time actually goes (from the Perfetto traces)
 
