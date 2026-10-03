@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.test)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.androidx.baselineprofile)
 }
 
 android {
@@ -38,4 +39,8 @@ dependencies {
     implementation(libs.androidx.benchmark.macro)
 }
 
-androidComponents { beforeVariants(selector().all()) { it.enable = it.buildType == "benchmark" } }
+// The benchmark build type runs the macrobenchmarks; nonMinifiedRelease is the variant the
+// baselineprofile plugin generates the profile against (R8 renaming would make it useless).
+androidComponents {
+    beforeVariants(selector().all()) { it.enable = it.buildType == "benchmark" || it.buildType == "nonMinifiedRelease" }
+}

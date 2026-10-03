@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.kotlin.android) apply false
     alias(libs.plugins.kotlin.jvm) apply false
     alias(libs.plugins.compose.compiler) apply false
+    alias(libs.plugins.androidx.baselineprofile) apply false
 }
 
 // The two modules that get published. `:demo` and `:benchmark` are not libraries.
