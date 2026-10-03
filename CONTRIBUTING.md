@@ -37,9 +37,9 @@ including the notes on running against a physical device.
 
 ## Behavior changes
 
-This library is a port, and its value is that torph configurations carry over
-directly. If a change alters observable behavior, say in the pull request how
-it lines up with upstream torph. Deliberate divergence is fine, but it should
+This library is a port, and part of its value is that it behaves like torph
+and feels familiar to anyone who knows it. If a change alters observable
+behavior, say in the pull request how it lines up with upstream torph. Deliberate divergence is fine, but it should
 be a decision rather than a side effect.
 
 ## Tests

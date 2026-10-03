@@ -109,14 +109,40 @@ fun TextMorph(
 
 sealed interface MorphEase {
     data class Curve(val easing: Easing) : MorphEase
-    data class Spring(stiffness = 100f, damping = 10f, mass = 1f, precision = 0.001f) : MorphEase
+    data class Spring(stiffness = 100f, damping = 10f, mass = 1f) : MorphEase
 }
 
-cssCubicBezier("cubic-bezier(0.19, 1, 0.22, 1)") // port torph configs verbatim
+cssCubicBezier("cubic-bezier(0.19, 1, 0.22, 1)") // any CSS cubic-bezier or keyword easing, as written
 ```
 
 Lower level: `rememberTextMorphState()` + `Modifier.textMorph(state)` for custom containers, and
-`segmentText` / `diffSegments` / `findNumericWords` / `settleTime` from `des.c5inco.torph.core`.
+`segmentText` / `diffSegments` / `findNumericWords` from `des.c5inco.torph.core`.
+
+### Coming from torph
+
+This library follows torph's behavior, option names and defaults where they make sense on Compose,
+so it should feel familiar. It is not a drop-in equivalent, though: there is no way to load a torph
+setup, so you translate it to Kotlin yourself, and some options differ because the platforms do.
+
+Same name, meaning and default as torph: `scale`, `numbers`, `debug`, `disabled`,
+`respectReducedMotion`, `cursorIndex`, `onAnimationStart`,
+`onAnimationComplete` and `onAnimationCancel` (exactly one of complete or cancel per morph).
+
+Where it differs, and why:
+
+| torph | here | why |
+| --- | --- | --- |
+| A component per framework, plus `MorphController` with `update()` | The `TextMorph` composable, or `rememberTextMorphState()` with `Modifier.textMorph(state)` for custom containers | Compose has composables and modifiers instead of components and DOM controllers. |
+| `text` / `children`: a string or a number | Two overloads: `text: String` and `value: Number` | Kotlin overloads instead of a union type. |
+| `decimals`: unset by default, so a number shows the locale's default fraction digits (up to 3) | `decimals` on the `value: Number` overload, default `0` | Formatting goes through `java.text.NumberFormat`. Pass `decimals` explicitly to control fraction digits on both. |
+| `duration`: milliseconds as a number | `duration: Duration`, default `400.milliseconds` | Kotlin's typed duration. |
+| `ease`: a CSS easing string or spring params | `ease: MorphEase`, either `Curve(Easing)` or `Spring(stiffness, damping, mass)`; `cssCubicBezier("…")` turns a CSS cubic-bezier or keyword easing into an `Easing` | Compose animates with typed `Easing`s, not CSS strings. |
+| Spring `precision` | No equivalent | torph bakes a spring into a fixed-length CSS `linear()` curve and uses `precision` to decide where to cut it off. Here the spring runs live, keeps its velocity when a new value interrupts it, and stops once movement is under half a pixel. The same spring can therefore finish at a slightly different time than in torph. |
+| `locale`: `Intl.LocalesArgument`, default `"en"` | `locale: Locale` (Compose), default `Locale.current` | Compose's locale type; following the device locale is the Android convention. |
+| Splits text into words whenever it contains a space or newline, and into characters only for a single word | `segmentation`, default `AUTO`: characters within each word, whole words for scripts that need contextual shaping (Arabic, Indic, Thai and others), and words for any text over 300 segments | Use `Segmentation.WORD` to get torph's word-by-word morph for text with spaces. |
+| `className`, `style`, `as` | `modifier`, `style: TextStyle`, `color` | Compose styling. |
+| Container size always animates | `sizeMode`: `Animate` (default) or `Snap` | `Snap` skips the per-frame layout pass while the size animates, for fixed-size slots like counters. |
+| `segmentText`, `diffSegments`, number helpers | `segmentText`, `diffSegments`, `findNumericWords` in `torph-core` | Same names and purpose, but Kotlin signatures: segmenter, options and id arguments differ. |
 
 ## How it works
 
@@ -180,8 +206,9 @@ Torph for Jetpack Compose is MIT licensed. See [LICENSE](LICENSE).
 
 This is an **independent, unofficial port** of [torph](https://github.com/lochie/torph) by
 [Lochie Axon](https://github.com/lochie), used under the MIT License. The Kotlin here was written
-from scratch, but the API surface, option names, algorithms, and default values follow torph's so
-that configurations carry over directly. Upstream's full copyright notice is in [NOTICE](NOTICE).
+from scratch. Its API, option names, algorithms and defaults follow torph's where that makes sense
+on Compose, so it will feel familiar, but it is not a drop-in equivalent: you translate a torph setup
+yourself, and the two differ where the platforms do. Upstream's full copyright notice is in [NOTICE](NOTICE).
 
 If you want the original, go use it: <https://torph.lochie.me>.
 
