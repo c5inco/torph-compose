@@ -127,13 +127,17 @@ Per text change (never per frame):
 2. `diffSegments` pairs numeric words by order and matches digits by place value; everything else
    goes through a left-biased LCS on grapheme (or word) text.
 3. Each segment gets a target rect from the layout's bounding boxes and a cached single-segment
-   `TextLayoutResult`.
-4. Animatables are retargeted: persist → `offset.animateTo`, enter → alpha/scale in (a digit that changed at the same place
-   becomes an odometer strip from old to new digit), exit → alpha/scale out then removed from the list by the animation coroutine.
+   `TextLayoutResult`. Boxes for leading lines an edit leaves unchanged are kept from the previous
+   layout.
+4. Each segment's position, alpha and scale are plain float channels, retargeted from their current
+   value and velocity: persist → move to the new position, enter → alpha/scale in (a digit that
+   changed at the same place becomes an odometer strip from old to new digit), exit → alpha/scale
+   out, then dropped by the frame loop once settled.
 5. The container size animates (or snaps) to the new layout size.
 
-Per frame: one `drawText(cachedLayout, topLeft, alpha)` per live segment inside a `Canvas`-style
-`drawBehind`. Animatables are read only in the layout and draw phases, never in composition, and
+Per frame: one frame loop advances every channel, and one `drawText(cachedLayout, topLeft, alpha)`
+per live segment runs inside a `drawBehind` in its own graphics layer, so siblings redrawing do not
+re-record the text. Channels are read only in the layout and draw phases, never in composition, and
 the traces confirm composition does not run per frame. Note that a *layout* pass does run per frame
 while the container size animates; use `sizeMode = Snap` to skip it.
 
