@@ -150,6 +150,40 @@ characters, 22-92 ms at 1000). In `morph1000` a few more land about 80 ms into t
 not yet explained. So on mid-range hardware too, the lever is the text-change frame (placement, or
 moving segmentation and the diff off the main thread), not the per-frame draw.
 
+## Which CPU core runs the change
+
+On phones with more than one kind of CPU core, the biggest single factor in what a text change
+costs is not this library's code but which core the scheduler runs the main thread on. Measured
+from the scheduling data in the Perfetto traces of the runs above (time the main thread spent
+running on each core during each text-change layout pass):
+
+| phone | cores | where 1000-character changes ran | cost by core |
+| --- | --- | --- | --- |
+| Pixel 4a | 2 fast (A76), 6 slow (A55) | 22 of 36 on slow cores | 18-23 ms fast, 40-52 ms slow |
+| Pixel 7 | 2 fastest, 2 middle, 4 slow | 33 of 36 on middle cores | 13.8 ms middle (median), 7.7 ms fastest |
+| Pixel 10 Pro | | 45 of 48 on the same group of cores | steady |
+
+Each pass ran entirely on one kind of core, and the main thread spent under 1 ms waiting for a
+core, so it is placement, not contention. This is why the Pixel 4a's 1000-character changes land at
+either about 20 ms or about 50 ms.
+
+**What triggers the change decides the core.** In the Pixel 4a's `ColdChangeBenchmark` traces, all
+39 text changes triggered by a tap ran on the fast cores (13.5-19 ms), but only 47 of 156 changes
+triggered by the demo's timer did. Android boosts the CPU briefly on touch input; a change driven by
+a timer or incoming data arrives after the app has been idle, starts on a slow core, and is not
+moved within the frame. So:
+
+- Every benchmark here changes text on a timer, so they measure the worst case. A change made in
+  response to a tap is cheaper.
+- That worst case is the common one for counters, stopwatches, live values and streaming text.
+- Moving the work to a background thread would not change this: background threads are placed the
+  same way.
+- Android's Performance Hint API (ADPF) lets an app tell the system a CPU burst is coming. It is
+  supported on the Pixel 7 and Pixel 10 Pro but not on the Pixel 4a (Android 13 reports no support
+  and refuses to create a hint session), so it cannot help the phone that needs it most.
+
+Reducing the work helps on every core, so it remains the main lever.
+
 ## Where the time actually goes (from the Perfetto traces)
 
 Measured with Perfetto's `trace_processor` over the captured traces, not inferred:
@@ -299,8 +333,8 @@ launches per build per phone, from `TextMorphDiagnostics`, without the profile â
 On the Pixel 10 Pro and Pixel 7, both runs with the profile beat both runs without it for the
 first change, the switch and the first 1000-character change. On the Pixel 4a the first change
 improved in every run, but its 1000-character changes land at either about 20 ms or about 50 ms
-with or without the profile, so their medians flip between runs; whatever causes the 50 ms case is
-not uncompiled code. Frame-time percentiles did not change, since this run is dominated by
+with or without the profile, so their medians flip between runs. That split is which CPU core the
+change ran on, not uncompiled code (see [Which CPU core runs the change](#which-cpu-core-runs-the-change)). Frame-time percentiles did not change, since this run is dominated by
 startup and navigation frames. The profile costs nothing at runtime.
 
 ## Emulator comparison (arm64, API 36)
