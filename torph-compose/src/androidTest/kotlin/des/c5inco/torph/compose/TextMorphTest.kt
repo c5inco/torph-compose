@@ -42,13 +42,14 @@ class TextMorphTest {
         rule.mainClock.advanceTimeByFrame()
         val before = state.segments
         assertEquals("Hello world", before.joinToString("") { it.text })
-        val idsHello = before.take(5).map { it.id }
+        // Text with a space morphs word by word, as in torph: "Hello" and the space persist.
+        val idsHello = before.take(2).map { it.id }
 
         text = "Hello there"
         rule.mainClock.advanceTimeByFrame()
         rule.mainClock.advanceTimeByFrame()
         val after = state.segments
-        assertEquals(idsHello, after.take(5).map { it.id })
+        assertEquals(idsHello, after.take(2).map { it.id })
         assertTrue(state.liveCount > after.size) // exiting segments still drawn mid-animation
         assertEquals(listOf("start"), events)
 

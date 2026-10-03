@@ -31,5 +31,10 @@ class NumberMatcherTest {
     fun `format number`() {
         assertEquals("1,234.50", formatNumber(1234.5, 2, Locale.US))
         assertEquals("1.234,50", formatNumber(1234.5, 2, Locale.GERMANY))
+        // No decimals given: up to 3 fraction digits, half-up, like Intl.NumberFormat and torph.
+        assertEquals("1,234.5", formatNumber(1234.5, locale = Locale.US))
+        assertEquals("2", formatNumber(2.0, locale = Locale.US))
+        assertEquals("1.235", formatNumber(1.2345, locale = Locale.US))
+        assertEquals("1.01", formatNumber(1.005, 2, Locale.US))
     }
 }

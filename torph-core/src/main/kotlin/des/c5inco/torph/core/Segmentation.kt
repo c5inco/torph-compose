@@ -51,7 +51,12 @@ public fun segmentText(
     options: SegmentOptions = SegmentOptions(),
     firstId: Long = 0L,
 ): List<Segment> {
-    if (options.segmentation == Segmentation.WORD) return segmentInternal(text, locale, segmenter, options, firstId)
+    // AUTO follows torph: anything with a space or line break goes word by word.
+    if (options.segmentation == Segmentation.WORD ||
+        (options.segmentation == Segmentation.AUTO && (text.indexOf(' ') >= 0 || text.indexOf('\n') >= 0))
+    ) {
+        return segmentInternal(text, locale, segmenter, options.copy(segmentation = Segmentation.WORD), firstId)
+    }
     // Stops as soon as it passes maxSegments, so long text doesn't pay for a full pass it throws away.
     val result = segmentInternal(text, locale, segmenter, options, firstId, limit = options.maxSegments)
     if (result.size > options.maxSegments) {

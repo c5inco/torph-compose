@@ -29,18 +29,21 @@ public data class NumberSymbols(
 }
 
 /**
- * Formats [value] the way `Intl.NumberFormat` would for [locale]: grouping on, exactly [decimals]
- * fraction digits, half-up rounding. The result is what you hand to `TextMorph`.
+ * Formats [value] the way `Intl.NumberFormat` would for [locale]: grouping on, half-up rounding,
+ * and exactly [decimals] fraction digits, or when [decimals] is null (torph's default) as many as
+ * needed up to 3.
  */
-public fun formatNumber(value: Number, decimals: Int = 0, locale: Locale = Locale.getDefault()): String {
+public fun formatNumber(value: Number, decimals: Int? = null, locale: Locale = Locale.getDefault()): String {
     val format = NumberFormat.getNumberInstance(locale)
     format.isGroupingUsed = true
-    format.minimumFractionDigits = decimals
-    format.maximumFractionDigits = decimals
+    format.minimumFractionDigits = decimals ?: 0
+    format.maximumFractionDigits = decimals ?: 3
     format.roundingMode = RoundingMode.HALF_UP
+    // Round the shortest decimal form, as Intl does: 1.005 is 1.00499999... in binary, but Intl
+    // (and so torph) formats it as 1.01 with two decimals.
     val v: Number = when (value) {
-        is Float -> BigDecimal(value.toDouble())
-        is Double -> BigDecimal(value)
+        is Float -> BigDecimal(value.toString())
+        is Double -> BigDecimal.valueOf(value)
         else -> value
     }
     return format.format(v)

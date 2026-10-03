@@ -124,9 +124,10 @@ This library follows torph's behavior, option names and defaults where they make
 so it should feel familiar. It is not a drop-in equivalent, though: there is no way to load a torph
 setup, so you translate it to Kotlin yourself, and some options differ because the platforms do.
 
-Same name, meaning and default as torph: `scale`, `numbers`, `debug`, `disabled`,
-`respectReducedMotion`, `cursorIndex`, `onAnimationStart`,
-`onAnimationComplete` and `onAnimationCancel` (exactly one of complete or cancel per morph).
+Same name, meaning and default as torph: `scale`, `numbers`, `decimals` (unset formats up to 3
+fraction digits, rounded like `Intl.NumberFormat`), `debug`, `disabled`, `respectReducedMotion`,
+`cursorIndex`, `onAnimationStart`, `onAnimationComplete` and `onAnimationCancel` (exactly one of
+complete or cancel per morph).
 
 Where it differs, and why:
 
@@ -134,12 +135,11 @@ Where it differs, and why:
 | --- | --- | --- |
 | A component per framework, plus `MorphController` with `update()` | The `TextMorph` composable, or `rememberTextMorphState()` with `Modifier.textMorph(state)` for custom containers | Compose has composables and modifiers instead of components and DOM controllers. |
 | `text` / `children`: a string or a number | Two overloads: `text: String` and `value: Number` | Kotlin overloads instead of a union type. |
-| `decimals`: unset by default, so a number shows the locale's default fraction digits (up to 3) | `decimals` on the `value: Number` overload, default `0` | Formatting goes through `java.text.NumberFormat`. Pass `decimals` explicitly to control fraction digits on both. |
 | `duration`: milliseconds as a number | `duration: Duration`, default `400.milliseconds` | Kotlin's typed duration. |
 | `ease`: a CSS easing string or spring params | `ease: MorphEase`, either `Curve(Easing)` or `Spring(stiffness, damping, mass)`; `cssCubicBezier("…")` turns a CSS cubic-bezier or keyword easing into an `Easing` | Compose animates with typed `Easing`s, not CSS strings. |
 | Spring `precision` | No equivalent | torph bakes a spring into a fixed-length CSS `linear()` curve and uses `precision` to decide where to cut it off. Here the spring runs live, keeps its velocity when a new value interrupts it, and stops once movement is under half a pixel. The same spring can therefore finish at a slightly different time than in torph. |
 | `locale`: `Intl.LocalesArgument`, default `"en"` | `locale: Locale` (Compose), default `Locale.current` | Compose's locale type; following the device locale is the Android convention. |
-| Splits text into words whenever it contains a space or newline, and into characters only for a single word | `segmentation`, default `AUTO`: characters within each word, whole words for scripts that need contextual shaping (Arabic, Indic, Thai and others), and words for any text over 300 segments | Use `Segmentation.WORD` to get torph's word-by-word morph for text with spaces. |
+| Chooses segmentation itself: by word when the text has a space or line break, by character for a single word | `segmentation`: `AUTO` (default) applies torph's rule, `GRAPHEME` and `WORD` force one | `AUTO` differs in one case: a single word in a script that needs contextual shaping (Arabic, Indic, Thai and others) stays whole, because splitting it into characters breaks its shaping. Any mode switches to words above 300 segments to keep the diff fast. |
 | `className`, `style`, `as` | `modifier`, `style: TextStyle`, `color` | Compose styling. |
 | Container size always animates | `sizeMode`: `Animate` (default) or `Snap` | `Snap` skips the per-frame layout pass while the size animates, for fixed-size slots like counters. |
 | `segmentText`, `diffSegments`, number helpers | `segmentText`, `diffSegments`, `findNumericWords` in `torph-core` | Same names and purpose, but Kotlin signatures: segmenter, options and id arguments differ. |
@@ -167,9 +167,11 @@ re-record the text. Channels are read only in the layout and draw phases, never 
 the traces confirm composition does not run per frame. Note that a *layout* pass does run per frame
 while the container size animates; use `sizeMode = Snap` to skip it.
 
-Complex scripts: `Segmentation.AUTO` detects Arabic, Hebrew, Indic, Thai, Lao, Khmer, Myanmar,
-Tibetan and Mongolian words via `Character.UnicodeScript` and morphs them as whole words so
-contextual shaping survives. Above 300 segments any mode falls back to `WORD`.
+Segmentation: `Segmentation.AUTO` morphs text with a space or line break word by word and a single
+word per character, as torph does. A single word in a script that needs contextual shaping (Arabic,
+Hebrew, Indic, Thai, Lao, Khmer, Myanmar, Tibetan, Mongolian, detected via `Character.UnicodeScript`)
+stays whole so its shaping survives. `GRAPHEME` morphs every character, even across words. Above 300
+segments any mode falls back to `WORD`.
 
 ## Building from source
 

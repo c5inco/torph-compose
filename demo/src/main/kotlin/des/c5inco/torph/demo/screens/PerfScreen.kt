@@ -122,7 +122,7 @@ fun PerfScreen() {
     Gap(4)
     Choice(listOf(false, true), edit, { if (it) "Edit one word" else "Replace text" }) { edit = it }
     ToggleRow("cycle every 1.5 s", running) { running = it }
-    Caption("Above 300 segments the library falls back to word segmentation automatically (maxSegments); force WORD to compare.")
+    Caption("AUTO morphs text with spaces word by word, as torph does; GRAPHEME morphs every character. Above 300 segments any mode falls back to words (maxSegments).")
     SectionTitle("$size characters")
     Stage(if (size > 500) 360 else if (size > 100) 160 else 80) {
         TextMorph(

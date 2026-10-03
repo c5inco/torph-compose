@@ -100,14 +100,15 @@ public fun TextMorph(
 }
 
 /**
- * Numeric overload: formats [value] with [decimals] fraction digits in [locale] (grouping on) and
- * morphs the result. Equivalent to `TextMorph(formatNumber(value, decimals, locale))`.
+ * Numeric overload: formats [value] in [locale] (grouping on) and morphs the result, with exactly
+ * [decimals] fraction digits, or up to 3 when it is null, as torph does. Equivalent to
+ * `TextMorph(formatNumber(value, decimals, locale))`.
  */
 @Composable
 public fun TextMorph(
     value: Number,
     modifier: Modifier = Modifier,
-    decimals: Int = 0,
+    decimals: Int? = null,
     style: TextStyle = TextStyle.Default,
     color: Color = Color.Unspecified,
     ease: MorphEase = MorphEase.Curve(),

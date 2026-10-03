@@ -49,8 +49,9 @@ public enum class Segmentation {
     /** One segment per word (spaces and punctuation become their own segments). */
     WORD,
     /**
-     * Per-word script detection: words in scripts that depend on contextual shaping
-     * (Arabic, Indic scripts, Thai, ...) morph as whole words; everything else per grapheme.
+     * torph's rule: text with a space or line break morphs word by word, and a single word per
+     * grapheme. Unlike torph, a single word in a script that depends on contextual shaping (Arabic,
+     * Indic scripts, Thai, ...) stays whole, since splitting it would break its shaping.
      */
     AUTO,
 }

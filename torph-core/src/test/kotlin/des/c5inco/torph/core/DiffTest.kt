@@ -20,7 +20,7 @@ class DiffTest {
 
     @Test
     fun `shared prefix keeps ids`() {
-        val (o, r) = diff("Hello world", "Hello there")
+        val (o, r) = diff("Hello world", "Hello there", SegmentOptions(segmentation = Segmentation.GRAPHEME))
         val oldIds = o.take(6).map { it.id }
         val newIds = r.segments.take(6).map { it.id }
         assertEquals(oldIds, newIds)
@@ -89,9 +89,15 @@ class DiffTest {
     }
 
     @Test
-    fun `word mode segments arabic as whole words in auto`() {
-        val s = seg("hi مرحبا", SegmentOptions(segmentation = Segmentation.AUTO))
-        assertEquals(listOf("h", "i", " ", "مرحبا"), s.map { it.text })
+    fun `auto follows torph and keeps shaped words whole`() {
+        // Like torph: text with a space or line break goes word by word, a single word per grapheme.
+        assertEquals(listOf("Hello", " ", "world"), seg("Hello world").map { it.text })
+        assertEquals(listOf("hi", "\n", "there"), seg("hi\nthere").map { it.text })
+        assertEquals(listOf("H", "e", "l", "l", "o"), seg("Hello").map { it.text })
+        // Unlike torph, a single word in a script that needs contextual shaping stays whole.
+        assertEquals(listOf("مرحبا"), seg("مرحبا").map { it.text })
+        // Numbers still split into digits inside word-by-word text.
+        assertEquals(listOf("Total", " ", "$", "1", "2"), seg("Total $12").map { it.text })
     }
 
     @Test
