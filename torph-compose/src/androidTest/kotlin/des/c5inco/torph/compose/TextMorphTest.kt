@@ -7,6 +7,7 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.sp
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import des.c5inco.torph.core.Segmentation
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Rule
@@ -58,6 +59,47 @@ class TextMorphTest {
     }
 
     @Test
+    fun changingSegmentationWithoutTextChangeResegmentsInPlace() {
+        var segmentation by mutableStateOf(Segmentation.GRAPHEME)
+        var text by mutableStateOf("Hello world")
+        lateinit var state: TextMorphState
+        val events = ArrayList<String>()
+        rule.mainClock.autoAdvance = false
+        rule.setContent {
+            state = rememberTextMorphState()
+            TextMorph(
+                text = text,
+                state = state,
+                segmentation = segmentation,
+                duration = 400.milliseconds,
+                respectReducedMotion = false,
+                onAnimationStart = { events += "start" },
+                onAnimationComplete = { events += "complete" },
+                onAnimationCancel = { events += "cancel" },
+            )
+        }
+        rule.mainClock.advanceTimeByFrame()
+        assertEquals(11, state.segments.size)
+
+        segmentation = Segmentation.WORD
+        // Two frames: on some devices (a Pixel 10 Pro on Android 17) a write from the test thread
+        // reaches layout one frame later than elsewhere.
+        repeat(2) { rule.mainClock.advanceTimeByFrame() }
+        assertEquals(listOf("Hello", " ", "world"), state.segments.map { it.text })
+        assertEquals(3, state.liveCount) // snapped, nothing left over from the grapheme split
+        assertEquals(emptyList<String>(), events) // not a text change, so no morph callbacks
+
+        // The next text change morphs from word segments, so "Hello" persists as one segment.
+        val helloId = state.segments.first().id
+        text = "Hello there"
+        repeat(2) { rule.mainClock.advanceTimeByFrame() }
+        assertEquals(helloId, state.segments.first().id)
+        rule.mainClock.advanceTimeBy(1000)
+        rule.waitForIdle()
+        assertEquals(listOf("start", "complete"), events)
+    }
+
+    @Test
     fun supersededMorphFiresCancelAndOnlyTheLatestCompletes() {
         var text by mutableStateOf("one")
         val events = ArrayList<String>()
@@ -76,6 +118,9 @@ class TextMorphTest {
         text = "two"
         repeat(3) { rule.mainClock.advanceTimeByFrame() }
         text = "three" // lands mid-morph
+        // Let it apply before jumping the clock (it can take two frames, as above), or the first
+        // morph completes inside the jump on devices where it lands a frame late.
+        repeat(2) { rule.mainClock.advanceTimeByFrame() }
         rule.mainClock.advanceTimeBy(1000)
         rule.waitForIdle()
         assertEquals(listOf("start", "cancel", "start", "complete"), events)

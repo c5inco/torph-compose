@@ -122,17 +122,18 @@ public class TextMorphState internal constructor(
         val prev = lastKey
         if (key != prev) {
             lastKey = key
-            apply(key, opts, prevText = prev?.text)
+            apply(key, opts, prev)
         }
         sizeTick.intValue // subscribe: re-measure while the size animates
         return constraints.constrain(IntSize(ceil(width.value).toInt(), ceil(height.value).toInt()))
     }
 
     /**
-     * Re-measures [key]. When its text differs from [prevText] (null on the first pass) the new
-     * text is diffed into [segments] and morphed to, or snapped to when [MorphOptions.snap] is set.
+     * Re-measures [key]. When its text differs from [prev]'s (null on the first pass) the new text is
+     * diffed into [segments] and morphed to, or snapped to when [MorphOptions.snap] is set. When only
+     * the options that shape segmentation changed, the same text is re-segmented and snapped to.
      */
-    private fun apply(key: LayoutKey, opts: MorphOptions, prevText: String?) {
+    private fun apply(key: LayoutKey, opts: MorphOptions, prev: LayoutKey?) {
         val diag = TextMorphDiagnostics.logTimings
         if (diag) timings.reset()
         val applyStart = if (diag) System.nanoTime() else 0L
@@ -150,8 +151,13 @@ public class TextMorphState internal constructor(
         if (cacheStyle != key.style || layoutCache.size > MAX_CACHED_LAYOUTS) { layoutCache.clear(); cacheStyle = key.style }
         val newSize = Size(full.size.width.toFloat(), full.size.height.toFloat())
 
+        val textChanged = key.text != prev?.text
+        val segmentationChanged = prev != null && (
+            key.segmentation != prev.segmentation || key.numbers != prev.numbers ||
+                key.locale != prev.locale || key.maxSegments != prev.maxSegments
+            )
         var diff: DiffResult? = null
-        if (key.text != prevText) {
+        if (textChanged || segmentationChanged) {
             val segOptions = SegmentOptions(opts.segmentation, opts.numbers, opts.cursorIndex, opts.maxSegments)
             val incoming = segmentText(key.text, opts.locale, segmenter, segOptions, nextId)
             if (diag) { val n = System.nanoTime(); timings.segment = n - mark; mark = n }
@@ -161,10 +167,10 @@ public class TextMorphState internal constructor(
             nextId = diff.nextId
         }
 
-        if (diff == null || prevText == null || opts.snap) {
-            // Initial layout, re-wrap without a text change, or snapping: rebuild everything in place.
-            // A snapped text change still fires its callbacks, in order.
-            snapToLayout(full, newSize, notify = diff != null && prevText != null && !diff.isEmpty)
+        if (diff == null || !textChanged || prev == null || opts.snap) {
+            // Initial layout, re-wrap or re-segment without a text change, or snapping: rebuild
+            // everything in place. A snapped text change still fires its callbacks, in order.
+            snapToLayout(full, newSize, notify = textChanged && prev != null && diff?.isEmpty == false)
             return
         }
 
