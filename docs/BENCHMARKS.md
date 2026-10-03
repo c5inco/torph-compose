@@ -75,6 +75,72 @@ before, 26.3 and 23.7 ms after; `morph200` 16.2 and 16.3 ms before, 14.6 and 14.
 `morph1000` P90 varied too much between the two runs after (21.6 and 11.4 ms) to quote as one
 number. 1000 characters still misses frames on a change, just less often and by less.
 
+#### Pixel 7 (Android 16)
+
+Same method and library code as above.
+
+| benchmark | frame CPU P50 | P90 | P99 |
+| --- | ---: | ---: | ---: |
+| morph50 | 4.6 → 4.7 ms | 6.1 → 6.3 ms | 13.7 → 13.8 ms |
+| morph200 | 6.8 → 7.0 ms | 14.9 → 11.6 ms | 27.1 → 28.5 ms |
+| morph1000 | 12.6 → 9.2 ms | 17.4 → 16.7 ms | 37.4 → 28.5 ms |
+| numberRolling | 4.7 → 4.4 ms | 7.0 → 6.4 ms | 12.7 → 12.3 ms |
+
+`morph1000` P99 improved in every run (38.9 and 35.8 ms before, 29.0 and 28.0 ms after). `morph200`
+P99 did not move (28.2 and 26.0 ms before, 29.0 and 28.1 ms after), even though its text change got
+4.6 ms cheaper, so its worst frames are dominated by something other than the change itself. The
+`morph1000` P50 and `morph200` P90 differences are within run-to-run noise (`morph1000` P50 was 10.6
+and 14.5 ms in the two runs before).
+
+The cost of one text change (medians, about 45 changes per size per build):
+
+| chars | total | position | of which box | measure text | tokenize | diff | anim setup |
+| ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| 10 | 1.64 → 1.62 ms | 0.30 → 0.25 ms | 0.19 → 0.15 ms | 0.49 → 0.61 ms | 0.16 → 0.17 ms | 0.27 → 0.23 ms | 0.29 → 0.25 ms |
+| 50 | 4.77 → 3.59 ms | 1.04 → 0.56 ms | 0.88 → 0.44 ms | 1.21 → 1.33 ms | 0.34 → 0.45 ms | 0.95 → 0.22 ms | 0.34 → 0.31 ms |
+| 200 | 10.72 → 6.09 ms | 3.18 → 1.74 ms | 2.86 → 1.40 ms | 1.72 → 1.58 ms | 0.99 → 0.84 ms | 2.93 → 0.63 ms | 0.74 → 0.57 ms |
+| 1000 | 21.80 → 13.10 ms | 13.95 → 7.17 ms | 13.23 → 6.69 ms | 2.13 → 1.89 ms | 2.29 → 1.25 ms | 1.04 → 0.70 ms | 1.17 → 0.80 ms |
+
+`DrawAllocationTest` went from 6.6-7.1 KB to 3.3-4.4 KB per frame, consistent across all six runs
+of each build.
+
+#### Pixel 4a (Android 13)
+
+The same comparison on a mid-range phone from 2020, same method (before, after, after, before; two
+runs of three iterations each). The library code is the same as above.
+
+| benchmark | frame CPU P50 | P90 | P99 |
+| --- | ---: | ---: | ---: |
+| morph50 | 23.2 → 15.4 ms | 32.2 → 24.0 ms | 40.3 → 27.9 ms |
+| morph200 | 16.8 → 16.3 ms | 32.9 → 32.4 ms | 58.2 → 43.3 ms |
+| morph1000 | 31.4 → 30.5 ms | 35.0 → 34.5 ms | 96.7 → 80.2 ms |
+| numberRolling | 6.2 → 6.2 ms | 12.6 → 12.6 ms | 13.9 → 13.7 ms |
+
+The P99 improvement held in every run (`morph1000` 95.6 and 97.7 ms before, 80.3 and 80.1 ms after;
+`morph200` 56.8 and 59.7 ms before, 42.5 and 44.0 ms after). The `morph50` row is noisy: one run
+before had double the P50 of the other three (30.7 ms against about 15.5 ms), so its typical frames
+did not really change.
+
+The cost of one text change, from `TextMorphDiagnostics` (medians, about 45 changes per size per
+build):
+
+| chars | total | position | of which box | measure text | tokenize | diff | anim setup |
+| ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| 10 | 2.21 → 1.73 ms | 0.80 → 0.45 ms | 0.68 → 0.37 ms | 0.65 → 0.63 ms | 0.16 → 0.16 ms | 0.19 → 0.16 ms | 0.35 → 0.30 ms |
+| 50 | 12.58 → 8.07 ms | 3.87 → 2.39 ms | 3.15 → 1.80 ms | 1.67 → 1.67 ms | 0.93 → 1.05 ms | 3.33 → 0.58 ms | 1.27 → 1.25 ms |
+| 200 | 24.59 → 16.08 ms | 8.88 → 5.26 ms | 7.76 → 4.56 ms | 1.54 → 1.55 ms | 1.92 → 1.75 ms | 8.15 → 1.51 ms | 2.28 → 1.99 ms |
+| 1000 | 52.90 → 22.26 ms | 34.80 → 14.22 ms | 33.23 → 13.02 ms | 3.21 → 1.94 ms | 6.83 → 2.94 ms | 5.09 → 1.48 ms | 3.34 → 1.70 ms |
+
+The slower the phone, the larger the gain: 58% off a 1000-character change here, against 40% on
+the Pixel 7 and 31% on the Pixel 10 Pro. `DrawAllocationTest` was noisier here (3.0-9.0 KB per frame after, 5.7-9.9 KB before; medians
+about 3.3 and 5.9 KB).
+
+This phone also shows a cost the Pixel 10 Pro hides: it cannot hold frame rate on long text even
+between changes. A typical `morph1000` frame takes about 30 ms, so every frame misses its deadline,
+and `morph200` sits right at the 16.7 ms budget. That is the per-frame draw of a few hundred
+segments, not the diff or placement. On mid-range hardware, caching settled segments (for example
+in a `GraphicsLayer`) is worth revisiting, despite the conclusion below drawn from the Pixel 10 Pro.
+
 ## Where the time actually goes (from the Perfetto traces)
 
 Measured with Perfetto's `trace_processor` over the captured traces, not inferred:
