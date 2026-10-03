@@ -41,6 +41,19 @@ private fun lorem(chars: Int, seed: Int): String {
     return sb.substring(0, chars)
 }
 
+/** [text] with the word at roughly [fraction] of the way through swapped for a different one. */
+private fun withEditedWord(text: String, fraction: Float, seed: Int): String {
+    var start = (text.length * fraction).toInt()
+    while (start > 0 && text[start - 1] != ' ') start--
+    var end = start
+    while (end < text.length && text[end] != ' ') end++
+    val current = text.substring(start, end)
+    val r = Random(seed)
+    var replacement: String
+    do replacement = words[r.nextInt(words.size)] while (replacement == current)
+    return text.substring(0, start) + replacement + text.substring(end)
+}
+
 @Composable
 fun PerfScreen() {
     // Log a per-change timing breakdown to logcat (adb logcat -s TextMorphPerf) while this
@@ -52,7 +65,17 @@ fun PerfScreen() {
     var size by rememberSaveable { mutableIntStateOf(200) }
     var running by rememberSaveable { mutableStateOf(true) }
     var mode by rememberSaveable { mutableStateOf(Segmentation.AUTO) }
-    val texts = remember(size) { listOf(lorem(size, 1), lorem(size, 2), lorem(size, 3)) }
+    // Replace swaps in unrelated text; edit changes one word of the same paragraph, 40-80% of the
+    // way through, so the lines before it are unchanged.
+    var edit by rememberSaveable { mutableStateOf(false) }
+    val texts = remember(size, edit) {
+        if (edit) {
+            val base = lorem(size, 1)
+            listOf(0.4f, 0.6f, 0.8f).mapIndexed { i, f -> withEditedWord(base, f, i) }
+        } else {
+            listOf(lorem(size, 1), lorem(size, 2), lorem(size, 3))
+        }
+    }
     val text by cycling(texts, 1500L, running)
     val state = rememberTextMorphState()
 
@@ -96,6 +119,8 @@ fun PerfScreen() {
     Choice(listOf(50, 200, 1000), size, { "$it chars" }) { size = it }
     Gap(4)
     Choice(Segmentation.entries, mode, { it.name }) { mode = it }
+    Gap(4)
+    Choice(listOf(false, true), edit, { if (it) "Edit one word" else "Replace text" }) { edit = it }
     ToggleRow("cycle every 1.5 s", running) { running = it }
     Caption("Above 300 segments the library falls back to word segmentation automatically (maxSegments); force WORD to compare.")
     SectionTitle("$size characters")
