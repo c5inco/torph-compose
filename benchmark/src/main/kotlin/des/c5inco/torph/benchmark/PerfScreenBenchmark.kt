@@ -41,17 +41,25 @@ class PerfScreenBenchmark {
         startActivityAndWait()
     }
 
+    // The default: AUTO, which morphs text with spaces (all of these) word by word, as torph does.
+
     @Test fun morph50() = morph(50)
 
     @Test fun morph200() = morph(200)
 
-    /** Over the 300-segment cap, so this also measures the automatic word-segmentation fallback. */
+    /** Over the 300-segment cap, where every mode morphs by word, so this is also the worst case. */
     @Test fun morph1000() = morph(1000)
 
     /** One word of the same 1000-character paragraph changes per cycle, 40-80% of the way through. */
     @Test fun morph1000Edit() = morph(1000, edit = true)
 
-    private fun morph(chars: Int, edit: Boolean = false) = rule.measureRepeated(
+    // The worst case: GRAPHEME, one segment per character.
+
+    @Test fun morph50Grapheme() = morph(50, segmentation = "GRAPHEME")
+
+    @Test fun morph200Grapheme() = morph(200, segmentation = "GRAPHEME")
+
+    private fun morph(chars: Int, edit: Boolean = false, segmentation: String = "AUTO") = rule.measureRepeated(
         packageName = PACKAGE,
         metrics = listOf(FrameTimingMetric()),
         iterations = 3,
@@ -60,19 +68,21 @@ class PerfScreenBenchmark {
         setupBlock = {
             pressHome()
             startActivityAndWait()
-            openPerf(chars, edit)
+            openPerf(chars, edit, segmentation)
         },
     ) {
         // Three cycles of the 1.5 s rotation: ~4.5 s of continuous morphing.
         Thread.sleep(4_800)
     }
 
-    private fun MacrobenchmarkScope.openPerf(chars: Int, edit: Boolean) {
+    private fun MacrobenchmarkScope.openPerf(chars: Int, edit: Boolean, segmentation: String) {
         device.wait(Until.hasObject(By.text("Perf")), 5_000)
         device.findObject(By.text("Perf")).click()
         device.wait(Until.hasObject(By.text("$chars chars")), 5_000)
         device.findObject(By.text("$chars chars")).click()
         device.findObject(By.text(if (edit) "Edit one word" else "Replace text")).click()
+        // Set explicitly: the screen remembers its last choice across launches.
+        device.findObject(By.text(segmentation)).click()
         // Let the first layout and cycle settle before measuring.
         Thread.sleep(1_600)
     }
