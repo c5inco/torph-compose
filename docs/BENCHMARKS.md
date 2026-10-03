@@ -293,6 +293,39 @@ The box fill is still linear in characters, since each lookup walks its line. Sc
 segment's first and last character would cut it further in word mode, but is not equivalent for
 bidirectional text.
 
+### Reusing unchanged lines after an edit
+
+After a text change, placement now keeps the character boxes of the leading lines that are provably
+unchanged (same start, end, extent, top, bottom and paragraph direction as in the previous layout,
+before the first changed character) and fills only the rest. Line breaking can look ahead and
+paragraph direction can depend on later text, so it compares the laid-out lines rather than assuming
+text before an edit keeps its layout; `ReusableBoxPrefixTest` checks the reused boxes against a fresh
+fill for LTR, RTL, mixed-direction, multi-paragraph and emoji edits.
+
+`PerfScreenBenchmark.morph1000Edit` measures it: the Perf screen's "Edit one word" mode changes one
+word of the same 1000-character paragraph, 40-80% of the way through, every 1.5 s. Same method as
+above (before, after, after, before), medians per 1000-character change:
+
+| | Pixel 10 Pro | Pixel 7 | Pixel 4a |
+| --- | ---: | ---: | ---: |
+| edit: total | 8.85 → 6.89 ms | 12.18 → 8.60 ms | noisy, see below |
+| edit: box fill | 4.78 → 3.15 ms | 6.81 → 4.45 ms | 18.6 → 13.5 ms |
+| edit: characters whose boxes were filled | 994 → 621 | 994 → 621 | 994 → 607 |
+| edit: frame CPU P99 | 20.5 → 16.7 ms | 26.1 → 22.7 ms | 68.4 → 59.1 ms |
+| replace (control): total | 9.10 → 9.36 ms | 12.85 → 12.66 ms | 22.6 → 22.4 ms |
+
+On the Pixel 10 Pro and Pixel 7 the change is 22-32% cheaper, and every run with the change beat
+every run without it. The Pixel 4a's box fill and P99 improved in every run, but its total per
+change swings with which core it ran on (see
+[Which CPU core runs the change](#which-cpu-core-runs-the-change)): one round went 29.0 → 20.5 ms,
+another 29.7 → 27.7 ms. Replacing the whole text, as `morph1000` does, reuses nothing and costs the
+same as before.
+
+How much is reused depends on where the change is. Text that only grows at the end, like a
+streaming reply or a transcript, reuses everything but the last line; an edit near the start
+reuses little. Single-line text (numbers, counters, timers, labels) never has a whole line before
+the change, so it gains nothing, and its box fill was already about 0.1-0.4 ms.
+
 One caveat on these numbers: segment-layout measuring shows 0.00 ms because the demo cycles strings
 built from a single word list, so the layout cache always hits. Text with genuinely new words pays
 to measure each one the first time it appears.
