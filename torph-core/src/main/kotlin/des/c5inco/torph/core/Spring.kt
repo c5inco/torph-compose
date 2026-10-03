@@ -15,7 +15,7 @@ import kotlin.math.sqrt
  * @property mass Mass m.
  * @property precision Distance from the target below which the spring is considered settled.
  */
-public data class SpringParams(
+internal data class SpringParams(
     val stiffness: Float = 100f,
     val damping: Float = 10f,
     val mass: Float = 1f,
@@ -29,10 +29,10 @@ public data class SpringParams(
     }
 
     /** Undamped angular frequency ω₀ = √(k/m). */
-    public val omega: Float get() = sqrt(stiffness / mass)
+    val omega: Float get() = sqrt(stiffness / mass)
 
     /** Damping ratio ζ = c / (2√(km)). 1 = critically damped. */
-    public val dampingRatio: Float get() = damping / (2f * sqrt(stiffness * mass))
+    val dampingRatio: Float get() = damping / (2f * sqrt(stiffness * mass))
 }
 
 /**
@@ -40,12 +40,12 @@ public data class SpringParams(
  * of its target, or [Long.MAX_VALUE] for an undamped spring. An estimate for callers planning around
  * a spring ease; the Compose renderer runs the spring itself and does not use it.
  */
-public fun settleTime(params: SpringParams): Long = settleTime(
+internal fun settleTime(params: SpringParams): Long = settleTime(
     params.stiffness, params.damping, params.mass, params.precision,
 )
 
 /** [settleTime] for loose spring parameters. */
-public fun settleTime(stiffness: Float, damping: Float, mass: Float, precision: Float = 0.001f): Long {
+internal fun settleTime(stiffness: Float, damping: Float, mass: Float, precision: Float = 0.001f): Long {
     val p = SpringParams(stiffness, damping, mass, precision)
     val zeta = p.dampingRatio
     val omega = p.omega
@@ -73,7 +73,7 @@ public fun settleTime(stiffness: Float, damping: Float, mass: Float, precision: 
  * Position of a damped spring at [timeMs] starting at displacement 1 with [initialVelocity], settling to 0.
  * Handy for tests and for generating easing tables; the Compose layer uses its own solver at runtime.
  */
-public fun springPosition(params: SpringParams, timeMs: Long, initialVelocity: Float = 0f): Float {
+internal fun springPosition(params: SpringParams, timeMs: Long, initialVelocity: Float = 0f): Float {
     val t = timeMs / 1000.0
     val zeta = params.dampingRatio.toDouble()
     val w0 = params.omega.toDouble()

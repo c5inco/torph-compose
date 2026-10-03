@@ -3,7 +3,7 @@ package des.c5inco.torph.compose
 import androidx.compose.animation.core.CubicBezierEasing
 import androidx.compose.animation.core.Easing
 import androidx.compose.animation.core.LinearEasing
-import des.c5inco.torph.core.SpringParams
+import kotlin.math.sqrt
 
 /** How segments travel. Mirrors torph's `ease` option: a timing curve or a physical spring. */
 public sealed interface MorphEase {
@@ -12,17 +12,18 @@ public sealed interface MorphEase {
 
     /**
      * Physical spring in torph's units (stiffness, damping coefficient, mass). Duration is ignored.
-     * `precision` is carried into [params] for settle-time estimates; the animation itself settles
-     * at fixed thresholds (half a pixel for movement, 0.001 for fades).
+     *
+     * Unlike torph there is no `precision`: torph bakes a spring into a fixed-length CSS curve and
+     * needs a cutoff to pick its length, while this runs the spring live, keeps its velocity when
+     * retargeted, and stops once movement is under half a pixel (fades under 0.001).
      */
     public data class Spring(
         val stiffness: Float = 100f,
         val damping: Float = 10f,
         val mass: Float = 1f,
-        val precision: Float = 0.001f,
     ) : MorphEase {
-        /** Same parameters as a core [SpringParams], for settle-time estimates. */
-        public val params: SpringParams get() = SpringParams(stiffness, damping, mass, precision)
+        /** Damping ratio from torph's damping coefficient: c / (2√(km)). 1 = critically damped. */
+        internal val dampingRatio: Float get() = damping / (2f * sqrt(stiffness * mass))
     }
 }
 
@@ -51,7 +52,7 @@ private val bezierRegex = Regex("""cubic-bezier\(\s*([-\d.eE]+)\s*,\s*([-\d.eE]+
 
 /**
  * Parses a CSS `cubic-bezier(x1, y1, x2, y2)` string (or the keywords `linear`, `ease`, `ease-in`,
- * `ease-out`, `ease-in-out`) into an [Easing], so torph configs port verbatim.
+ * `ease-out`, `ease-in-out`) into an [Easing], so a CSS easing string can be used as written.
  */
 public fun cssCubicBezier(css: String): Easing {
     val s = css.trim()

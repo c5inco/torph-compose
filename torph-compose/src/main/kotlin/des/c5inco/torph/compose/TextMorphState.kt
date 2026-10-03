@@ -43,8 +43,8 @@ private const val MAX_CACHED_LAYOUTS = 1024
  * [rememberTextMorphState] and attach with [Modifier.textMorph] for custom containers.
  */
 public class TextMorphState internal constructor(
-    /** The measurer used for every layout; exposed for debug overlays and tests. */
-    public val textMeasurer: TextMeasurer,
+    /** The measurer used for every layout, including the debug overlay. */
+    internal val textMeasurer: TextMeasurer,
     private val scope: CoroutineScope,
     private val segmenter: Segmenter,
 ) {

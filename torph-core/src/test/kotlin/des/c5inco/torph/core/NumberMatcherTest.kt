@@ -11,8 +11,8 @@ class NumberMatcherTest {
     fun `finds numbers with attached symbols`() {
         val words = findNumericWords("Total $1,234.50 and -12% at 3pm.", en)
         assertEquals(listOf("$1,234.50", "-12%", "3"), words.map { it.text })
-        assertEquals(1234.5, words[0].value)
-        assertEquals(-12.0, words[1].value)
+        assertEquals(1234.5, parseNumericWord(words[0].text, en))
+        assertEquals(-12.0, parseNumericWord(words[1].text, en))
     }
 
     @Test

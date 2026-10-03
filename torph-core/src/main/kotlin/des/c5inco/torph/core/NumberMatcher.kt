@@ -7,11 +7,7 @@ public data class NumericWord(
     val text: String,
     /** Place value per char offset within [text]; symbols inherit a place from a neighbouring digit. */
     val places: IntArray,
-    /** Numeric value, for roll-direction decisions. */
-    val value: Double,
 ) {
-    val range: IntRange get() = start until end
-
     override fun equals(other: Any?): Boolean =
         other is NumericWord && other.start == start && other.end == end && other.text == text
 
@@ -58,7 +54,7 @@ public fun findNumericWords(text: String, symbols: NumberSymbols): List<NumericW
         start = p
         lastEnd = end
         val word = text.substring(start, end)
-        out.add(NumericWord(start, end, word, assignPlaces(word, symbols), parseNumericWord(word, symbols)))
+        out.add(NumericWord(start, end, word, assignPlaces(word, symbols)))
         i = end
     }
     return out

@@ -77,7 +77,7 @@ internal class Channel(initial: Float) {
 internal fun MorphEase.toFloatSpec(duration: Duration, threshold: Float): FloatAnimationSpec = when (this) {
     is MorphEase.Curve -> FloatTweenSpec(duration.inWholeMilliseconds.toInt().coerceAtLeast(0), 0, easing)
     is MorphEase.Spring -> FloatSpringSpec(
-        dampingRatio = params.dampingRatio.coerceAtLeast(0.01f),
+        dampingRatio = dampingRatio.coerceAtLeast(0.01f),
         stiffness = (stiffness / mass).coerceAtLeast(1f),
         visibilityThreshold = threshold,
     )

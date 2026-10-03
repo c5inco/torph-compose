@@ -11,7 +11,6 @@ public data class NumberSymbols(
     val decimalSeparator: Char,
     val groupingSeparator: Char,
     val minusSign: Char,
-    val zeroDigit: Char,
 ) {
     public companion object {
         private val cache = HashMap<Locale, NumberSymbols>()
@@ -23,7 +22,6 @@ public data class NumberSymbols(
                     decimalSeparator = s.decimalSeparator,
                     groupingSeparator = s.groupingSeparator,
                     minusSign = s.minusSign,
-                    zeroDigit = s.zeroDigit,
                 )
             }
         }
