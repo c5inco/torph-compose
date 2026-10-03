@@ -427,16 +427,21 @@ public class TextMorphState internal constructor(
      * Every character's box in [full], filled in one batch on first use. Per-character
      * `getBoundingBox` looked up the line and measured both edges on every call, and allocated two
      * rects; the batch shares each edge between neighbouring characters and allocates nothing.
+     *
+     * Boxes still held for the previous layout are kept for the leading lines that
+     * [reusableBoxPrefix] proves unchanged, so an edit only pays for the lines from the change on.
      */
     private fun charBoxes(full: TextLayoutResult): FloatArray {
         if (charBoxesFor === full) return charBoxes
         val diag = TextMorphDiagnostics.logTimings
         val t0 = if (diag) System.nanoTime() else 0L
         val textLen = full.layoutInput.text.length
-        if (charBoxes.size < textLen * 4) charBoxes = FloatArray(textLen * 4)
-        full.multiParagraph.fillBoundingBoxes(TextRange(0, textLen), charBoxes, 0)
+        val reused = charBoxesFor?.let { reusableBoxPrefix(it, full) } ?: 0
+        // copyOf keeps the reused prefix, which sits at the same indices in the new text.
+        if (charBoxes.size < textLen * 4) charBoxes = charBoxes.copyOf(textLen * 4)
+        if (reused < textLen) full.multiParagraph.fillBoundingBoxes(TextRange(reused, textLen), charBoxes, reused * 4)
         charBoxesFor = full
-        if (diag) { timings.box += System.nanoTime() - t0; timings.boxCalls += textLen }
+        if (diag) { timings.box += System.nanoTime() - t0; timings.boxCalls += textLen - reused }
         return charBoxes
     }
 
@@ -487,4 +492,37 @@ public fun rememberTextMorphState(): TextMorphState {
     val scope = rememberCoroutineScope()
     val segmenter = remember { IcuSegmenter() }
     return remember(measurer) { TextMorphState(measurer, scope, segmenter) }
+}
+
+/**
+ * How many leading characters of [new] have exactly the boxes they had in [old]: the whole lines
+ * before the first changed character whose start, end, extent and paragraph direction are
+ * unchanged. Line breaking can look ahead, and paragraph direction can depend on later text, so this
+ * compares the laid-out lines rather than assuming the text before an edit keeps its layout.
+ */
+internal fun reusableBoxPrefix(old: TextLayoutResult, new: TextLayoutResult): Int {
+    val a = old.layoutInput
+    val b = new.layoutInput
+    if (a.style != b.style || a.constraints != b.constraints || a.layoutDirection != b.layoutDirection ||
+        a.density != b.density || a.fontFamilyResolver != b.fontFamilyResolver ||
+        a.softWrap != b.softWrap || a.maxLines != b.maxLines || a.overflow != b.overflow
+    ) return 0
+    val oldText = a.text.text
+    val newText = b.text.text
+    val limit = minOf(oldText.length, newText.length)
+    var common = 0
+    while (common < limit && oldText[common] == newText[common]) common++
+    var reusable = 0
+    for (line in 0 until minOf(old.lineCount, new.lineCount)) {
+        val start = new.getLineStart(line)
+        val end = new.getLineEnd(line)
+        if (end > common) break
+        if (old.getLineStart(line) != start || old.getLineEnd(line) != end ||
+            old.getLineLeft(line) != new.getLineLeft(line) || old.getLineRight(line) != new.getLineRight(line) ||
+            old.getLineTop(line) != new.getLineTop(line) || old.getLineBottom(line) != new.getLineBottom(line) ||
+            old.getParagraphDirection(start) != new.getParagraphDirection(start)
+        ) break
+        reusable = end
+    }
+    return reusable
 }
