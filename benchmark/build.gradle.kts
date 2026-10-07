@@ -1,18 +1,18 @@
 plugins {
     alias(libs.plugins.android.test)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.androidx.baselineprofile)
 }
 
 android {
     namespace = "des.c5inco.torph.benchmark"
-    compileSdk = libs.versions.compileSdk.get().toInt()
+    compileSdk { version = release(37) { minorApiLevel = 1 } }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
     defaultConfig {
         minSdk = 28
+        targetSdk = 37
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         // Emulators and debug-signed builds are fine for relative comparisons; real numbers need a device.
         testInstrumentationRunnerArguments["androidx.benchmark.suppressErrors"] = "EMULATOR,LOW-BATTERY,UNLOCKED,ACTIVITY-MISSING"

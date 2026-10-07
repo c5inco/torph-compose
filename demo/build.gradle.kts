@@ -1,17 +1,16 @@
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.androidx.baselineprofile)
 }
 
 android {
     namespace = "des.c5inco.torph.demo"
-    compileSdk = libs.versions.compileSdk.get().toInt()
+    compileSdk { version = release(37) { minorApiLevel = 1 } }
     defaultConfig {
         applicationId = "des.c5inco.torph.demo"
         minSdk = 28
-        targetSdk = libs.versions.compileSdk.get().toInt()
+        targetSdk = 37
         versionCode = 1
         versionName = "0.1.0"
     }

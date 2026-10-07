@@ -33,7 +33,7 @@ cd torph-compose
 ./gradlew publishLocal    # installs both libraries into ~/.m2/repository
 ```
 
-That needs a JDK and an Android SDK with platform 36; see
+That needs a JDK and an Android SDK with platform 37.1; see
 [Building from source](#building-from-source). Then, in the project that wants to use it:
 
 ```kotlin
@@ -57,9 +57,10 @@ implementation("des.c5inco:torph-compose:0.1.0")  // Compose UI, brings :torph-c
 
 ### What your project needs
 
-- `minSdk` 24 or higher, and `compileSdk` 36 or higher.
+- `minSdk` 24 or higher, and `compileSdk` 37.1 or higher (`compileSdk { version = release(37) { minorApiLevel = 1 } }`),
+  with Android Gradle Plugin 9.1 or newer: the Compose alpha it builds against requires both.
 - Java 17 bytecode (`compileOptions` / `jvmToolchain(17)`).
-- Compose: the library is built against Compose BOM 2026.01.01 and only depends on
+- Compose: the library is built against Compose BOM alpha 2026.09.01 (Compose 1.13 alphas) and only depends on
   foundation/animation/ui/ui-text, not Material.
 
 Then:
@@ -177,7 +178,7 @@ segments any mode falls back to `WORD`.
 
 You need a JDK to run Gradle (any recent one; the build uses a Java 17 toolchain and downloads it
 if your machine does not have one) and, for everything except `:torph-core`, an Android SDK with
-platform 36 installed. Point at it with `ANDROID_HOME` or a `local.properties` containing
+platform 37.1 installed. Point at it with `ANDROID_HOME` or a `local.properties` containing
 `sdk.dir=/path/to/Android/sdk`.
 
 | Command | What it does |
