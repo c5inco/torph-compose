@@ -126,6 +126,7 @@ fun TextMorph(
     cursorIndex: Int? = null,         // caret matching for editable fields
     segmentation: Segmentation = Segmentation.AUTO,  // GRAPHEME | WORD | AUTO
     sizeMode: MorphSizeMode = MorphSizeMode.Animate, // or Snap for fixed slots
+    clip: MorphClip = MorphClip.Default,              // how far past the line box digits roll
     disabled: Boolean = false,
     respectReducedMotion: Boolean = true,
     debug: Boolean = false,           // draw segment rects, ids, enter/exit colours
@@ -145,6 +146,28 @@ cssCubicBezier("cubic-bezier(0.19, 1, 0.22, 1)") // any CSS cubic-bezier or keyw
 
 Lower level: `rememberTextMorphState()` + `Modifier.textMorph(state)` for custom containers, and
 `segmentText` / `diffSegments` / `findNumericWords` from `des.c5inco.torph.core`.
+
+### Clipping rolling digits
+
+A rolling digit is drawn through a soft clip: a band around its line box, faded at the top and
+bottom, so the digits before and after it in the roll slide in and out of view. `clip` sets that
+band, in fractions of the line height:
+
+```kotlin
+TextMorph(value = count, clip = MorphClip.Default)    // a quarter line past the line box
+TextMorph(value = count, clip = MorphClip.lineBox())  // nothing past the line box
+TextMorph(value = count, clip = MorphClip.window())   // 6% inside it, like a counter's window
+TextMorph(value = count, clip = MorphClip(overflow = -0.1f, inset = 0.2f))
+```
+
+`overflow` is how far past the line box a digit may draw (negative clips inside it), and `inset` is
+how far inside the line box the fade completes. `Default` (0.25, 0.1) is how this library has always
+drawn rolling digits, and looks best with room around the figure. When a figure sits tight against a
+label above or below it, the neighbouring digits paint over that label mid-roll, and with some fonts
+their edges stay faintly visible after the roll settles; `lineBox()` or `window()` keep the roll
+inside the figure's own line. Keep `inset` larger than `-overflow` and inside the gap between the
+line box and the digits' ink, or settled digits are faded at their edges. The Numbers screen of
+`:demo` switches between the presets.
 
 ### Coming from torph
 
@@ -170,6 +193,7 @@ Where it differs, and why:
 | Chooses segmentation itself: by word when the text has a space or line break, by character for a single word | `segmentation`: `AUTO` (default) applies torph's rule, `GRAPHEME` and `WORD` force one | `AUTO` differs in one case: a single word in a script that needs contextual shaping (Arabic, Indic, Thai and others) stays whole, because splitting it into characters breaks its shaping. Any mode switches to words above 300 segments to keep the diff fast. |
 | `className`, `style`, `as` | `modifier`, `style: TextStyle`, `color` | Compose styling. |
 | Container size always animates | `sizeMode`: `Animate` (default) or `Snap` | `Snap` skips the per-frame layout pass while the size animates, for fixed-size slots like counters. |
+| Rolling digits clip at the line box, fading over `0.15em` inside it | `clip: MorphClip`, by default a quarter line past the line box, fading until a tenth of a line inside it; `MorphClip.lineBox()` comes close to torph | The default is this port's original look, kept so that existing layouts do not change. See [Clipping rolling digits](#clipping-rolling-digits). |
 | `segmentText`, `diffSegments`, number helpers | `segmentText`, `diffSegments`, `findNumericWords` in `torph-core` | Same names and purpose, but Kotlin signatures: segmenter, options and id arguments differ. |
 
 ## How it works

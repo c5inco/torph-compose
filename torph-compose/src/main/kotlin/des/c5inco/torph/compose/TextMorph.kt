@@ -33,6 +33,7 @@ import kotlin.time.Duration.Companion.milliseconds
  *   matched by position instead of place so typing doesn't shift every digit.
  * @param segmentation Grapheme, word, or per-word auto detection of shaping-sensitive scripts.
  * @param sizeMode Animate or snap the composable's own bounds.
+ * @param clip How far past the line box rolling digits may draw; see [MorphClip].
  * @param disabled Snap every change; callbacks still fire.
  * @param respectReducedMotion Snap when the system animator scale is 0.
  * @param debug Draw segment rects, ids and enter/exit colours.
@@ -55,6 +56,7 @@ public fun TextMorph(
     cursorIndex: Int? = null,
     segmentation: Segmentation = Segmentation.AUTO,
     sizeMode: MorphSizeMode = MorphSizeMode.Animate,
+    clip: MorphClip = MorphClip.Default,
     disabled: Boolean = false,
     respectReducedMotion: Boolean = true,
     debug: Boolean = false,
@@ -80,6 +82,7 @@ public fun TextMorph(
         cursorIndex = cursorIndex,
         segmentation = segmentation,
         sizeMode = sizeMode,
+        clip = clip,
         snap = disabled || inspection || (respectReducedMotion && reduced),
         debug = debug,
     )
@@ -117,6 +120,7 @@ public fun TextMorph(
     locale: Locale = Locale.current,
     segmentation: Segmentation = Segmentation.AUTO,
     sizeMode: MorphSizeMode = MorphSizeMode.Animate,
+    clip: MorphClip = MorphClip.Default,
     disabled: Boolean = false,
     respectReducedMotion: Boolean = true,
     debug: Boolean = false,
@@ -137,6 +141,7 @@ public fun TextMorph(
         locale = locale,
         segmentation = segmentation,
         sizeMode = sizeMode,
+        clip = clip,
         disabled = disabled,
         respectReducedMotion = respectReducedMotion,
         debug = debug,

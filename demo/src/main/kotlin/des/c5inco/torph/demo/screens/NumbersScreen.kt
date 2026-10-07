@@ -16,6 +16,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.unit.dp
+import des.c5inco.torph.compose.MorphClip
 import des.c5inco.torph.compose.MorphEase
 import des.c5inco.torph.compose.TextMorph
 import des.c5inco.torph.compose.TextMorphDiagnostics
@@ -31,6 +32,7 @@ import des.c5inco.torph.demo.ToggleRow
 import kotlin.random.Random
 
 private val locales = listOf("en-US", "de-DE", "fr-FR", "ar-EG", "hi-IN")
+private val clips = listOf("Default" to MorphClip.Default, "lineBox()" to MorphClip.lineBox(), "window()" to MorphClip.window())
 
 @Composable
 fun NumbersScreen() {
@@ -45,11 +47,13 @@ fun NumbersScreen() {
     var localeTag by rememberSaveable { mutableStateOf("en-US") }
     var currency by rememberSaveable { mutableStateOf(true) }
     var spring by rememberSaveable { mutableStateOf(false) }
+    var clipName by rememberSaveable { mutableStateOf(clips.first().first) }
     val locale = Locale(localeTag)
     val javaLocale = java.util.Locale.forLanguageTag(localeTag)
     val symbol = if (currency) java.text.NumberFormat.getCurrencyInstance(javaLocale).currency?.symbol ?: "$" else ""
     val formatted = formatNumber(value, decimals, javaLocale)
     val text = if (currency) (if (localeTag.startsWith("en")) "$symbol$formatted" else "$formatted $symbol") else formatted
+    val clipArg = if (clipName == clips.first().first) "" else ", clip = MorphClip.$clipName"
 
     Stage(120, numbers = true) {
         TextMorph(
@@ -58,6 +62,7 @@ fun NumbersScreen() {
             color = MaterialTheme.colorScheme.onSurface,
             locale = locale,
             ease = if (spring) MorphEase.Spring(stiffness = 180f, damping = 18f) else MorphEase.Curve(),
+            clip = clips.first { it.first == clipName }.second,
         )
     }
     Gap(12)
@@ -77,13 +82,18 @@ fun NumbersScreen() {
     ToggleRow("spring ease", spring) { spring = it }
     LabeledSlider("decimals", decimals.toFloat(), 0f..4f, { it.toInt().toString() }) { decimals = it.toInt() }
 
+    SectionTitle("Clip")
+    Choice(clips.map { it.first }, clipName, { it }) { clipName = it }
+    Gap()
+    Caption("How far past the line box rolling digits draw. Default is a quarter-line soft margin, where the neighbouring digits peek out; lineBox() stops at the line box, close to torph on the web; window() clips just inside it, like a mechanical counter, for figures set tight against other text.")
+
     CodeBlock(
         """
         // Numeric overload formats via the locale:
-        TextMorph(value = $value, decimals = $decimals, locale = Locale("$localeTag"))
+        TextMorph(value = $value, decimals = $decimals, locale = Locale("$localeTag")$clipArg)
 
         // Or format yourself and pass a String:
-        TextMorph(text = "$text", locale = Locale("$localeTag"))
+        TextMorph(text = "$text", locale = Locale("$localeTag")$clipArg)
         """,
     )
 }

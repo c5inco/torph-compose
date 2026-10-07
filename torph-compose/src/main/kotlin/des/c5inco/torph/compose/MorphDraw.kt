@@ -24,6 +24,7 @@ internal fun TextMorphState.draw(scope: DrawScope) = with(scope) {
     frameTick.intValue // subscribe to the frame loop
     val list = live
     val debug = options.debug
+    val clipSpec = options.clip
     var i = 0
     val n = list.size
     while (i < n) {
@@ -37,18 +38,18 @@ internal fun TextMorphState.draw(scope: DrawScope) = with(scope) {
         val strip = ls.strip
         if (strip != null) {
             val h = ls.cell.height
-            val padY = h * 0.25f
-            val softClip = ls.softClip(x - ls.width * 0.5f, y - padY, x + ls.width * 1.5f, y + h + padY, padY + h * 0.1f)
+            val padY = h * clipSpec.overflow
+            val softClip = ls.softClip(x - ls.width * 0.5f, y - padY, x + ls.width * 1.5f, y + h + padY, padY + h * clipSpec.inset)
             drawWithSoftClip(softClip) {
                 drawStrip(ls, strip, ls.stripProgress.value, x, y, alpha)
             }
         } else {
             val clip = ls.clip
             if (clip != null) {
-                val padY = clip.height * 0.25f
+                val padY = clip.height * clipSpec.overflow
                 val softClip = ls.softClip(
                     clip.left - ls.width * 0.5f, clip.top - padY, clip.right + ls.width * 0.5f, clip.bottom + padY,
-                    padY + clip.height * 0.1f,
+                    padY + clip.height * clipSpec.inset,
                 )
                 drawWithSoftClip(softClip) {
                     drawSegment(ls, x, y, ls.scale.value, alpha)

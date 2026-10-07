@@ -9,5 +9,6 @@ into milestones M1 through M5.
   draw-allocation guard are in place (see [BENCHMARKS.md](BENCHMARKS.md)).
 - Number rolling is an odometer strip: a changed digit scrolls through every intermediate digit
   (wrapping 9 → 0) inside its clipped cell, up when the number grows and down when it shrinks. A
-  digit interrupted mid-roll continues from where its strip is, with velocity preserved.
+  digit interrupted mid-roll continues from where its strip is, with velocity preserved. `clip`
+  (`MorphClip`) sets how far past its line box the strip may draw.
 - `AnnotatedString`, selection and glyph-level (`drawGlyphs`) animation are out of scope, as planned.

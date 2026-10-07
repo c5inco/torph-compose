@@ -55,6 +55,9 @@ dependencies {
     androidTestImplementation(libs.androidx.test.monitor)
     androidTestImplementation(libs.compose.ui.test.junit4)
     debugImplementation(libs.compose.ui.test.manifest)
+
+    testImplementation(libs.kotlin.test)
+    testImplementation(libs.junit)
 }
 
 afterEvaluate {
