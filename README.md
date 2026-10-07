@@ -49,11 +49,38 @@ dependencyResolutionManagement {
 
 ```kotlin
 // app/build.gradle.kts
-implementation("des.c5inco:torph-compose:0.1.0")  // Compose UI, brings :torph-core with it
+implementation("des.c5inco.torph:torph-compose:0.1.0")  // Compose UI, brings :torph-core with it
 ```
 
 `./gradlew torphCoordinates` prints that dependency line for the version you have checked out, and
 `publishLocal` takes `-PVERSION_NAME=0.2.0-SNAPSHOT` if you want to stamp a different one.
+
+### Or build it inside your own build
+
+A checkout (a clone, a submodule or a subtree) can also be a Gradle
+[composite build](https://docs.gradle.org/current/userguide/composite_builds.html) of your project,
+so the library compiles from source with your app and edits to it show up without publishing:
+
+```kotlin
+// settings.gradle.kts
+includeBuild("libs/torph-compose")  // path to the checkout
+```
+
+```kotlin
+// app/build.gradle.kts: no version, the included build supplies it
+implementation("des.c5inco.torph:torph-compose")
+```
+
+Gradle substitutes `des.c5inco.torph:torph-compose` and `des.c5inco.torph:torph-core` with the
+projects in the checkout. Two things to know:
+
+- Your build must use the same Android Gradle Plugin version as this one (see
+  `gradle/libs.versions.toml`); AGP refuses to mix versions in one build.
+- The included build looks for the Android SDK itself: set `ANDROID_HOME`, or give the checkout
+  its own `local.properties` with `sdk.dir`.
+
+`:demo` and `:benchmark` are configured along with the libraries but never built unless you run
+their tasks.
 
 ### What your project needs
 
@@ -71,7 +98,7 @@ import des.c5inco.torph.compose.TextMorph
 TextMorph(text = "$1,234.50")
 ```
 
-`:torph-core` is plain Kotlin/JVM (`des.c5inco:torph-core`) if you only want the segmentation and
+`:torph-core` is plain Kotlin/JVM (`des.c5inco.torph:torph-core`) if you only want the segmentation and
 diff algorithms without Compose.
 
 ## Modules
