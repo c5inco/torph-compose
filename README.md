@@ -49,11 +49,11 @@ dependencyResolutionManagement {
 
 ```kotlin
 // app/build.gradle.kts
-implementation("des.c5inco.torph:torph-compose:0.1.0")  // Compose UI, brings :torph-core with it
+implementation("des.c5inco.torph:torph-compose:0.2.0")  // Compose UI, brings :torph-core with it
 ```
 
 `./gradlew torphCoordinates` prints that dependency line for the version you have checked out, and
-`publishLocal` takes `-PVERSION_NAME=0.2.0-SNAPSHOT` if you want to stamp a different one.
+`publishLocal` takes `-PVERSION_NAME=0.3.0-SNAPSHOT` if you want to stamp a different one.
 
 ### Or build it inside your own build
 
