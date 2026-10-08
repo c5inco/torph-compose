@@ -2,10 +2,14 @@
 
 How Torph for Jetpack Compose performs, measured on three phones, and how to reproduce it.
 
-> **These numbers are a snapshot, not a spec.** They were measured in October 2026 with the code
-> at that time. Frame times drift by several milliseconds between sessions on the same phone, and
-> the Pixel 4a varies most (see [Which CPU core runs the change](#which-cpu-core-runs-the-change)).
-> Rerun the suite before relying on a specific figure.
+> **These numbers are a snapshot, not a spec.** They were measured in October 2026. The Pixel 4 XL
+> figures are 0.2.0 (AGP 9.4, Kotlin 2.4, Compose 1.12); the Pixel 10 Pro and Pixel 7 figures are
+> 0.1.0 (AGP 8.13, Kotlin 2.2, Compose 1.10) and have not been rerun. On the Pixel 4 XL, text
+> changes cost the same or less with 0.2.0 than with 0.1.0 in the same session, and frame times
+> were within run-to-run drift (see [0.2.0 against 0.1.0](#020-against-010)). Frame times drift
+> by several milliseconds between sessions on the same phone, mostly with the CPU core each change
+> lands on (see [Which CPU core runs the change](#which-cpu-core-runs-the-change)). Rerun the suite
+> before relying on a specific figure.
 
 ## How these were measured
 
@@ -13,7 +17,7 @@ How Torph for Jetpack Compose performs, measured on three phones, and how to rep
 | --- | --- | --- | ---: |
 | Pixel 10 Pro | 17 | 120 Hz | 8.3 ms |
 | Pixel 7 | 17 | 90 Hz | 11.1 ms |
-| Pixel 4a | 13 | 60 Hz | 16.7 ms |
+| Pixel 4 XL | 13 | 90 Hz | 11.1 ms |
 
 - Macrobenchmark against the demo app's `benchmark` build (R8-minified, with the library's
   Baseline Profile), `CompilationMode.Partial()`, three warm iterations per benchmark.
@@ -29,14 +33,35 @@ How Torph for Jetpack Compose performs, measured on three phones, and how to rep
 
 ## At a glance
 
-- **Numbers, rapid interruption and multi-line reflow** stay on time at P99 on all three phones
-  (to within 0.2 ms on the Pixel 4a).
+- **Numbers, rapid interruption and multi-line reflow** stay on time at P99 on all three phones.
 - **Text up to 200 characters** stays within about a frame at P99 on the Pixel 10 Pro and Pixel 7.
 - **The expensive frame is the text-change frame**, one per change. At 1000 characters it runs
-  late on every phone, and on the Pixel 4a long text misses two or three frames per change.
+  late on every phone, and on the Pixel 4 XL, whose timer-driven changes run on its slow cores,
+  long text misses two or three frames per change.
 - **Segmentation mode barely changes what a text change costs**, because that cost is mostly per
   character, not per segment. The default (word by word for text with spaces) mainly saves drawing
   work in the frames that follow.
+
+## 0.2.0 against 0.1.0
+
+0.2.0 moved to AGP 9.4, Kotlin 2.4 and Compose 1.12, added `MorphClip` and regenerated the Baseline
+Profile. On the Pixel 4 XL, 0.2.0, then 0.1.0 (5cafb8a), then 0.2.0 again ran back to back; the
+0.2.0 figures here are from the second run, and the first agreed with them to within about a
+millisecond except where noted. Median cost of one text change, and frame CPU at P99:
+
+| benchmark | text change, 0.1.0 | text change, 0.2.0 | frame P99, 0.1.0 | frame P99, 0.2.0 |
+| --- | ---: | ---: | ---: | ---: |
+| `morph50` | 4.0 ms | 3.3 ms | 17.3 ms | 19.6 ms |
+| `morph200` | 9.1 ms | 7.5 ms | 26.7 ms | 25.6 ms |
+| `morph200Grapheme` | 10.6 ms | 9.1 ms | 30.1 ms | 29.0 ms |
+| `morph1000` | 29.9 ms | 25.8 ms | 57.2 ms | 57.2 ms |
+| `morph1000Edit` | 18.5 ms | 12.5 ms | 42.6 ms | 41.3 ms |
+| `numberRolling` | 1.1 ms | 1.0 ms | 7.7 ms | 7.4 ms |
+| 1st 1000-char change after a cold start | 32.9 ms | 31.0 ms | | |
+
+Text changes cost the same or less with 0.2.0; frame P99 moves by about a millisecond either way,
+within the drift between runs (the first 0.2.0 run had `morph50` at 16.8 ms). The one regression is
+allocation in the draw path from Compose 1.12 (see [Allocation guard](#allocation-guard)).
 
 ## Text morphing
 
@@ -46,33 +71,36 @@ so the 1000-character rows are both default and worst case.
 
 Cost of one text change (median):
 
-| benchmark | segments | Pixel 10 Pro | Pixel 7 | Pixel 4a |
+| benchmark | segments | Pixel 10 Pro | Pixel 7 | Pixel 4 XL |
 | --- | ---: | ---: | ---: | ---: |
-| `morph50`: 50 chars, default | 19 | 2.0 ms | 2.9 ms | 3.4 ms |
-| `morph50Grapheme`: 50 chars, worst case | 50 | 2.4 ms | 2.4 ms | 3.3 ms |
-| `morph200`: 200 chars, default | 67 | 3.5 ms | 5.0 ms | 12.3 ms |
-| `morph200Grapheme`: 200 chars, worst case | 200 | 3.6 ms | 5.2 ms | 15.5 ms |
-| `morph1000`: 1000 chars | 340 | 8.9 ms | 12.3 ms | 14.3 ms |
-| `morph1000Edit`: 1000 chars, one word edited | 332 | 6.8 ms | 8.7 ms | 12.6 ms |
+| `morph50`: 50 chars, default | 19 | 2.0 ms | 2.9 ms | 3.3 ms |
+| `morph50Grapheme`: 50 chars, worst case | 50 | 2.4 ms | 2.4 ms | 3.4 ms |
+| `morph200`: 200 chars, default | 67 | 3.5 ms | 5.0 ms | 7.5 ms |
+| `morph200Grapheme`: 200 chars, worst case | 200 | 3.6 ms | 5.2 ms | 9.1 ms |
+| `morph1000`: 1000 chars | 340 | 8.9 ms | 12.3 ms | 25.8 ms |
+| `morph1000Edit`: 1000 chars, one word edited | 332 | 6.8 ms | 8.7 ms | 12.5 ms |
 
 Frame CPU P50 / P99, and overrun at P99:
 
-| benchmark | Pixel 10 Pro | Pixel 7 | Pixel 4a |
+| benchmark | Pixel 10 Pro | Pixel 7 | Pixel 4 XL |
 | --- | ---: | ---: | ---: |
-| `morph50` | 4.3 / 13.1 ms, +0.0 | 4.9 / 15.1 ms, +3.6 | 14.9 / 32.2 ms, +15.4 |
-| `morph50Grapheme` | 4.7 / 12.5 ms, -0.9 | 5.2 / 15.1 ms, +5.5 | 15.1 / 33.4 ms, +17.8 |
-| `morph200` | 5.5 / 12.9 ms, -1.2 | 6.2 / 17.1 ms, +6.6 | 28.1 / 34.4 ms, +23.9 |
-| `morph200Grapheme` | 6.5 / 14.7 ms, +1.5 | 6.7 / 21.3 ms, +8.7 | 16.2 / 42.0 ms, +33.1 |
-| `morph1000` | 8.7 / 23.4 ms, +12.6 | 10.2 / 28.7 ms, +18.8 | 22.1 / 77.3 ms, +68.4 |
-| `morph1000Edit` | 6.0 / 16.0 ms, +3.4 | 7.3 / 25.4 ms, +14.7 | 14.7 / 56.1 ms, +46.3 |
+| `morph50` | 4.3 / 13.1 ms, +0.0 | 4.9 / 15.1 ms, +3.6 | 7.5 / 19.6 ms, +3.6 |
+| `morph50Grapheme` | 4.7 / 12.5 ms, -0.9 | 5.2 / 15.1 ms, +5.5 | 8.2 / 19.7 ms, +4.4 |
+| `morph200` | 5.5 / 12.9 ms, -1.2 | 6.2 / 17.1 ms, +6.6 | 16.5 / 25.6 ms, +12.9 |
+| `morph200Grapheme` | 6.5 / 14.7 ms, +1.5 | 6.7 / 21.3 ms, +8.7 | 12.3 / 29.0 ms, +16.7 |
+| `morph1000` | 8.7 / 23.4 ms, +12.6 | 10.2 / 28.7 ms, +18.8 | 15.1 / 57.2 ms, +44.8 |
+| `morph1000Edit` | 6.0 / 16.0 ms, +3.4 | 7.3 / 25.4 ms, +14.7 | 15.9 / 41.3 ms, +27.1 |
 
-A run has about three text changes in roughly 300 frames, so P99 is essentially the text-change
-frame. The Pixel 4a's P50 sits above its 16.7 ms budget for long text but that does not mean
-30 fps: its main thread and RenderThread work in parallel, so frames still come out at close to the
-display rate, each presented a vsync late. Android's frame timeline in the traces classes almost
-all of them as *Buffer Stuffing*. Only 4-8 frames per 4.8 s run miss their deadline outright,
-mostly text-change frames. The Pixel 4a's `morph200` and `morph200Grapheme` P50s are a reversed
-pair (28.1 against 16.2 ms) that comes from core placement in single runs, not from segmentation.
+A run has about three text changes in a few hundred frames, so P99 is essentially the
+text-change frame. The Pixel 4 XL's P50 sits above its 11.1 ms budget from 200 characters up, but
+that does not mean a lower frame rate: its main thread and RenderThread work in parallel, so while
+the text animates frames still come out one vsync apart (143 of 147 frame intervals in a `morph200`
+run, 121 of 129 in `morph1000`), each presented a vsync late. Android's frame timeline in the
+traces classes almost all of them as *Buffer Stuffing*. Only 3-6 frames per 4.8 s run miss their
+deadline outright, mostly text-change frames. On the Pixel 4 XL the default's `morph200` P50 is
+higher than the worst case's (16.5 against 12.3 ms) in every run, with 0.1.0 as well; the
+per-frame main-thread and RenderThread time varies from one text cycle to the next, and these runs
+do not explain the order. The change cost and P99 order as expected.
 
 ### Where a text change spends its time
 
@@ -84,8 +112,8 @@ Medians per phase (columns are independent medians, so they do not sum to the to
 | Pixel 10 Pro, 1000 chars | 8.9 ms | 1.9 ms | 0.4 ms | 0.6 ms | 5.2 ms | 4.9 ms | 0.6 ms |
 | Pixel 7, 200 chars | 5.0 ms | 1.6 ms | 0.2 ms | 0.2 ms | 1.6 ms | 1.5 ms | 0.3 ms |
 | Pixel 7, 1000 chars | 12.3 ms | 2.0 ms | 0.4 ms | 0.5 ms | 7.5 ms | 7.1 ms | 0.5 ms |
-| Pixel 4a, 200 chars | 12.3 ms | 1.4 ms | 0.8 ms | 0.8 ms | 6.8 ms | 6.4 ms | 1.4 ms |
-| Pixel 4a, 1000 chars | 14.3 ms | 2.0 ms | 1.0 ms | 0.9 ms | 7.5 ms | 7.0 ms | 1.4 ms |
+| Pixel 4 XL, 200 chars | 7.5 ms | 1.2 ms | 0.3 ms | 0.4 ms | 4.6 ms | 4.3 ms | 0.6 ms |
+| Pixel 4 XL, 1000 chars | 25.8 ms | 2.8 ms | 1.1 ms | 1.1 ms | 18.3 ms | 17.2 ms | 1.9 ms |
 
 Placement dominates, and inside it the per-character box fill: every character's bounding box is
 read from the layout to find each segment's edges. That is why segmenting by word saves little on
@@ -103,15 +131,14 @@ Text that keeps introducing new words pays to measure each one the first time.
 
 Frame CPU P50 / P99, and overrun at P99:
 
-| benchmark | what it drives | Pixel 10 Pro | Pixel 7 | Pixel 4a |
+| benchmark | what it drives | Pixel 10 Pro | Pixel 7 | Pixel 4 XL |
 | --- | --- | ---: | ---: | ---: |
-| `numberRolling` | random jumps, most digits roll | 4.3 / 10.8 ms, -1.6 | 4.4 / 10.6 ms, -0.2 | 6.2 / 13.4 ms, -0.2 |
-| `numberIncrement` | +1 taps, one or two digits roll | 3.8 / 6.9 ms, -3.2 | 3.8 / 10.1 ms, -0.1 | 4.8 / 11.9 ms, -1.9 |
-| `interruption` | 80 ms timer plus live typing | 4.8 / 9.5 ms, -3.0 | 4.8 / 12.9 ms, -3.1 | 9.0 / 15.3 ms, +0.2 |
-| `multiLine` | paragraph swap, lines reflow | 4.0 / 9.8 ms, -4.7 | 5.0 / 11.4 ms, -1.2 | 5.1 / 9.9 ms, -4.6 |
+| `numberRolling` | random jumps, most digits roll | 4.3 / 10.8 ms, -1.6 | 4.4 / 10.6 ms, -0.2 | 5.3 / 7.4 ms, -9.1 |
+| `numberIncrement` | +1 taps, one or two digits roll | 3.8 / 6.9 ms, -3.2 | 3.8 / 10.1 ms, -0.1 | 4.2 / 7.2 ms, -11.4 |
+| `interruption` | 80 ms timer plus live typing | 4.8 / 9.5 ms, -3.0 | 4.8 / 12.9 ms, -3.1 | 6.9 / 11.3 ms, -5.8 |
+| `multiLine` | paragraph swap, lines reflow | 4.0 / 9.8 ms, -4.7 | 5.0 / 11.4 ms, -1.2 | 4.3 / 6.1 ms, -11.5 |
 
-A number change costs about 0.7-1.6 ms. Every one of these holds its deadline at P99, to within
-0.2 ms on the Pixel 4a.
+A number change costs about 0.7-1.6 ms. Every one of these holds its deadline at P99.
 
 ## First changes after a cold start
 
@@ -119,20 +146,20 @@ A number change costs about 0.7-1.6 ms. Every one of these holds its deadline at
 its first text changes: two at 200 characters (timer-driven), the switch to 1000 characters (a tap),
 then two more at 1000 (timer-driven). Medians:
 
-| change after launch | Pixel 10 Pro | Pixel 7 | Pixel 4a |
+| change after launch | Pixel 10 Pro | Pixel 7 | Pixel 4 XL |
 | --- | ---: | ---: | ---: |
-| 1st, 200 chars | 7.8 ms | 5.8 ms | 25.7 ms |
-| 2nd, 200 chars | 4.2 ms | 5.8 ms | 17.3 ms |
-| switch to 1000 chars (tap) | 7.0 ms | 10.3 ms | 10.7 ms |
-| 1st, 1000 chars | 6.9 ms | 11.7 ms | 46.7 ms |
-| 2nd, 1000 chars | 7.5 ms | 8.5 ms | 18.5 ms |
+| 1st, 200 chars | 7.8 ms | 5.8 ms | 15.2 ms |
+| 2nd, 200 chars | 4.2 ms | 5.8 ms | 10.2 ms |
+| switch to 1000 chars (tap) | 7.0 ms | 10.3 ms | 8.8 ms |
+| 1st, 1000 chars | 6.9 ms | 11.7 ms | 31.0 ms |
+| 2nd, 1000 chars | 7.5 ms | 8.5 ms | 30.0 ms |
 
 `:torph-compose` ships a Baseline Profile (`src/main/generated/baselineProfiles/baseline-prof.txt`,
 in the AAR as `baseline-prof.txt`) covering `des.c5inco.torph.**`, so apps compile the text-change
 path at install rather than interpreting it until the JIT catches up. It matters for these first
 changes; once the JIT has compiled the hot code, as in the warm benchmarks above, it makes no
-difference. On the Pixel 4a, compare the tap-triggered switch (10.7 ms) with the timer-driven
-change right after it (46.7 ms): that gap is core placement, described next.
+difference. On the Pixel 4 XL, compare the tap-triggered switch (8.8 ms) with the timer-driven
+change right after it (31.0 ms): that gap is core placement, described next.
 
 ## Which CPU core runs the change
 
@@ -142,13 +169,14 @@ scheduling data in the `morph1000` traces (where each text-change layout pass ra
 
 | phone | cores | where the text changes ran | cost by core |
 | --- | --- | --- | --- |
-| Pixel 4a | 2 fast, 6 slow | 7 of 12 on slow cores | about 47 ms slow, 9-18 ms fast |
 | Pixel 7 | 2 fastest, 2 middle, 4 slow | most on the middle cores, a third on the fastest | about 13 ms middle, 7.6 ms fastest |
 | Pixel 10 Pro | four groups by top frequency | 24 of 30 on its fastest group, the rest one step down | 8-10 ms either way |
+| Pixel 4 XL | 1 fastest, 3 middle, 4 slow | all 18 on the slow cores; the tapped switch in `ColdChangeBenchmark` on a middle core, 10 of 10 | about 30 ms slow, 9.5-12 ms middle |
 
 Almost every pass runs entirely on one kind of core, and the main thread spends about a millisecond
-or less waiting for one, so this is placement, not contention. It is why the Pixel 4a's numbers swing between
-runs.
+or less waiting for one, so this is placement, not contention. On the Pixel 4 XL every timer-driven
+change ran on the slow cores, so its numbers are slow but steady between runs; on phones where
+placement is mixed, it is what makes them swing.
 
 **What triggers the change decides the core.** Android boosts the CPU briefly on touch input, so a
 change made in response to a tap usually runs on a fast core. A change driven by a timer or
@@ -157,8 +185,8 @@ the frame. Counters, stopwatches, live values and streaming text are all timer- 
 the benchmarks here measure their case. Moving the work to a background thread would not change
 this, since background threads are placed the same way. Android's Performance Hint API (ADPF) lets
 an app tell the system a CPU burst is coming; the Pixel 7 and Pixel 10 Pro support it, but the
-Pixel 4a does not (it refuses to create a hint session), so it cannot help the phone that needs it
-most. Doing less work helps on every core, so it remains the main lever.
+Pixel 4 XL does not (its power HAL reports no hint support), so it cannot help the phone that needs
+it most. Doing less work helps on every core, so it remains the main lever.
 
 ## Drawing
 
@@ -174,14 +202,20 @@ run every frame while the container size animates; `sizeMode = Snap` skips it fo
 
 `DrawAllocationTest` in `:torph-compose` measures process-wide ART allocation per animated frame
 with about 200 live segments and fails above 12 KB per frame. It guards against per-segment lambdas,
-string building or other allocation creeping into the draw path. Current figures, three runs each:
+string building or other allocation creeping into the draw path. Current figures (three runs each,
+two for the Pixel 4 XL on 0.1.0):
 
-| Pixel 10 Pro | Pixel 7 | Pixel 4a |
-| ---: | ---: | ---: |
-| 4.4-4.9 KB | 3.3-3.8 KB | 3.0-3.3 KB (has reached 9.3 KB) |
+| Pixel 10 Pro (0.1.0) | Pixel 7 (0.1.0) | Pixel 4 XL (0.1.0) | Pixel 4 XL (0.2.0) |
+| ---: | ---: | ---: | ---: |
+| 4.4-4.9 KB | 3.3-3.8 KB | 3.0 KB | 11.2 KB |
 
-Most of that is Compose's and the test clock's own per-frame work; the draw path itself allocates
-next to nothing.
+With Compose 1.10, as in 0.1.0, most of that is Compose's and the test clock's own per-frame work,
+and the draw path itself allocates next to nothing. Compose 1.12, which 0.2.0 builds against,
+allocates a small lambda inside every `drawText` of a `TextLayoutResult` (`AndroidParagraph.paint`),
+about 40 bytes, so with one call per live segment the test's 205 segments add about 8 KB per frame.
+The draw code is unchanged: the same build allocates 3.0 KB per frame against Compose 1.10, and so
+does Compose 1.13.0-alpha03, where the lambda is gone. An app on the Compose 1.13 alphas does not
+pay it.
 
 ## Running the suite
 
@@ -218,15 +252,31 @@ attached (one without a work profile, see below):
 ./gradlew :torph-compose:generateBaselineProfile
 ```
 
-A stale profile is harmless; it just stops covering the code that changed.
+A stale profile is harmless; it just stops covering the code that changed. A toolchain upgrade can
+make it stale without any code changing: AGP 9 names `internal` members after the module
+(`getLive$torph_compose`) instead of the variant (`getLive$torph_compose_release`), so regenerate
+after upgrading AGP. Generate with animations on (see below), or the profile records snaps instead
+of the animation path.
 
 ## Running on a physical device
 
-Three things bite on a personal phone:
+A few things bite on a personal phone:
 
+- **Animations must be on.** With the animator duration scale at 0, `TextMorph` respects reduced
+  motion and snaps every change, so the benchmarks and the Baseline Profile measure snapping. A
+  phone can be in that state with `animator_duration_scale` unset (a Pixel 4 XL on Android 13 was);
+  run `adb shell settings put global animator_duration_scale 1` first, and
+  `adb shell settings delete global animator_duration_scale` afterwards to put it back.
 - **Play Protect blocks the install.** Sideloading the ~46 MB test APK trips
   `INSTALL_FAILED_VERIFICATION_FAILURE` and waits on an on-device prompt. Approve it once, or turn
-  off *Verify apps over ADB* in Developer options.
+  off *Verify apps over ADB* in Developer options. On Android 13 and earlier Macrobenchmark also
+  reinstalls the demo before every benchmark to reset its compilation, and a few seconds later Play
+  Protect may ask to *Send app for a security check?*. Until someone answers, the next iteration
+  cannot start; answer *Don't send*.
+- **A leftover trace processor stalls the run.** Macrobenchmark analyses each trace with
+  `/data/local/tmp/trace_processor_shell` serving on port 9001. One left running by an interrupted
+  run keeps the port, and later runs stall for minutes at a time between iterations. Check with
+  `adb shell ps -A | grep trace_processor` before starting and stop any that predate the run.
 - **Anything else holding UiAutomation makes every test fail** with `UiAutomation not connected`.
   Layout Inspector, a CLI instrumentation server, or an accessibility automation tool will do it.
   Check with `adb shell dumpsys activity | grep -A2 "Active instrumentation"` and stop the owner.
