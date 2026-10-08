@@ -2,11 +2,9 @@
 
 How Torph for Jetpack Compose performs, measured on three phones, and how to reproduce it.
 
-> **These numbers are a snapshot, not a spec.** They were measured in October 2026. The Pixel 4 XL
-> figures are 0.2.0 (AGP 9.4, Kotlin 2.4, Compose 1.12); the Pixel 10 Pro and Pixel 7 figures are
-> 0.1.0 (AGP 8.13, Kotlin 2.2, Compose 1.10) and have not been rerun. On the Pixel 4 XL, text
-> changes cost the same or less with 0.2.0 than with 0.1.0 in the same session, and frame times
-> were within run-to-run drift (see [0.2.0 against 0.1.0](#020-against-010)). Frame times drift
+> **These numbers are a snapshot, not a spec.** They were measured in October 2026 with 0.2.0
+> (AGP 9.4, Kotlin 2.4, Compose 1.12); see [0.2.0 against 0.1.0](#020-against-010) for how they
+> compare with the previous release. Frame times drift
 > by several milliseconds between sessions on the same phone, mostly with the CPU core each change
 > lands on (see [Which CPU core runs the change](#which-cpu-core-runs-the-change)). Rerun the suite
 > before relying on a specific figure.
@@ -60,8 +58,12 @@ millisecond except where noted. Median cost of one text change, and frame CPU at
 | 1st 1000-char change after a cold start | 32.9 ms | 31.0 ms | | |
 
 Text changes cost the same or less with 0.2.0; frame P99 moves by about a millisecond either way,
-within the drift between runs (the first 0.2.0 run had `morph50` at 16.8 ms). The one regression is
-allocation in the draw path from Compose 1.12 (see [Allocation guard](#allocation-guard)).
+within the drift between runs (the first 0.2.0 run had `morph50` at 16.8 ms). On the Pixel 7 and
+Pixel 10 Pro, the warm text-change costs below are within 0.7 ms of the 0.1.0 figures measured in an
+earlier session, either way, and `ColdChangeBenchmark` run back to back on each gave the same first
+1000-character change with both releases (Pixel 7: 13.6 ms with 0.1.0, 13.6 and 14.4 ms in two 0.2.0
+runs; Pixel 10 Pro: 10.3 ms with each). The one regression is allocation in the draw path from
+Compose 1.12 (see [Allocation guard](#allocation-guard)).
 
 ## Text morphing
 
@@ -73,23 +75,23 @@ Cost of one text change (median):
 
 | benchmark | segments | Pixel 10 Pro | Pixel 7 | Pixel 4 XL |
 | --- | ---: | ---: | ---: | ---: |
-| `morph50`: 50 chars, default | 19 | 2.0 ms | 2.9 ms | 3.3 ms |
-| `morph50Grapheme`: 50 chars, worst case | 50 | 2.4 ms | 2.4 ms | 3.4 ms |
-| `morph200`: 200 chars, default | 67 | 3.5 ms | 5.0 ms | 7.5 ms |
-| `morph200Grapheme`: 200 chars, worst case | 200 | 3.6 ms | 5.2 ms | 9.1 ms |
-| `morph1000`: 1000 chars | 340 | 8.9 ms | 12.3 ms | 25.8 ms |
-| `morph1000Edit`: 1000 chars, one word edited | 332 | 6.8 ms | 8.7 ms | 12.5 ms |
+| `morph50`: 50 chars, default | 19 | 1.6 ms | 2.6 ms | 3.3 ms |
+| `morph50Grapheme`: 50 chars, worst case | 50 | 2.1 ms | 2.9 ms | 3.4 ms |
+| `morph200`: 200 chars, default | 67 | 3.6 ms | 5.2 ms | 7.5 ms |
+| `morph200Grapheme`: 200 chars, worst case | 200 | 3.7 ms | 5.6 ms | 9.1 ms |
+| `morph1000`: 1000 chars | 340 | 8.8 ms | 12.1 ms | 25.8 ms |
+| `morph1000Edit`: 1000 chars, one word edited | 332 | 7.5 ms | 8.8 ms | 12.5 ms |
 
 Frame CPU P50 / P99, and overrun at P99:
 
 | benchmark | Pixel 10 Pro | Pixel 7 | Pixel 4 XL |
 | --- | ---: | ---: | ---: |
-| `morph50` | 4.3 / 13.1 ms, +0.0 | 4.9 / 15.1 ms, +3.6 | 7.5 / 19.6 ms, +3.6 |
-| `morph50Grapheme` | 4.7 / 12.5 ms, -0.9 | 5.2 / 15.1 ms, +5.5 | 8.2 / 19.7 ms, +4.4 |
-| `morph200` | 5.5 / 12.9 ms, -1.2 | 6.2 / 17.1 ms, +6.6 | 16.5 / 25.6 ms, +12.9 |
-| `morph200Grapheme` | 6.5 / 14.7 ms, +1.5 | 6.7 / 21.3 ms, +8.7 | 12.3 / 29.0 ms, +16.7 |
-| `morph1000` | 8.7 / 23.4 ms, +12.6 | 10.2 / 28.7 ms, +18.8 | 15.1 / 57.2 ms, +44.8 |
-| `morph1000Edit` | 6.0 / 16.0 ms, +3.4 | 7.3 / 25.4 ms, +14.7 | 15.9 / 41.3 ms, +27.1 |
+| `morph50` | 4.1 / 12.0 ms, -1.5 | 4.5 / 15.1 ms, +4.9 | 7.5 / 19.6 ms, +3.6 |
+| `morph50Grapheme` | 4.8 / 12.7 ms, -1.0 | 5.5 / 17.1 ms, +7.1 | 8.2 / 19.7 ms, +4.4 |
+| `morph200` | 6.1 / 13.7 ms, -0.4 | 5.8 / 18.3 ms, +8.0 | 16.5 / 25.6 ms, +12.9 |
+| `morph200Grapheme` | 7.4 / 16.6 ms, +3.1 | 7.0 / 20.4 ms, +8.1 | 12.3 / 29.0 ms, +16.7 |
+| `morph1000` | 9.6 / 23.9 ms, +12.9 | 11.6 / 33.2 ms, +21.2 | 15.1 / 57.2 ms, +44.8 |
+| `morph1000Edit` | 6.5 / 18.1 ms, +4.6 | 7.4 / 23.7 ms, +13.5 | 15.9 / 41.3 ms, +27.1 |
 
 A run has about three text changes in a few hundred frames, so P99 is essentially the
 text-change frame. The Pixel 4 XL's P50 sits above its 11.1 ms budget from 200 characters up, but
@@ -108,10 +110,10 @@ Medians per phase (columns are independent medians, so they do not sum to the to
 
 | | total | measure text | segment | diff | place | of which boxes | animation setup |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| Pixel 10 Pro, 200 chars | 3.5 ms | 0.9 ms | 0.2 ms | 0.3 ms | 1.3 ms | 1.2 ms | 0.3 ms |
-| Pixel 10 Pro, 1000 chars | 8.9 ms | 1.9 ms | 0.4 ms | 0.6 ms | 5.2 ms | 4.9 ms | 0.6 ms |
-| Pixel 7, 200 chars | 5.0 ms | 1.6 ms | 0.2 ms | 0.2 ms | 1.6 ms | 1.5 ms | 0.3 ms |
-| Pixel 7, 1000 chars | 12.3 ms | 2.0 ms | 0.4 ms | 0.5 ms | 7.5 ms | 7.1 ms | 0.5 ms |
+| Pixel 10 Pro, 200 chars | 3.6 ms | 0.7 ms | 0.1 ms | 0.2 ms | 1.3 ms | 1.2 ms | 0.3 ms |
+| Pixel 10 Pro, 1000 chars | 8.8 ms | 1.5 ms | 0.4 ms | 0.5 ms | 5.4 ms | 5.1 ms | 0.5 ms |
+| Pixel 7, 200 chars | 5.2 ms | 1.7 ms | 0.2 ms | 0.3 ms | 1.9 ms | 1.8 ms | 0.3 ms |
+| Pixel 7, 1000 chars | 12.1 ms | 2.2 ms | 0.4 ms | 0.5 ms | 8.0 ms | 7.6 ms | 0.6 ms |
 | Pixel 4 XL, 200 chars | 7.5 ms | 1.2 ms | 0.3 ms | 0.4 ms | 4.6 ms | 4.3 ms | 0.6 ms |
 | Pixel 4 XL, 1000 chars | 25.8 ms | 2.8 ms | 1.1 ms | 1.1 ms | 18.3 ms | 17.2 ms | 1.9 ms |
 
@@ -133,12 +135,12 @@ Frame CPU P50 / P99, and overrun at P99:
 
 | benchmark | what it drives | Pixel 10 Pro | Pixel 7 | Pixel 4 XL |
 | --- | --- | ---: | ---: | ---: |
-| `numberRolling` | random jumps, most digits roll | 4.3 / 10.8 ms, -1.6 | 4.4 / 10.6 ms, -0.2 | 5.3 / 7.4 ms, -9.1 |
-| `numberIncrement` | +1 taps, one or two digits roll | 3.8 / 6.9 ms, -3.2 | 3.8 / 10.1 ms, -0.1 | 4.2 / 7.2 ms, -11.4 |
-| `interruption` | 80 ms timer plus live typing | 4.8 / 9.5 ms, -3.0 | 4.8 / 12.9 ms, -3.1 | 6.9 / 11.3 ms, -5.8 |
-| `multiLine` | paragraph swap, lines reflow | 4.0 / 9.8 ms, -4.7 | 5.0 / 11.4 ms, -1.2 | 4.3 / 6.1 ms, -11.5 |
+| `numberRolling` | random jumps, most digits roll | 4.7 / 11.8 ms, -1.3 | 4.7 / 10.1 ms, -0.1 | 5.3 / 7.4 ms, -9.1 |
+| `numberIncrement` | +1 taps, one or two digits roll | 4.0 / 7.9 ms, -1.7 | 3.8 / 10.2 ms, -0.4 | 4.2 / 7.2 ms, -11.4 |
+| `interruption` | 80 ms timer plus live typing | 5.3 / 10.6 ms, -3.0 | 4.2 / 11.3 ms, -4.0 | 6.9 / 11.3 ms, -5.8 |
+| `multiLine` | paragraph swap, lines reflow | 4.2 / 9.9 ms, -4.1 | 4.7 / 10.7 ms, -4.0 | 4.3 / 6.1 ms, -11.5 |
 
-A number change costs about 0.7-1.6 ms. Every one of these holds its deadline at P99.
+A number change costs about 0.8-1.3 ms. Every one of these holds its deadline at P99.
 
 ## First changes after a cold start
 
@@ -148,11 +150,11 @@ then two more at 1000 (timer-driven). Medians:
 
 | change after launch | Pixel 10 Pro | Pixel 7 | Pixel 4 XL |
 | --- | ---: | ---: | ---: |
-| 1st, 200 chars | 7.8 ms | 5.8 ms | 15.2 ms |
-| 2nd, 200 chars | 4.2 ms | 5.8 ms | 10.2 ms |
-| switch to 1000 chars (tap) | 7.0 ms | 10.3 ms | 8.8 ms |
-| 1st, 1000 chars | 6.9 ms | 11.7 ms | 31.0 ms |
-| 2nd, 1000 chars | 7.5 ms | 8.5 ms | 30.0 ms |
+| 1st, 200 chars | 7.7 ms | 8.5 ms | 15.2 ms |
+| 2nd, 200 chars | 4.4 ms | 6.8 ms | 10.2 ms |
+| switch to 1000 chars (tap) | 7.4 ms | 9.6 ms | 8.8 ms |
+| 1st, 1000 chars | 10.3 ms | 13.6 ms | 31.0 ms |
+| 2nd, 1000 chars | 9.6 ms | 8.9 ms | 30.0 ms |
 
 `:torph-compose` ships a Baseline Profile (`src/main/generated/baselineProfiles/baseline-prof.txt`,
 in the AAR as `baseline-prof.txt`) covering `des.c5inco.torph.**`, so apps compile the text-change
@@ -169,12 +171,13 @@ scheduling data in the `morph1000` traces (where each text-change layout pass ra
 
 | phone | cores | where the text changes ran | cost by core |
 | --- | --- | --- | --- |
-| Pixel 7 | 2 fastest, 2 middle, 4 slow | most on the middle cores, a third on the fastest | about 13 ms middle, 7.6 ms fastest |
-| Pixel 10 Pro | four groups by top frequency | 24 of 30 on its fastest group, the rest one step down | 8-10 ms either way |
+| Pixel 7 | 2 fastest, 2 middle, 4 slow | 8 of 9 on the middle cores, 1 on the fastest; the tapped switch in `ColdChangeBenchmark` on the fastest, 6 of 10 | 12.7-17.9 ms middle, 11.8 ms fastest |
+| Pixel 10 Pro | 1 fastest, 5 middle (in two clusters), 2 slow | all 9 on the middle cores, none on the fastest; the tapped switch also on the middle cores, 10 of 10 | 6.5-12.9 ms middle |
 | Pixel 4 XL | 1 fastest, 3 middle, 4 slow | all 18 on the slow cores; the tapped switch in `ColdChangeBenchmark` on a middle core, 10 of 10 | about 30 ms slow, 9.5-12 ms middle |
 
-Almost every pass runs entirely on one kind of core, and the main thread spends about a millisecond
-or less waiting for one, so this is placement, not contention. On the Pixel 4 XL every timer-driven
+Most passes run almost entirely on one kind of core (on the Pixel 7, five of nine moved between its
+middle and fastest cores partway through), and the main thread spends a median of half a
+millisecond or less waiting for a core, so this is placement, not contention. On the Pixel 4 XL every timer-driven
 change ran on the slow cores, so its numbers are slow but steady between runs; on phones where
 placement is mixed, it is what makes them swing.
 
@@ -191,9 +194,9 @@ it most. Doing less work helps on every core, so it remains the main lever.
 ## Drawing
 
 Composition does not run per frame: animation state lives in plain float channels advanced by one
-frame loop and read only in layout and draw. In a Pixel 7 `morph200` trace, 13 of 118 rendered
+frame loop and read only in layout and draw. In a Pixel 7 `morph200` trace, 12-14 of 118-120 rendered
 frames recomposed (the text changes and the demo's frame-time readout); the rest only ran Compose's
-check for pending work, about 0.25 ms. Each frame draws one cached single-segment layout per
+check for pending work, about 0.3 ms. Each frame draws one cached single-segment layout per
 live segment. The drawing has its own graphics layer, so a sibling redrawing (a clock, a progress
 bar, a ripple) does not re-record the text; `RedrawIsolationTest` checks this. A layout pass does
 run every frame while the container size animates; `sizeMode = Snap` skips it for fixed-size slots.
@@ -202,12 +205,14 @@ run every frame while the container size animates; `sizeMode = Snap` skips it fo
 
 `DrawAllocationTest` in `:torph-compose` measures process-wide ART allocation per animated frame
 with about 200 live segments and fails above 16 KB per frame. It guards against per-segment lambdas,
-string building or other allocation creeping into the draw path. Current figures (three runs each,
-two for the Pixel 4 XL on 0.1.0):
+string building or other allocation creeping into the draw path. Figures from three runs each (two
+for the Pixel 4 XL on 0.1.0):
 
-| Pixel 10 Pro (0.1.0) | Pixel 7 (0.1.0) | Pixel 4 XL (0.1.0) | Pixel 4 XL (0.2.0) |
-| ---: | ---: | ---: | ---: |
-| 4.4-4.9 KB | 3.3-3.8 KB | 3.0 KB | 11.2 KB |
+| phone | 0.1.0 (Compose 1.10) | 0.2.0 (Compose 1.12) |
+| --- | ---: | ---: |
+| Pixel 10 Pro | 4.4-4.9 KB | 11.7-14.4 KB |
+| Pixel 7 | 3.3-3.8 KB | 11.7-12.3 KB |
+| Pixel 4 XL | 3.0 KB | 11.2 KB |
 
 With Compose 1.10, as in 0.1.0, most of that is Compose's and the test clock's own per-frame work,
 and the draw path itself allocates next to nothing. Compose 1.12, which 0.2.0 builds against,
@@ -217,8 +222,8 @@ The draw code is unchanged: the same build allocates 3.0 KB per frame against Co
 does Compose 1.13.0-alpha03, where the lambda is gone. An app on the Compose 1.13 alphas does not
 pay it.
 
-The ceiling was 12 KB and is 16 KB while torph builds against Compose 1.12, so that this does not
-fail the guard on phones whose baseline is higher. **To do:** lower it back to 12 KB once torph
+The ceiling was 12 KB and is 16 KB while torph builds against Compose 1.12: at 12 KB the Pixel 7 and
+Pixel 10 Pro already fail it. **To do:** lower it back to 12 KB once torph
 builds against Compose 1.13 or later (the `TODO` in `DrawAllocationTest`).
 
 ## Running the suite
