@@ -201,7 +201,7 @@ run every frame while the container size animates; `sizeMode = Snap` skips it fo
 ## Allocation guard
 
 `DrawAllocationTest` in `:torph-compose` measures process-wide ART allocation per animated frame
-with about 200 live segments and fails above 12 KB per frame. It guards against per-segment lambdas,
+with about 200 live segments and fails above 16 KB per frame. It guards against per-segment lambdas,
 string building or other allocation creeping into the draw path. Current figures (three runs each,
 two for the Pixel 4 XL on 0.1.0):
 
@@ -216,6 +216,10 @@ about 40 bytes, so with one call per live segment the test's 205 segments add ab
 The draw code is unchanged: the same build allocates 3.0 KB per frame against Compose 1.10, and so
 does Compose 1.13.0-alpha03, where the lambda is gone. An app on the Compose 1.13 alphas does not
 pay it.
+
+The ceiling was 12 KB and is 16 KB while torph builds against Compose 1.12, so that this does not
+fail the guard on phones whose baseline is higher. **To do:** lower it back to 12 KB once torph
+builds against Compose 1.13 or later (the `TODO` in `DrawAllocationTest`).
 
 ## Running the suite
 

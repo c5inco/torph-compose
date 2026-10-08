@@ -57,7 +57,11 @@ class DrawAllocationTest {
         val perFrame = (allocatedBytes() - before) / frames
         Log.i("DrawAllocationTest", "live=${state.liveCount} bytes/frame=$perFrame")
         assertTrue("segments should still be animating", state.isAnimating)
-        assertTrue("allocated $perFrame bytes/frame for ${state.liveCount} live segments", perFrame < 12 * 1024)
+        // TODO: Lower back to 12 KB once this builds against Compose 1.13 or later. Compose 1.12
+        //  allocates a ~40-byte lambda in every drawText of a TextLayoutResult (AndroidParagraph.paint),
+        //  about 8 KB per frame at ~200 segments that the draw path here does not cause. With Compose
+        //  1.10 or the 1.13 alphas this test reads 3-5 KB. See docs/BENCHMARKS.md, "Allocation guard".
+        assertTrue("allocated $perFrame bytes/frame for ${state.liveCount} live segments", perFrame < 16 * 1024)
     }
 
     private fun allocatedBytes(): Long = Debug.getRuntimeStat("art.gc.bytes-allocated")?.toLongOrNull() ?: 0L
