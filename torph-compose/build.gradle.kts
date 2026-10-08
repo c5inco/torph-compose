@@ -13,6 +13,9 @@ android {
     compileSdk { version = release(37) { minorApiLevel = 1 } }
     defaultConfig {
         minSdk = libs.versions.minSdk.get().toInt()
+        // Compiled against 37.1 like the apps that use it, but no 37.1 API is used, so apps need only 37
+        // (the floor Compose 1.12 sets). Left alone, AGP would require the minor version too.
+        aarMetadata { minCompileSdk = 37 }
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
     compileOptions {

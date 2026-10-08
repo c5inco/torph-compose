@@ -1,7 +1,7 @@
 [versions]
 agp = "9.4.1"
 kotlin = "2.4.20"
-composeBomAlpha = "2026.09.01"
+composeBom = "2026.09.00"
 activityCompose = "1.13.0"
 coreKtx = "1.19.1"
 coroutines = "1.11.0"
@@ -19,7 +19,7 @@ minSdk = "24"
 [libraries]
 androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "coreKtx" }
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }
-compose-bom = { module = "androidx.compose:compose-bom-alpha", version.ref = "composeBomAlpha" }
+compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
 compose-foundation = { module = "androidx.compose.foundation:foundation" }
 compose-animation = { module = "androidx.compose.animation:animation" }
 compose-ui = { module = "androidx.compose.ui:ui" }

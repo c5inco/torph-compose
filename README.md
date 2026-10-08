@@ -84,11 +84,12 @@ their tasks.
 
 ### What your project needs
 
-- `minSdk` 24 or higher, and `compileSdk` 37.1 or higher (`compileSdk { version = release(37) { minorApiLevel = 1 } }`),
-  with Android Gradle Plugin 9.1 or newer: the Compose alpha it builds against requires both.
+- `minSdk` 24 or higher, `compileSdk` 37 or higher, and Android Gradle Plugin 9.1 or newer: the
+  Compose release it builds against requires both.
 - Java 17 bytecode (`compileOptions` / `jvmToolchain(17)`).
-- Compose: the library is built against Compose BOM alpha 2026.09.01 (Compose 1.13 alphas) and only depends on
-  foundation/animation/ui/ui-text, not Material.
+- Compose: the library is built against Compose BOM 2026.09.00 (Compose 1.12) and only depends on
+  foundation/animation/ui/ui-text, not Material. A newer Compose in your app, alphas included,
+  takes precedence.
 
 Then:
 
