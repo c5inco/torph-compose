@@ -146,7 +146,7 @@ Per text change (never per frame):
 
 1. The full target string is measured once with `TextMeasurer` under the incoming constraints, so line breaks and kerning match `Text`.
 2. `diffSegments` pairs numeric words by order and matches digits by place value; everything else goes through a left-biased LCS on grapheme (or word) text.
-3. Each segment gets a target rect from the layout's bounding boxes and a cached single-segment `TextLayoutResult` (reusing boxes for unchanged leading lines).
+3. Each segment gets a target rect from cached boundary positions for eligible ASCII word layouts, or character bounding boxes for other text, plus a cached single-segment `TextLayoutResult`. Geometry for unchanged leading lines is reused.
 4. Each segment's position, alpha, and scale are plain float channels retargeted from their current value and velocity: persist → glide to new position, enter → alpha/scale in (changed digits roll on an odometer strip), exit → alpha/scale out.
 5. The container size animates (or snaps) to the new layout size.
 

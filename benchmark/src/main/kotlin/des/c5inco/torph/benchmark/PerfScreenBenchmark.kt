@@ -9,9 +9,11 @@ import androidx.benchmark.macro.junit4.MacrobenchmarkRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.uiautomator.By
 import androidx.test.uiautomator.Until
+import org.junit.ClassRule
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.junit.rules.TestRule
 
 /** The demo's `benchmark` build type carries an applicationIdSuffix so it coexists with the debug install. */
 private const val PACKAGE = "des.c5inco.torph.demo.benchmark"
@@ -27,6 +29,12 @@ private const val PACKAGE = "des.c5inco.torph.demo.benchmark"
  */
 @RunWith(AndroidJUnit4::class)
 class PerfScreenBenchmark {
+    companion object {
+        @ClassRule
+        @JvmField
+        val deviceState: TestRule = BenchmarkDeviceState()
+    }
+
     @get:Rule
     val rule = MacrobenchmarkRule()
 
@@ -45,12 +53,15 @@ class PerfScreenBenchmark {
 
     @Test fun morph50() = morph(50)
 
+    @GeometryWorkload
     @Test fun morph200() = morph(200)
 
     /** Over the 300-segment cap, where every mode morphs by word, so this is also the worst case. */
+    @GeometryWorkload
     @Test fun morph1000() = morph(1000)
 
     /** One word of the same 1000-character paragraph changes per cycle, 40-80% of the way through. */
+    @GeometryWorkload
     @Test fun morph1000Edit() = morph(1000, edit = true)
 
     // The worst case: GRAPHEME, one segment per character.

@@ -8,9 +8,11 @@ import androidx.benchmark.macro.junit4.MacrobenchmarkRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.uiautomator.By
 import androidx.test.uiautomator.Until
+import org.junit.ClassRule
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.junit.rules.TestRule
 
 private const val PACKAGE = "des.c5inco.torph.demo.benchmark"
 
@@ -22,6 +24,12 @@ private const val PACKAGE = "des.c5inco.torph.demo.benchmark"
  */
 @RunWith(AndroidJUnit4::class)
 class FeatureBenchmark {
+    companion object {
+        @ClassRule
+        @JvmField
+        val deviceState: TestRule = BenchmarkDeviceState()
+    }
+
     @get:Rule
     val rule = MacrobenchmarkRule()
 

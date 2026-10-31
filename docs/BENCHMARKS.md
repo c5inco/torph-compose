@@ -2,6 +2,12 @@
 
 How Torph for Jetpack Compose performs, measured on three phones, and how to reproduce it.
 
+For the 2026-10-29 working-tree geometry optimization, Pixel 7 and Pixel 4 XL A/B results, and
+Pixel 4 XL refresh-switch investigation, see [Boundary-position tuning](PERFORMANCE_TUNING.md).
+The historical three-phone tables below predate that optimization. The current Perf/Feature
+benchmark harness temporarily fixes the highest supported refresh rate and enables animations,
+then restores and verifies the phone's original settings.
+
 > **These numbers are a snapshot, not a spec.** They were measured in October 2026 with 0.2.0
 > (AGP 9.4, Kotlin 2.4, Compose 1.12); see [0.2.0 against 0.1.0](#020-against-010) for how they
 > compare with the previous release. Frame times drift

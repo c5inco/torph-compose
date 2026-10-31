@@ -17,6 +17,7 @@ import androidx.compose.ui.text.TextMeasurer
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.rememberTextMeasurer
+import androidx.compose.ui.text.style.ResolvedTextDirection
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.LayoutDirection
@@ -95,6 +96,10 @@ public class TextMorphState internal constructor(
     /** Per-character (left, top, right, bottom) boxes of [charBoxesFor], filled once per layout for [place]. */
     private var charBoxes = FloatArray(0)
     private var charBoxesFor: TextLayoutResult? = null
+    private var boundaryLayout: TextLayoutResult? = null
+    private var useSegmentBoundaries = false
+    private var boundaryBoxes = FloatArray(0)
+    private var boundaryPositions = FloatArray(0)
 
     private val timings = MorphTimings()
     private var loop: Job? = null
@@ -390,7 +395,6 @@ public class TextMorphState internal constructor(
         val textLen = full.layoutInput.text.length
         if (textLen == 0) return Offset.Zero to Rect.Zero
         val start = s.index.coerceIn(0, textLen - 1)
-        val boxes = charBoxes(full)
         val line = full.getLineForOffset(start)
         val lineTop = full.getLineTop(line)
         val lineBottom = full.getLineBottom(line)
@@ -399,18 +403,53 @@ public class TextMorphState internal constructor(
             val r = full.getCursorRect(start)
             return Offset(r.left, lineTop) to Rect(r.left, lineTop, r.left, lineBottom)
         }
-        var left = Float.POSITIVE_INFINITY
-        var right = Float.NEGATIVE_INFINITY
         val end = s.end.coerceAtMost(textLen)
-        var i = start
-        while (i < end) {
-            val boxLeft = boxes[4 * i]
-            val boxRight = boxes[4 * i + 2]
-            if (boxRight - boxLeft > 0f || boxLeft != 0f) {
-                if (boxLeft < left) left = boxLeft
-                if (boxRight > right) right = boxRight
+        if (boundaryLayout !== full) {
+            val previous = boundaryLayout
+            val previouslyUsedBoundaries = useSegmentBoundaries
+            boundaryLayout = full
+            // ASCII has no bidi controls or combining sequences. Restrict the shortcut to
+            // nonnegative spacing and positive horizontal scale so positions remain monotonic.
+            useSegmentBoundaries = textLen > segments.size * 2 &&
+                full.layoutInput.text.text.all { it in ' '..'~' || it == '\n' } &&
+                !(full.layoutInput.style.letterSpacing.value < 0f) &&
+                (full.layoutInput.style.textGeometricTransform?.scaleX ?: 1f) > 0f
+            if (useSegmentBoundaries) {
+                val reused = if (previouslyUsedBoundaries && previous != null) reusableBoxPrefix(previous, full) else 0
+                if (boundaryPositions.size < textLen + 1) boundaryPositions = boundaryPositions.copyOf(textLen + 1)
+                boundaryPositions.fill(Float.NaN, reused, textLen + 1)
             }
-            i++
+        }
+        val bounds = if (useSegmentBoundaries) asciiSegmentBounds(full, start, end, line, boundaryPositions) else null
+        var left = bounds?.left ?: Float.POSITIVE_INFINITY
+        var right = bounds?.right ?: Float.NEGATIVE_INFINITY
+        if (bounds == null) {
+            val boxStart: Int
+            val boxes: FloatArray
+            if (useSegmentBoundaries) {
+                // Wrapped ranges and line ends need upstream-aware character boxes. Fill only
+                // this range rather than every interior character in the paragraph.
+                val diag = TextMorphDiagnostics.logTimings
+                val t0 = if (diag) System.nanoTime() else 0L
+                if (boundaryBoxes.size < (end - start) * 4) boundaryBoxes = FloatArray((end - start) * 4)
+                full.multiParagraph.fillBoundingBoxes(TextRange(start, end), boundaryBoxes, 0)
+                if (diag) { timings.box += System.nanoTime() - t0; timings.boxCalls += end - start }
+                boxes = boundaryBoxes
+                boxStart = start
+            } else {
+                boxes = charBoxes(full)
+                boxStart = 0
+            }
+            var i = start
+            while (i < end) {
+                val boxLeft = boxes[4 * (i - boxStart)]
+                val boxRight = boxes[4 * (i - boxStart) + 2]
+                if (boxRight - boxLeft > 0f || boxLeft != 0f) {
+                    if (boxLeft < left) left = boxLeft
+                    if (boxRight > right) right = boxRight
+                }
+                i++
+            }
         }
         if (left == Float.POSITIVE_INFINITY) {
             val r = full.getCursorRect(start)
@@ -525,4 +564,32 @@ internal fun reusableBoxPrefix(old: TextLayoutResult, new: TextLayoutResult): In
         reusable = end
     }
     return reusable
+}
+
+/**
+ * Interior ASCII ranges in an LTR line have monotonically increasing character edges. The
+ * insertion positions at their boundaries equal the union of their character boxes, including
+ * kerning. Line ends need upstream positions, so keep those on the bounding-box path.
+ * Call only for printable ASCII/newline text with nonnegative letter spacing.
+ */
+internal fun asciiSegmentBounds(
+    full: TextLayoutResult,
+    start: Int,
+    end: Int,
+    line: Int,
+    positions: FloatArray,
+): Rect? {
+    if (start >= end || end >= full.getLineEnd(line) ||
+        full.getParagraphDirection(start) != ResolvedTextDirection.Ltr
+    ) return null
+    val left = asciiBoundaryPosition(full, start, positions)
+    val right = asciiBoundaryPosition(full, end, positions)
+    return Rect(left, full.getLineTop(line), right, full.getLineBottom(line))
+}
+
+/** Neighbouring segments share an edge; calculate each insertion position at most once. */
+private fun asciiBoundaryPosition(full: TextLayoutResult, offset: Int, positions: FloatArray): Float {
+    val cached = positions[offset]
+    if (!cached.isNaN()) return cached
+    return full.getHorizontalPosition(offset, usePrimaryDirection = true).also { positions[offset] = it }
 }
