@@ -127,7 +127,7 @@ public class TextMorphState internal constructor(
         val prev = lastKey
         if (key != prev) {
             lastKey = key
-            apply(key, opts, prev)
+            morphTrace(if (prev == null) "Morph:firstApply" else "Morph:apply") { apply(key, opts, prev) }
         }
         sizeTick.intValue // subscribe: re-measure while the size animates
         return constraints.constrain(IntSize(ceil(width.value).toInt(), ceil(height.value).toInt()))
@@ -143,12 +143,14 @@ public class TextMorphState internal constructor(
         if (diag) timings.reset()
         val applyStart = if (diag) System.nanoTime() else 0L
         var mark = applyStart
-        val full = textMeasurer.measure(
-            text = AnnotatedString(key.text),
-            style = key.style,
-            softWrap = true,
-            constraints = if (key.maxWidth == Constraints.Infinity) Constraints() else Constraints(maxWidth = key.maxWidth),
-        )
+        val full = morphTrace("Morph:fullMeasure") {
+            textMeasurer.measure(
+                text = AnnotatedString(key.text),
+                style = key.style,
+                softWrap = true,
+                constraints = if (key.maxWidth == Constraints.Infinity) Constraints() else Constraints(maxWidth = key.maxWidth),
+            )
+        }
         if (diag) { val n = System.nanoTime(); timings.measureText = n - mark; mark = n }
         layoutResult = full
         // Text that keeps introducing new words would otherwise grow the cache without bound. Live
@@ -164,7 +166,7 @@ public class TextMorphState internal constructor(
         var diff: DiffResult? = null
         if (textChanged || segmentationChanged) {
             val segOptions = SegmentOptions(opts.segmentation, opts.numbers, opts.cursorIndex, opts.maxSegments)
-            val incoming = segmentText(key.text, opts.locale, segmenter, segOptions, nextId)
+            val incoming = morphTrace("Morph:segment") { segmentText(key.text, opts.locale, segmenter, segOptions, nextId) }
             if (diag) { val n = System.nanoTime(); timings.segment = n - mark; mark = n }
             diff = diffSegments(segments, incoming, opts.locale)
             if (diag) { val n = System.nanoTime(); timings.diff = n - mark; mark = n }
@@ -175,7 +177,15 @@ public class TextMorphState internal constructor(
         if (diff == null || !textChanged || prev == null || opts.snap) {
             // Initial layout, re-wrap or re-segment without a text change, or snapping: rebuild
             // everything in place. A snapped text change still fires its callbacks, in order.
-            snapToLayout(full, newSize, notify = textChanged && prev != null && diff?.isEmpty == false)
+            morphTrace("Morph:prepareSnap") {
+                snapToLayout(full, newSize, notify = textChanged && prev != null && diff?.isEmpty == false)
+            }
+            if (diag) timings.log(
+                totalNs = System.nanoTime() - applyStart,
+                chars = key.text.length, segments = segments.size,
+                persist = diff?.persist?.size ?: 0, enter = diff?.enter?.size ?: 0,
+                exit = diff?.exit?.size ?: 0, phase = if (prev == null) "initial" else "snap",
+            )
             return
         }
 
@@ -488,12 +498,14 @@ public class TextMorphState internal constructor(
         layoutCache[s.text]?.let { return it }
         val diag = TextMorphDiagnostics.logTimings
         val t0 = if (diag) System.nanoTime() else 0L
-        val measured = textMeasurer.measure(
-            text = AnnotatedString(if (s.kind == SegmentKind.NEWLINE) "" else s.text),
-            style = style,
-            softWrap = false,
-            maxLines = 1,
-        )
+        val measured = morphTrace("Morph:segmentMeasure") {
+            textMeasurer.measure(
+                text = AnnotatedString(if (s.kind == SegmentKind.NEWLINE) "" else s.text),
+                style = style,
+                softWrap = false,
+                maxLines = 1,
+            )
+        }
         if (diag) { timings.segmentLayout += System.nanoTime() - t0; timings.layoutMisses++ }
         layoutCache[s.text] = measured
         return measured

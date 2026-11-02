@@ -173,3 +173,6 @@ See [docs/BENCHMARKS.md](docs/BENCHMARKS.md) for benchmark results and frame-pha
 MIT licensed. See [LICENSE](LICENSE) and [NOTICE](NOTICE).
 
 This is an independent Kotlin port of [torph](https://torph.lochie.me) by [Lochie Axon](https://github.com/lochie) (MIT). It is a personal project by [Chris Sinco](https://github.com/c5inco) and is not affiliated with, endorsed by, or supported by Google LLC.
+
+See [rendering regression coverage](docs/REGRESSION_TESTING.md) and
+[the independent typography reference](docs/TYPOGRAPHY_REFERENCE.md) for the investigation harness.
