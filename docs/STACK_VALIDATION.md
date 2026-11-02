@@ -36,3 +36,12 @@ corpus and six animation reference cases pass, including
 mirrored brackets, isolates and retarget continuity.
 Log: `/Users/christop/Library/Application Support/atc/logs/gradle.tasks-2026-11-02T02-42-23-553Z-30386.log`.
 Raw evidence: `/tmp/torph-pr-stack-20261102/stage3-correctness/`.
+
+## 3b. Bidi geometry acceleration
+
+Pixel 7/API 37: full 44-test instrumentation suite passed, zero failures/errors/skips.
+The independent corpus has 43 exact matches and 8 known shaping/wrapping differences; all
+30 expanded bidi geometry and six animation reference cases match. Native range geometry
+checks compare 93,912 ranges at zero tolerance, including the native-path fallbacks.
+Log: `/Users/christop/Library/Application Support/atc/logs/gradle.tasks-2026-11-02T02-44-01-697Z-31691.log`.
+Raw evidence: `/tmp/torph-pr-stack-20261102/stage3-optimized/`.

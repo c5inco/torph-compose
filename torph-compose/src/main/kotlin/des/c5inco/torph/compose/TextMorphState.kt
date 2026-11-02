@@ -106,6 +106,7 @@ public class TextMorphState internal constructor(
     private var boundaryLayout: TextLayoutResult? = null
     private var useSegmentBoundaries = false
     private var useBidiSelectionBounds = false
+    private var bidiRangeBounds: BidiRangeBounds? = null
     private var boundaryBoxes = FloatArray(0)
     private var boundaryPositions = FloatArray(0)
 
@@ -488,13 +489,16 @@ public class TextMorphState internal constructor(
             }
         }
         if (useBidiSelectionBounds) {
-            val selection = full.getPathForRange(start, end).getBounds()
+            val ranges = bidiRangeBounds ?: BidiRangeBounds().also { bidiRangeBounds = it }
+            val selection = ranges.bounds(full, start, end)
             val seg = segmentLayout(s)
             // Align actual line origins, not the rounded integer layout widths. A standalone
             // RTL line can have a fractional inset even when the paragraph's selection is exact.
             val x = selection.left - seg.getLineLeft(0)
             val y = baseline - seg.firstBaseline
-            return Offset(x, y) to Rect(selection.left, lineTop, selection.right, lineBottom)
+            val cell = if (selection.top == lineTop && selection.bottom == lineBottom) selection
+                else Rect(selection.left, lineTop, selection.right, lineBottom)
+            return Offset(x, y) to cell
         }
         val bounds = if (useSegmentBoundaries) asciiSegmentBounds(full, start, end, line, boundaryPositions) else null
         var left = bounds?.left ?: Float.POSITIVE_INFINITY
