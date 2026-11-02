@@ -12,3 +12,11 @@ fonts and disposal contracts are added with the corresponding implementation cha
 TypographyReferenceHarness supplies a separate BasicText oracle. It requires exact paragraph
 metadata and software/hardware pixels for Exact cases; Characterize cases record named differences
 without claiming equality. A deliberate two-pixel displacement must be detected in both captures.
+
+## Shared cache, fonts and lifecycle
+
+The shared-versus-isolated subjects now exercise the bounded shared TextMeasurer. Added tests
+cover environment/owner/default-locale separation, eviction and live references, asynchronous font
+completion at rest and during animation, rolling strips, environment changes, disposal callbacks
+and reduced-motion behavior. Allocation synchronization changes preserve the original ceiling.
+See SHARED_LAYOUT_CACHE.md for bounds, thread confinement and historical measurements.

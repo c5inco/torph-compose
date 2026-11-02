@@ -103,6 +103,84 @@ class MorphRegressionTest {
         }
     }
 
+    @Test fun liveEnvironmentTransitionsAndReturnToOriginalRemainIsolated() {
+        val h = MorphParityHarness(rule)
+        h.mount(MorphScene(text = "office مرحبا 123"))
+        val original = h.actual.textMeasurer
+        val resolver = createFontFamilyResolver(InstrumentationRegistry.getInstrumentation().targetContext)
+        val environments = listOf(
+            MorphEnvironment(density = Density(1.5f)),
+            MorphEnvironment(density = Density(1f, 1.8f)),
+            MorphEnvironment(direction = LayoutDirection.Rtl),
+            MorphEnvironment(resolver = resolver),
+            MorphEnvironment(),
+        )
+        for ((i, env) in environments.withIndex()) {
+            h.update(h.scene.copy(text = "office مرحبا ${124 + i}"), env)
+            h.check("environment-$i-applied")
+            if (i < 4) assertNotSame(original, h.actual.textMeasurer)
+            else assertSame(original, h.actual.textMeasurer)
+            h.update(h.scene.copy(text = "office שלום ${125 + i}"))
+            h.advance(128)
+            h.check("environment-$i-moving")
+            h.advance(1000)
+            h.check("environment-$i-settled", settled = true)
+        }
+        h.update(h.scene.copy(text = "moving before density change"))
+        h.advance(96)
+        val moving = h.actual
+        val cancels = h.actualEvents.count { it == "cancel" }
+        assertTrue(moving.isAnimating)
+        h.update(h.scene, MorphEnvironment(density = Density(1.25f)))
+        h.check("environment-replaced-while-moving", settled = true)
+        assertFalse(moving.isAnimating)
+        assertEquals(cancels + 1, h.actualEvents.count { it == "cancel" })
+        val tick = moving.frameTick.intValue
+        h.update(h.scene.copy(text = "replacement state still animates"))
+        h.advance(1000)
+        h.check("environment-replacement-settled", settled = true)
+        assertEquals(tick, moving.frameTick.intValue)
+    }
+
+    @Test fun cachePressurePreservesLiveAndRecreatedSubjects() {
+        val h = MorphParityHarness(rule)
+        h.mount(MorphScene(text = "office affinity 123"))
+        val measurer = h.actual.textMeasurer
+        val paragraph = h.actual.layoutResult!!.multiParagraph
+        rule.runOnIdle {
+            repeat(SHARED_LAYOUT_CAPACITY + 32) {
+                measurer.measure(AnnotatedString("eviction $it مرحبا"), TextStyle(fontSize = (18 + it % 7).sp))
+            }
+        }
+        // Eviction must not invalidate live references or mutate their pixels.
+        h.check("pressure-live", settled = true)
+        h.show(false)
+        h.show(true)
+        rule.runOnIdle {
+            assertNotSame(paragraph, h.actual.layoutResult!!.multiParagraph)
+            assertNotSame(h.actual, h.expected)
+        }
+        h.check("pressure-remount", settled = true)
+        h.update(h.scene.copy(text = "office affinity 456"))
+        h.advance(128)
+        h.check("pressure-moving")
+        h.advance(1000)
+        h.check("pressure-settled", settled = true)
+        val originalEnvironmentMeasurer = h.actual.textMeasurer
+        // Saturate the actual registry; weak-entry cleanup must not substitute for eviction.
+        val retainedMeasurers = ArrayList<TextMeasurer>()
+        retainedMeasurers += originalEnvironmentMeasurer
+        repeat(17) { i ->
+            h.update(h.scene, MorphEnvironment(density = Density(1f, 1.01f + i / 100f)))
+            retainedMeasurers += h.actual.textMeasurer
+            h.check("environment-pressure-$i", settled = true)
+        }
+        h.update(h.scene, MorphEnvironment())
+        assertEquals(18, retainedMeasurers.distinct().size)
+        assertNotSame(originalEnvironmentMeasurer, h.actual.textMeasurer)
+        h.check("environment-pressure-return", settled = true)
+    }
+
     @Test fun callbacksIdsAndDisabledTransitionsSatisfyIndependentContracts() {
         val h = MorphParityHarness(rule)
         h.mount(MorphScene(text = "Hello world", options = MorphOptions(segmentation = Segmentation.WORD)))
@@ -147,6 +225,30 @@ class MorphRegressionTest {
         h.check("continuity-retargeted", hardware = true)
         h.advance(1000)
         h.check("continuity-settled", settled = true, hardware = true)
+        assertEquals(listOf("start", "cancel", "start", "complete"), h.actualEvents)
+    }
+
+    @Test fun disposalEndsGenerationAndRemountHasIndependentState() {
+        val h = MorphParityHarness(rule)
+        h.mount(MorphScene(text = "first"))
+        h.update(h.scene.copy(text = "second"))
+        h.advance(96)
+        val previous = h.actual
+        assertTrue(previous.isAnimating)
+        h.show(false)
+        rule.runOnIdle {
+            assertFalse("A disposed state must end its generation", previous.isAnimating)
+            assertEquals(listOf("start", "cancel"), h.actualEvents)
+        }
+        val tick = previous.frameTick.intValue
+        h.advance(1000)
+        assertEquals(tick, previous.frameTick.intValue)
+        h.show(true)
+        assertNotSame(previous, h.actual)
+        h.check("lifecycle-remount", settled = true)
+        h.update(h.scene.copy(text = "third"))
+        h.advance(1000)
+        h.check("lifecycle-new-generation", settled = true)
         assertEquals(listOf("start", "cancel", "start", "complete"), h.actualEvents)
     }
 
