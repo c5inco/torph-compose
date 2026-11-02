@@ -1,0 +1,1309 @@
+{
+  "device": "Pixel 7/API 37",
+  "protocol": "8 distinct fresh labels in warm process; 5 samples per case; full compilation; device settings verified/restored",
+  "beforeSourceSha256": "a60fe28735f6d112bc03ae091bf12141e656a377af5b3f87daa591a3b1ab48e4",
+  "afterSourcesSha256": {
+    "TextMorphState.kt": "d9d2bcc61ea455b8d632546d038f542bd30ab1c29bee1e8825c5a164dc19ef82",
+    "BidiRangeBounds.kt": "01172a0ab8e2cfee6bc491adf3332f0a4a70dd6f0e7c6e34338dbca3df564c94"
+  },
+  "markerValidation": "All 50 included iterations have exactly one Labels:firstMeasure and expected eight morph or zero plain firstApply markers.",
+  "rows": [
+    {
+      "name": "warmBidi8",
+      "label": "Bidi GRAPHEME",
+      "before": {
+        "samplesMs": [
+          7.889242,
+          6.591186,
+          8.583008,
+          7.492716,
+          7.682291
+        ],
+        "medianMs": 7.682291,
+        "minimumMs": 6.591186,
+        "maximumMs": 8.583008,
+        "platformLayoutCounts": [
+          53.0,
+          53.0,
+          53.0,
+          53.0,
+          53.0
+        ],
+        "source": "/tmp/torph-bidi-perf-20261031/pixel7-before/connected_android_test_additional_output/benchmark/connected/Pixel 7 - 17/des.c5inco.torph.benchmark-benchmarkData.json",
+        "Morph:prepareSnapSumMs": [
+          5.344482,
+          4.324993,
+          5.215617,
+          4.827353,
+          5.308755
+        ],
+        "Morph:segmentMeasureSumMs": [
+          2.498695,
+          2.037189,
+          2.641967,
+          2.101402,
+          2.485026
+        ],
+        "Morph:fullMeasureSumMs": [
+          1.703246,
+          1.394735,
+          1.678832,
+          1.405273,
+          1.535928
+        ]
+      },
+      "after": {
+        "samplesMs": [
+          6.747233,
+          7.357707,
+          6.567423,
+          6.202759,
+          6.611491
+        ],
+        "medianMs": 6.611491,
+        "minimumMs": 6.202759,
+        "maximumMs": 7.357707,
+        "platformLayoutCounts": [
+          53.0,
+          53.0,
+          53.0,
+          53.0,
+          53.0
+        ],
+        "source": "/tmp/torph-bidi-perf-20261031/pixel7-after-recheck-grapheme/connected_android_test_additional_output/benchmark/connected/Pixel 7 - 17/des.c5inco.torph.benchmark-benchmarkData.json",
+        "Morph:prepareSnapSumMs": [
+          4.278484,
+          4.970378,
+          3.684043,
+          3.810994,
+          4.146403
+        ],
+        "Morph:segmentMeasureSumMs": [
+          2.392088,
+          2.425005,
+          2.012087,
+          2.23006,
+          2.304566
+        ],
+        "Morph:fullMeasureSumMs": [
+          1.554851,
+          1.553019,
+          1.372882,
+          1.447103,
+          1.4976
+        ]
+      },
+      "medianReductionMs": 1.0708000000000002,
+      "medianReductionPercent": 13.938550362125051
+    },
+    {
+      "name": "warmBidi8Auto",
+      "label": "Bidi AUTO",
+      "before": {
+        "samplesMs": [
+          5.033935,
+          6.630331,
+          5.602784,
+          6.283488,
+          5.788411
+        ],
+        "medianMs": 5.788411,
+        "minimumMs": 5.033935,
+        "maximumMs": 6.630331,
+        "platformLayoutCounts": [
+          38.0,
+          38.0,
+          38.0,
+          38.0,
+          38.0
+        ],
+        "source": "/tmp/torph-bidi-perf-20261031/pixel7-before/connected_android_test_additional_output/benchmark/connected/Pixel 7 - 17/des.c5inco.torph.benchmark-benchmarkData.json",
+        "Morph:prepareSnapSumMs": [
+          2.97888,
+          4.034464,
+          3.261883,
+          3.739501,
+          3.495525
+        ],
+        "Morph:segmentMeasureSumMs": [
+          1.491703,
+          2.055015,
+          1.626627,
+          1.823404,
+          1.714029
+        ],
+        "Morph:fullMeasureSumMs": [
+          1.40865,
+          1.786092,
+          1.497437,
+          1.697877,
+          1.498006
+        ]
+      },
+      "after": {
+        "samplesMs": [
+          5.879557,
+          5.506836,
+          6.017782,
+          5.802287,
+          4.897501
+        ],
+        "medianMs": 5.802287,
+        "minimumMs": 4.897501,
+        "maximumMs": 6.017782,
+        "platformLayoutCounts": [
+          38.0,
+          38.0,
+          38.0,
+          38.0,
+          38.0
+        ],
+        "source": "/tmp/torph-bidi-perf-20261031/pixel7-after/connected_android_test_additional_output/benchmark/connected/Pixel 7 - 17/des.c5inco.torph.benchmark-benchmarkData.json",
+        "Morph:prepareSnapSumMs": [
+          3.414146,
+          3.003134,
+          3.189535,
+          3.215781,
+          2.814738
+        ],
+        "Morph:segmentMeasureSumMs": [
+          1.907146,
+          1.687174,
+          1.817217,
+          1.964441,
+          1.544149
+        ],
+        "Morph:fullMeasureSumMs": [
+          1.530884,
+          1.756916,
+          1.499429,
+          1.867635,
+          1.407022
+        ]
+      },
+      "medianReductionMs": -0.013875999999999777,
+      "medianReductionPercent": -0.23972036539906683
+    },
+    {
+      "name": "warmMorph8",
+      "label": "ASCII GRAPHEME",
+      "before": {
+        "samplesMs": [
+          2.958414,
+          2.391317,
+          2.859863,
+          2.651082,
+          3.0059
+        ],
+        "medianMs": 2.859863,
+        "minimumMs": 2.391317,
+        "maximumMs": 3.0059,
+        "platformLayoutCounts": [
+          45.0,
+          45.0,
+          45.0,
+          45.0,
+          45.0
+        ],
+        "source": "/tmp/torph-bidi-perf-20261031/pixel7-before/connected_android_test_additional_output/benchmark/connected/Pixel 7 - 17/des.c5inco.torph.benchmark-benchmarkData.json",
+        "Morph:prepareSnapSumMs": [
+          1.707764,
+          1.509561,
+          1.776694,
+          1.558391,
+          1.953529
+        ],
+        "Morph:segmentMeasureSumMs": [
+          1.061151,
+          1.014648,
+          1.177889,
+          1.030959,
+          1.338787
+        ],
+        "Morph:fullMeasureSumMs": [
+          0.424111,
+          0.343546,
+          0.399779,
+          0.38806,
+          0.411457
+        ]
+      },
+      "after": {
+        "samplesMs": [
+          2.672851,
+          3.596028,
+          2.462361,
+          2.257405,
+          2.827758
+        ],
+        "medianMs": 2.672851,
+        "minimumMs": 2.257405,
+        "maximumMs": 3.596028,
+        "platformLayoutCounts": [
+          45.0,
+          45.0,
+          45.0,
+          45.0,
+          45.0
+        ],
+        "source": "/tmp/torph-bidi-perf-20261031/pixel7-after-recheck-grapheme/connected_android_test_additional_output/benchmark/connected/Pixel 7 - 17/des.c5inco.torph.benchmark-benchmarkData.json",
+        "Morph:prepareSnapSumMs": [
+          1.631795,
+          2.354695,
+          1.524779,
+          1.414836,
+          1.702842
+        ],
+        "Morph:segmentMeasureSumMs": [
+          1.020994,
+          1.706344,
+          1.000736,
+          0.934905,
+          1.147866
+        ],
+        "Morph:fullMeasureSumMs": [
+          0.372314,
+          0.504148,
+          0.381633,
+          0.331991,
+          0.430542
+        ]
+      },
+      "medianReductionMs": 0.18701199999999973,
+      "medianReductionPercent": 6.539194360009544
+    },
+    {
+      "name": "warmPlainBidi8",
+      "label": "Bidi plain Text",
+      "before": {
+        "samplesMs": [
+          1.833089,
+          1.716228,
+          1.520508,
+          1.662231,
+          1.601806
+        ],
+        "medianMs": 1.662231,
+        "minimumMs": 1.520508,
+        "maximumMs": 1.833089,
+        "platformLayoutCounts": [
+          8.0,
+          8.0,
+          8.0,
+          8.0,
+          8.0
+        ],
+        "source": "/tmp/torph-bidi-perf-20261031/pixel7-before/connected_android_test_additional_output/benchmark/connected/Pixel 7 - 17/des.c5inco.torph.benchmark-benchmarkData.json",
+        "Morph:prepareSnapSumMs": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "Morph:segmentMeasureSumMs": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "Morph:fullMeasureSumMs": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "after": {
+        "samplesMs": [
+          2.165934,
+          1.767945,
+          1.381022,
+          1.439697,
+          1.446533
+        ],
+        "medianMs": 1.446533,
+        "minimumMs": 1.381022,
+        "maximumMs": 2.165934,
+        "platformLayoutCounts": [
+          8.0,
+          8.0,
+          8.0,
+          8.0,
+          8.0
+        ],
+        "source": "/tmp/torph-bidi-perf-20261031/pixel7-after/connected_android_test_additional_output/benchmark/connected/Pixel 7 - 17/des.c5inco.torph.benchmark-benchmarkData.json",
+        "Morph:prepareSnapSumMs": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "Morph:segmentMeasureSumMs": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "Morph:fullMeasureSumMs": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "medianReductionMs": 0.21569799999999995,
+      "medianReductionPercent": 12.976415432030802
+    },
+    {
+      "name": "warmPlain8",
+      "label": "ASCII plain Text",
+      "before": {
+        "samplesMs": [
+          0.749186,
+          0.485108,
+          0.599813,
+          0.642986,
+          0.60026
+        ],
+        "medianMs": 0.60026,
+        "minimumMs": 0.485108,
+        "maximumMs": 0.749186,
+        "platformLayoutCounts": [
+          8.0,
+          8.0,
+          8.0,
+          8.0,
+          8.0
+        ],
+        "source": "/tmp/torph-bidi-perf-20261031/pixel7-before/connected_android_test_additional_output/benchmark/connected/Pixel 7 - 17/des.c5inco.torph.benchmark-benchmarkData.json",
+        "Morph:prepareSnapSumMs": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "Morph:segmentMeasureSumMs": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "Morph:fullMeasureSumMs": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "after": {
+        "samplesMs": [
+          0.753011,
+          0.75232,
+          0.583659,
+          0.807739,
+          0.63208
+        ],
+        "medianMs": 0.75232,
+        "minimumMs": 0.583659,
+        "maximumMs": 0.807739,
+        "platformLayoutCounts": [
+          8.0,
+          8.0,
+          8.0,
+          8.0,
+          8.0
+        ],
+        "source": "/tmp/torph-bidi-perf-20261031/pixel7-after/connected_android_test_additional_output/benchmark/connected/Pixel 7 - 17/des.c5inco.torph.benchmark-benchmarkData.json",
+        "Morph:prepareSnapSumMs": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "Morph:segmentMeasureSumMs": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "Morph:fullMeasureSumMs": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "medianReductionMs": -0.15205999999999997,
+      "medianReductionPercent": -25.33235597907573
+    }
+  ],
+  "limits": "Five samples per build/workload; measured on Pixel 7 only. No FPS, cold startup or warm-change claim.",
+  "diagnosticPhaseCpu": [
+    {
+      "name": "Morph:bidiDetect",
+      "calls": "8",
+      "cpu_ms": "0.037395"
+    },
+    {
+      "name": "Morph:bidiOrigin",
+      "calls": "126",
+      "cpu_ms": "0.362382"
+    },
+    {
+      "name": "Morph:bidiPath",
+      "calls": "126",
+      "cpu_ms": "2.360672"
+    },
+    {
+      "name": "Morph:firstApply",
+      "calls": "8",
+      "cpu_ms": "8.419881"
+    },
+    {
+      "name": "Morph:fullMeasure",
+      "calls": "8",
+      "cpu_ms": "1.595011"
+    },
+    {
+      "name": "Morph:prepareSnap",
+      "calls": "8",
+      "cpu_ms": "6.291342"
+    },
+    {
+      "name": "Morph:segment",
+      "calls": "8",
+      "cpu_ms": "0.358723"
+    },
+    {
+      "name": "Morph:segmentMeasure",
+      "calls": "122",
+      "cpu_ms": "2.357509"
+    }
+  ],
+  "medianWallIterationCpu": {
+    "before-grapheme": [
+      {
+        "name": "Morph:firstApply",
+        "calls": "8",
+        "cpu_ms": "7.313029"
+      },
+      {
+        "name": "Morph:fullMeasure",
+        "calls": "8",
+        "cpu_ms": "1.535928"
+      },
+      {
+        "name": "Morph:prepareSnap",
+        "calls": "8",
+        "cpu_ms": "5.308755"
+      },
+      {
+        "name": "Morph:segment",
+        "calls": "8",
+        "cpu_ms": "0.289348"
+      },
+      {
+        "name": "Morph:segmentMeasure",
+        "calls": "122",
+        "cpu_ms": "2.485026"
+      },
+      {
+        "name": "TextLayout:initLayout",
+        "calls": "53",
+        "cpu_ms": "1.346235"
+      }
+    ],
+    "before-auto": [
+      {
+        "name": "Morph:firstApply",
+        "calls": "8",
+        "cpu_ms": "5.425089"
+      },
+      {
+        "name": "Morph:fullMeasure",
+        "calls": "8",
+        "cpu_ms": "1.498006"
+      },
+      {
+        "name": "Morph:prepareSnap",
+        "calls": "8",
+        "cpu_ms": "3.495525"
+      },
+      {
+        "name": "Morph:segment",
+        "calls": "8",
+        "cpu_ms": "0.272909"
+      },
+      {
+        "name": "Morph:segmentMeasure",
+        "calls": "74",
+        "cpu_ms": "1.714029"
+      },
+      {
+        "name": "TextLayout:initLayout",
+        "calls": "38",
+        "cpu_ms": "1.206669"
+      }
+    ],
+    "after-grapheme": [
+      {
+        "name": "Morph:firstApply",
+        "calls": "8",
+        "cpu_ms": "6.081868"
+      },
+      {
+        "name": "Morph:fullMeasure",
+        "calls": "8",
+        "cpu_ms": "1.497600"
+      },
+      {
+        "name": "Morph:prepareSnap",
+        "calls": "8",
+        "cpu_ms": "4.115234"
+      },
+      {
+        "name": "Morph:segment",
+        "calls": "8",
+        "cpu_ms": "0.294636"
+      },
+      {
+        "name": "Morph:segmentMeasure",
+        "calls": "122",
+        "cpu_ms": "2.273397"
+      },
+      {
+        "name": "TextLayout:initLayout",
+        "calls": "53",
+        "cpu_ms": "1.317665"
+      }
+    ],
+    "after-auto": [
+      {
+        "name": "Morph:firstApply",
+        "calls": "8",
+        "cpu_ms": "4.803833"
+      },
+      {
+        "name": "Morph:fullMeasure",
+        "calls": "8",
+        "cpu_ms": "1.505574"
+      },
+      {
+        "name": "Morph:prepareSnap",
+        "calls": "8",
+        "cpu_ms": "2.898724"
+      },
+      {
+        "name": "Morph:segment",
+        "calls": "8",
+        "cpu_ms": "0.250856"
+      },
+      {
+        "name": "Morph:segmentMeasure",
+        "calls": "74",
+        "cpu_ms": "1.647384"
+      },
+      {
+        "name": "TextLayout:initLayout",
+        "calls": "38",
+        "cpu_ms": "1.181563"
+      }
+    ]
+  },
+  "allIterationCpu": {
+    "before": {
+      "grapheme": {
+        "samples": [
+          {
+            "iteration": 0,
+            "trace": "/tmp/torph-bidi-perf-20261031/pixel7-before/connected_android_test_additional_output/benchmark/connected/Pixel 7 - 17/FirstLayoutBenchmark_warmBidi8_iter000_2026-11-01-04-18-34.perfetto-trace",
+            "wallMs": 7.889242,
+            "slices": {
+              "Morph:firstApply": {
+                "calls": 8,
+                "cpuMs": 7.011598
+              },
+              "Morph:fullMeasure": {
+                "calls": 8,
+                "cpuMs": 1.540608
+              },
+              "Morph:prepareSnap": {
+                "calls": 8,
+                "cpuMs": 5.017375
+              },
+              "Morph:segment": {
+                "calls": 8,
+                "cpuMs": 0.291343
+              },
+              "Morph:segmentMeasure": {
+                "calls": 122,
+                "cpuMs": 2.339598
+              },
+              "TextLayout:initLayout": {
+                "calls": 53,
+                "cpuMs": 1.295452
+              }
+            }
+          },
+          {
+            "iteration": 1,
+            "trace": "/tmp/torph-bidi-perf-20261031/pixel7-before/connected_android_test_additional_output/benchmark/connected/Pixel 7 - 17/FirstLayoutBenchmark_warmBidi8_iter001_2026-11-01-04-18-39.perfetto-trace",
+            "wallMs": 6.591186,
+            "slices": {
+              "Morph:firstApply": {
+                "calls": 8,
+                "cpuMs": 6.147623
+              },
+              "Morph:fullMeasure": {
+                "calls": 8,
+                "cpuMs": 1.394735
+              },
+              "Morph:prepareSnap": {
+                "calls": 8,
+                "cpuMs": 4.324993
+              },
+              "Morph:segment": {
+                "calls": 8,
+                "cpuMs": 0.278359
+              },
+              "Morph:segmentMeasure": {
+                "calls": 122,
+                "cpuMs": 2.037189
+              },
+              "TextLayout:initLayout": {
+                "calls": 53,
+                "cpuMs": 1.130001
+              }
+            }
+          },
+          {
+            "iteration": 2,
+            "trace": "/tmp/torph-bidi-perf-20261031/pixel7-before/connected_android_test_additional_output/benchmark/connected/Pixel 7 - 17/FirstLayoutBenchmark_warmBidi8_iter002_2026-11-01-04-18-45.perfetto-trace",
+            "wallMs": 8.583008,
+            "slices": {
+              "Morph:firstApply": {
+                "calls": 8,
+                "cpuMs": 6.896974
+              },
+              "Morph:fullMeasure": {
+                "calls": 8,
+                "cpuMs": 1.570027
+              },
+              "Morph:prepareSnap": {
+                "calls": 8,
+                "cpuMs": 4.860719
+              },
+              "Morph:segment": {
+                "calls": 8,
+                "cpuMs": 0.302775
+              },
+              "Morph:segmentMeasure": {
+                "calls": 122,
+                "cpuMs": 2.287069
+              },
+              "TextLayout:initLayout": {
+                "calls": 53,
+                "cpuMs": 1.251592
+              }
+            }
+          },
+          {
+            "iteration": 3,
+            "trace": "/tmp/torph-bidi-perf-20261031/pixel7-before/connected_android_test_additional_output/benchmark/connected/Pixel 7 - 17/FirstLayoutBenchmark_warmBidi8_iter003_2026-11-01-04-18-50.perfetto-trace",
+            "wallMs": 7.492716,
+            "slices": {
+              "Morph:firstApply": {
+                "calls": 8,
+                "cpuMs": 6.464884
+              },
+              "Morph:fullMeasure": {
+                "calls": 8,
+                "cpuMs": 1.405273
+              },
+              "Morph:prepareSnap": {
+                "calls": 8,
+                "cpuMs": 4.613486
+              },
+              "Morph:segment": {
+                "calls": 8,
+                "cpuMs": 0.282307
+              },
+              "Morph:segmentMeasure": {
+                "calls": 122,
+                "cpuMs": 2.101402
+              },
+              "TextLayout:initLayout": {
+                "calls": 53,
+                "cpuMs": 1.159664
+              }
+            }
+          },
+          {
+            "iteration": 4,
+            "trace": "/tmp/torph-bidi-perf-20261031/pixel7-before/connected_android_test_additional_output/benchmark/connected/Pixel 7 - 17/FirstLayoutBenchmark_warmBidi8_iter004_2026-11-01-04-18-55.perfetto-trace",
+            "wallMs": 7.682291,
+            "slices": {
+              "Morph:firstApply": {
+                "calls": 8,
+                "cpuMs": 7.313029
+              },
+              "Morph:fullMeasure": {
+                "calls": 8,
+                "cpuMs": 1.535928
+              },
+              "Morph:prepareSnap": {
+                "calls": 8,
+                "cpuMs": 5.308755
+              },
+              "Morph:segment": {
+                "calls": 8,
+                "cpuMs": 0.289348
+              },
+              "Morph:segmentMeasure": {
+                "calls": 122,
+                "cpuMs": 2.485026
+              },
+              "TextLayout:initLayout": {
+                "calls": 53,
+                "cpuMs": 1.346235
+              }
+            }
+          }
+        ],
+        "medianCpuMs": {
+          "Morph:firstApply": 6.896974,
+          "Morph:fullMeasure": 1.535928,
+          "Morph:prepareSnap": 4.860719,
+          "Morph:segment": 0.289348,
+          "Morph:segmentMeasure": 2.287069,
+          "TextLayout:initLayout": 1.251592
+        }
+      },
+      "auto": {
+        "samples": [
+          {
+            "iteration": 0,
+            "trace": "/tmp/torph-bidi-perf-20261031/pixel7-before/connected_android_test_additional_output/benchmark/connected/Pixel 7 - 17/FirstLayoutBenchmark_warmBidi8Auto_iter000_2026-11-01-04-20-46.perfetto-trace",
+            "wallMs": 5.033935,
+            "slices": {
+              "Morph:firstApply": {
+                "calls": 8,
+                "cpuMs": 4.758138
+              },
+              "Morph:fullMeasure": {
+                "calls": 8,
+                "cpuMs": 1.40865
+              },
+              "Morph:prepareSnap": {
+                "calls": 8,
+                "cpuMs": 2.97888
+              },
+              "Morph:segment": {
+                "calls": 8,
+                "cpuMs": 0.221516
+              },
+              "Morph:segmentMeasure": {
+                "calls": 74,
+                "cpuMs": 1.491703
+              },
+              "TextLayout:initLayout": {
+                "calls": 38,
+                "cpuMs": 1.081749
+              }
+            }
+          },
+          {
+            "iteration": 1,
+            "trace": "/tmp/torph-bidi-perf-20261031/pixel7-before/connected_android_test_additional_output/benchmark/connected/Pixel 7 - 17/FirstLayoutBenchmark_warmBidi8Auto_iter001_2026-11-01-04-20-51.perfetto-trace",
+            "wallMs": 6.630331,
+            "slices": {
+              "Morph:firstApply": {
+                "calls": 8,
+                "cpuMs": 5.555868
+              },
+              "Morph:fullMeasure": {
+                "calls": 8,
+                "cpuMs": 1.532064
+              },
+              "Morph:prepareSnap": {
+                "calls": 8,
+                "cpuMs": 3.607991
+              },
+              "Morph:segment": {
+                "calls": 8,
+                "cpuMs": 0.274333
+              },
+              "Morph:segmentMeasure": {
+                "calls": 74,
+                "cpuMs": 1.812176
+              },
+              "TextLayout:initLayout": {
+                "calls": 38,
+                "cpuMs": 1.190141
+              }
+            }
+          },
+          {
+            "iteration": 2,
+            "trace": "/tmp/torph-bidi-perf-20261031/pixel7-before/connected_android_test_additional_output/benchmark/connected/Pixel 7 - 17/FirstLayoutBenchmark_warmBidi8Auto_iter002_2026-11-01-04-20-56.perfetto-trace",
+            "wallMs": 5.602784,
+            "slices": {
+              "Morph:firstApply": {
+                "calls": 8,
+                "cpuMs": 5.197553
+              },
+              "Morph:fullMeasure": {
+                "calls": 8,
+                "cpuMs": 1.497437
+              },
+              "Morph:prepareSnap": {
+                "calls": 8,
+                "cpuMs": 3.261883
+              },
+              "Morph:segment": {
+                "calls": 8,
+                "cpuMs": 0.281169
+              },
+              "Morph:segmentMeasure": {
+                "calls": 74,
+                "cpuMs": 1.626627
+              },
+              "TextLayout:initLayout": {
+                "calls": 38,
+                "cpuMs": 1.148641
+              }
+            }
+          },
+          {
+            "iteration": 3,
+            "trace": "/tmp/torph-bidi-perf-20261031/pixel7-before/connected_android_test_additional_output/benchmark/connected/Pixel 7 - 17/FirstLayoutBenchmark_warmBidi8Auto_iter003_2026-11-01-04-21-01.perfetto-trace",
+            "wallMs": 6.283488,
+            "slices": {
+              "Morph:firstApply": {
+                "calls": 8,
+                "cpuMs": 5.712931
+              },
+              "Morph:fullMeasure": {
+                "calls": 8,
+                "cpuMs": 1.633627
+              },
+              "Morph:prepareSnap": {
+                "calls": 8,
+                "cpuMs": 3.638304
+              },
+              "Morph:segment": {
+                "calls": 8,
+                "cpuMs": 0.279661
+              },
+              "Morph:segmentMeasure": {
+                "calls": 74,
+                "cpuMs": 1.823404
+              },
+              "TextLayout:initLayout": {
+                "calls": 38,
+                "cpuMs": 1.273067
+              }
+            }
+          },
+          {
+            "iteration": 4,
+            "trace": "/tmp/torph-bidi-perf-20261031/pixel7-before/connected_android_test_additional_output/benchmark/connected/Pixel 7 - 17/FirstLayoutBenchmark_warmBidi8Auto_iter004_2026-11-01-04-21-07.perfetto-trace",
+            "wallMs": 5.788411,
+            "slices": {
+              "Morph:firstApply": {
+                "calls": 8,
+                "cpuMs": 5.425089
+              },
+              "Morph:fullMeasure": {
+                "calls": 8,
+                "cpuMs": 1.498006
+              },
+              "Morph:prepareSnap": {
+                "calls": 8,
+                "cpuMs": 3.495525
+              },
+              "Morph:segment": {
+                "calls": 8,
+                "cpuMs": 0.272909
+              },
+              "Morph:segmentMeasure": {
+                "calls": 74,
+                "cpuMs": 1.714029
+              },
+              "TextLayout:initLayout": {
+                "calls": 38,
+                "cpuMs": 1.206669
+              }
+            }
+          }
+        ],
+        "medianCpuMs": {
+          "Morph:firstApply": 5.425089,
+          "Morph:fullMeasure": 1.498006,
+          "Morph:prepareSnap": 3.495525,
+          "Morph:segment": 0.274333,
+          "Morph:segmentMeasure": 1.714029,
+          "TextLayout:initLayout": 1.190141
+        }
+      }
+    },
+    "after": {
+      "grapheme": {
+        "samples": [
+          {
+            "iteration": 0,
+            "trace": "/tmp/torph-bidi-perf-20261031/pixel7-after-recheck-grapheme/connected_android_test_additional_output/benchmark/connected/Pixel 7 - 17/FirstLayoutBenchmark_warmBidi8_iter000_2026-11-01-04-30-04.perfetto-trace",
+            "wallMs": 6.747233,
+            "slices": {
+              "Morph:firstApply": {
+                "calls": 8,
+                "cpuMs": 6.330038
+              },
+              "Morph:fullMeasure": {
+                "calls": 8,
+                "cpuMs": 1.554851
+              },
+              "Morph:prepareSnap": {
+                "calls": 8,
+                "cpuMs": 4.278484
+              },
+              "Morph:segment": {
+                "calls": 8,
+                "cpuMs": 0.324422
+              },
+              "Morph:segmentMeasure": {
+                "calls": 122,
+                "cpuMs": 2.392088
+              },
+              "TextLayout:initLayout": {
+                "calls": 53,
+                "cpuMs": 1.367266
+              }
+            }
+          },
+          {
+            "iteration": 1,
+            "trace": "/tmp/torph-bidi-perf-20261031/pixel7-after-recheck-grapheme/connected_android_test_additional_output/benchmark/connected/Pixel 7 - 17/FirstLayoutBenchmark_warmBidi8_iter001_2026-11-01-04-30-10.perfetto-trace",
+            "wallMs": 7.357707,
+            "slices": {
+              "Morph:firstApply": {
+                "calls": 8,
+                "cpuMs": 6.513672
+              },
+              "Morph:fullMeasure": {
+                "calls": 8,
+                "cpuMs": 1.553019
+              },
+              "Morph:prepareSnap": {
+                "calls": 8,
+                "cpuMs": 4.45394
+              },
+              "Morph:segment": {
+                "calls": 8,
+                "cpuMs": 0.316408
+              },
+              "Morph:segmentMeasure": {
+                "calls": 122,
+                "cpuMs": 2.425005
+              },
+              "TextLayout:initLayout": {
+                "calls": 53,
+                "cpuMs": 1.425579
+              }
+            }
+          },
+          {
+            "iteration": 2,
+            "trace": "/tmp/torph-bidi-perf-20261031/pixel7-after-recheck-grapheme/connected_android_test_additional_output/benchmark/connected/Pixel 7 - 17/FirstLayoutBenchmark_warmBidi8_iter002_2026-11-01-04-30-15.perfetto-trace",
+            "wallMs": 6.567423,
+            "slices": {
+              "Morph:firstApply": {
+                "calls": 8,
+                "cpuMs": 5.510334
+              },
+              "Morph:fullMeasure": {
+                "calls": 8,
+                "cpuMs": 1.372882
+              },
+              "Morph:prepareSnap": {
+                "calls": 8,
+                "cpuMs": 3.684043
+              },
+              "Morph:segment": {
+                "calls": 8,
+                "cpuMs": 0.275187
+              },
+              "Morph:segmentMeasure": {
+                "calls": 122,
+                "cpuMs": 2.012087
+              },
+              "TextLayout:initLayout": {
+                "calls": 53,
+                "cpuMs": 1.142823
+              }
+            }
+          },
+          {
+            "iteration": 3,
+            "trace": "/tmp/torph-bidi-perf-20261031/pixel7-after-recheck-grapheme/connected_android_test_additional_output/benchmark/connected/Pixel 7 - 17/FirstLayoutBenchmark_warmBidi8_iter003_2026-11-01-04-30-20.perfetto-trace",
+            "wallMs": 6.202759,
+            "slices": {
+              "Morph:firstApply": {
+                "calls": 8,
+                "cpuMs": 5.477783
+              },
+              "Morph:fullMeasure": {
+                "calls": 8,
+                "cpuMs": 1.420084
+              },
+              "Morph:prepareSnap": {
+                "calls": 8,
+                "cpuMs": 3.634196
+              },
+              "Morph:segment": {
+                "calls": 8,
+                "cpuMs": 0.274985
+              },
+              "Morph:segmentMeasure": {
+                "calls": 122,
+                "cpuMs": 2.053262
+              },
+              "TextLayout:initLayout": {
+                "calls": 53,
+                "cpuMs": 1.111209
+              }
+            }
+          },
+          {
+            "iteration": 4,
+            "trace": "/tmp/torph-bidi-perf-20261031/pixel7-after-recheck-grapheme/connected_android_test_additional_output/benchmark/connected/Pixel 7 - 17/FirstLayoutBenchmark_warmBidi8_iter004_2026-11-01-04-30-25.perfetto-trace",
+            "wallMs": 6.611491,
+            "slices": {
+              "Morph:firstApply": {
+                "calls": 8,
+                "cpuMs": 6.081868
+              },
+              "Morph:fullMeasure": {
+                "calls": 8,
+                "cpuMs": 1.4976
+              },
+              "Morph:prepareSnap": {
+                "calls": 8,
+                "cpuMs": 4.115234
+              },
+              "Morph:segment": {
+                "calls": 8,
+                "cpuMs": 0.294636
+              },
+              "Morph:segmentMeasure": {
+                "calls": 122,
+                "cpuMs": 2.273397
+              },
+              "TextLayout:initLayout": {
+                "calls": 53,
+                "cpuMs": 1.317665
+              }
+            }
+          }
+        ],
+        "medianCpuMs": {
+          "Morph:firstApply": 6.081868,
+          "Morph:fullMeasure": 1.4976,
+          "Morph:prepareSnap": 4.115234,
+          "Morph:segment": 0.294636,
+          "Morph:segmentMeasure": 2.273397,
+          "TextLayout:initLayout": 1.317665
+        }
+      },
+      "auto": {
+        "samples": [
+          {
+            "iteration": 0,
+            "trace": "/tmp/torph-bidi-perf-20261031/pixel7-after/connected_android_test_additional_output/benchmark/connected/Pixel 7 - 17/FirstLayoutBenchmark_warmBidi8Auto_iter000_2026-11-01-04-25-13.perfetto-trace",
+            "wallMs": 5.879557,
+            "slices": {
+              "Morph:firstApply": {
+                "calls": 8,
+                "cpuMs": 5.180218
+              },
+              "Morph:fullMeasure": {
+                "calls": 8,
+                "cpuMs": 1.530884
+              },
+              "Morph:prepareSnap": {
+                "calls": 8,
+                "cpuMs": 3.152754
+              },
+              "Morph:segment": {
+                "calls": 8,
+                "cpuMs": 0.333534
+              },
+              "Morph:segmentMeasure": {
+                "calls": 74,
+                "cpuMs": 1.741253
+              },
+              "TextLayout:initLayout": {
+                "calls": 38,
+                "cpuMs": 1.210783
+              }
+            }
+          },
+          {
+            "iteration": 1,
+            "trace": "/tmp/torph-bidi-perf-20261031/pixel7-after/connected_android_test_additional_output/benchmark/connected/Pixel 7 - 17/FirstLayoutBenchmark_warmBidi8Auto_iter001_2026-11-01-04-25-18.perfetto-trace",
+            "wallMs": 5.506836,
+            "slices": {
+              "Morph:firstApply": {
+                "calls": 8,
+                "cpuMs": 4.914835
+              },
+              "Morph:fullMeasure": {
+                "calls": 8,
+                "cpuMs": 1.506998
+              },
+              "Morph:prepareSnap": {
+                "calls": 8,
+                "cpuMs": 3.003134
+              },
+              "Morph:segment": {
+                "calls": 8,
+                "cpuMs": 0.254802
+              },
+              "Morph:segmentMeasure": {
+                "calls": 74,
+                "cpuMs": 1.687174
+              },
+              "TextLayout:initLayout": {
+                "calls": 38,
+                "cpuMs": 1.179649
+              }
+            }
+          },
+          {
+            "iteration": 2,
+            "trace": "/tmp/torph-bidi-perf-20261031/pixel7-after/connected_android_test_additional_output/benchmark/connected/Pixel 7 - 17/FirstLayoutBenchmark_warmBidi8Auto_iter002_2026-11-01-04-25-23.perfetto-trace",
+            "wallMs": 6.017782,
+            "slices": {
+              "Morph:firstApply": {
+                "calls": 8,
+                "cpuMs": 5.093466
+              },
+              "Morph:fullMeasure": {
+                "calls": 8,
+                "cpuMs": 1.499429
+              },
+              "Morph:prepareSnap": {
+                "calls": 8,
+                "cpuMs": 3.127523
+              },
+              "Morph:segment": {
+                "calls": 8,
+                "cpuMs": 0.275553
+              },
+              "Morph:segmentMeasure": {
+                "calls": 74,
+                "cpuMs": 1.755205
+              },
+              "TextLayout:initLayout": {
+                "calls": 38,
+                "cpuMs": 1.225876
+              }
+            }
+          },
+          {
+            "iteration": 3,
+            "trace": "/tmp/torph-bidi-perf-20261031/pixel7-after/connected_android_test_additional_output/benchmark/connected/Pixel 7 - 17/FirstLayoutBenchmark_warmBidi8Auto_iter003_2026-11-01-04-25-29.perfetto-trace",
+            "wallMs": 5.802287,
+            "slices": {
+              "Morph:firstApply": {
+                "calls": 8,
+                "cpuMs": 4.803833
+              },
+              "Morph:fullMeasure": {
+                "calls": 8,
+                "cpuMs": 1.505574
+              },
+              "Morph:prepareSnap": {
+                "calls": 8,
+                "cpuMs": 2.898724
+              },
+              "Morph:segment": {
+                "calls": 8,
+                "cpuMs": 0.250856
+              },
+              "Morph:segmentMeasure": {
+                "calls": 74,
+                "cpuMs": 1.647384
+              },
+              "TextLayout:initLayout": {
+                "calls": 38,
+                "cpuMs": 1.181563
+              }
+            }
+          },
+          {
+            "iteration": 4,
+            "trace": "/tmp/torph-bidi-perf-20261031/pixel7-after/connected_android_test_additional_output/benchmark/connected/Pixel 7 - 17/FirstLayoutBenchmark_warmBidi8Auto_iter004_2026-11-01-04-25-34.perfetto-trace",
+            "wallMs": 4.897501,
+            "slices": {
+              "Morph:firstApply": {
+                "calls": 8,
+                "cpuMs": 4.624431
+              },
+              "Morph:fullMeasure": {
+                "calls": 8,
+                "cpuMs": 1.407022
+              },
+              "Morph:prepareSnap": {
+                "calls": 8,
+                "cpuMs": 2.814738
+              },
+              "Morph:segment": {
+                "calls": 8,
+                "cpuMs": 0.261392
+              },
+              "Morph:segmentMeasure": {
+                "calls": 74,
+                "cpuMs": 1.544149
+              },
+              "TextLayout:initLayout": {
+                "calls": 38,
+                "cpuMs": 1.095542
+              }
+            }
+          }
+        ],
+        "medianCpuMs": {
+          "Morph:firstApply": 4.914835,
+          "Morph:fullMeasure": 1.505574,
+          "Morph:prepareSnap": 3.003134,
+          "Morph:segment": 0.261392,
+          "Morph:segmentMeasure": 1.687174,
+          "TextLayout:initLayout": 1.181563
+        }
+      }
+    }
+  },
+  "rechecks": [
+    {
+      "phase": "after",
+      "cases": [
+        "warmBidi8",
+        "warmMorph8"
+      ],
+      "reason": "Original G8 iteration 3 and ASCII iteration 0 lacked outer and firstApply markers; both complete five-sample cases were replaced. Original data retained."
+    }
+  ]
+}

@@ -22,6 +22,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import des.c5inco.torph.core.SegmentKind
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
+import java.text.Bidi
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -72,7 +73,7 @@ class SegmentBoundsTest {
     }
 
     @Test
-    fun placedCellsMatchCharacterUnionsAcrossWrapsAndScripts() {
+    fun placedCellsMatchParagraphGeometryAcrossWrapsAndScripts() {
         lateinit var state: TextMorphState
         var target by mutableStateOf("ASCII words that wrap with numbers 12345 and punctuation!\nnext line")
         var targetStyle by mutableStateOf(TextStyle(fontSize = 18.sp))
@@ -121,6 +122,15 @@ class SegmentBoundsTest {
                     if (left == Float.POSITIVE_INFINITY) {
                         left = layout.getCursorRect(segment.index).left
                         right = left
+                    }
+                    if ((style.textGeometricTransform?.scaleX ?: 1f) > 0f &&
+                        Bidi.requiresBidi(text.toCharArray(), 0, text.length)) {
+                        // For bidi runs the independent selection geometry replaces ambiguous
+                        // character-box edges. ASCII and mirrored transforms retain their oracle.
+                        val selection = layout.getPathForRange(segment.index, segment.end).getBounds()
+                        left = selection.left
+                        right = selection.right
+                        assertTrue(right >= left)
                     }
                     val line = layout.getLineForOffset(segment.index)
                     assertEquals(Rect(left, layout.getLineTop(line), right, layout.getLineBottom(line)), live.cell)

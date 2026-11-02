@@ -25,3 +25,23 @@ including cache keys/eviction, async fonts, environment transitions, disposal, a
 and the independent baseline typography corpus. This revision still uses eager preparation.
 Build/test log: `/Users/christop/Library/Application Support/atc/logs/gradle.tasks-2026-11-02T02-38-31-677Z-28587.log`.
 Raw evidence: `/tmp/torph-pr-stack-20261102/stage2/`.
+
+## 3a. Bidi correctness before geometry acceleration
+
+Pixel 7/API 37: both BidiGeometryTest methods passed. The runner executed only the first
+class in the requested multi-class filter; no claim is made that the other classes ran here.
+The six original bidi findings are promoted to exact contracts; the complete typography corpus
+is run with the following geometry-optimization revision. The expanded 30-case bidi geometry
+corpus and six animation reference cases pass, including
+mirrored brackets, isolates and retarget continuity.
+Log: `/Users/christop/Library/Application Support/atc/logs/gradle.tasks-2026-11-02T02-42-23-553Z-30386.log`.
+Raw evidence: `/tmp/torph-pr-stack-20261102/stage3-correctness/`.
+
+## 3b. Bidi geometry acceleration
+
+Pixel 7/API 37: full 44-test instrumentation suite passed, zero failures/errors/skips.
+The independent corpus has 43 exact matches and 8 known shaping/wrapping differences; all
+30 expanded bidi geometry and six animation reference cases match. Native range geometry
+checks compare 93,912 ranges at zero tolerance, including the native-path fallbacks.
+Log: `/Users/christop/Library/Application Support/atc/logs/gradle.tasks-2026-11-02T02-44-01-697Z-31691.log`.
+Raw evidence: `/tmp/torph-pr-stack-20261102/stage3-optimized/`.
