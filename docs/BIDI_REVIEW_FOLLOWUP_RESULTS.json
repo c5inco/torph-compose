@@ -197,6 +197,230 @@
         "benchmark/src/main/kotlin/des/c5inco/torph/benchmark/FirstLayoutBenchmark.kt": "ab91f200bbc79ae6f55216f138969061541c8d0d2d2bb8e5bf6c9ad4a9d2c280",
         "benchmark/src/main/kotlin/des/c5inco/torph/benchmark/FeatureBenchmark.kt": "41f6cb175ac07da1d3cade17590587269cca93a8b3fa056b8b071afa775eae71"
       }
+    },
+    "pr7-pixel7": {
+      "suite": {
+        "tests": "56",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0",
+        "time": "0.000",
+        "timestamp": "2026-11-02T03:48:28",
+        "hostname": "localhost"
+      },
+      "reports": {
+        "oracle-self-check": {
+          "MATCH": 1,
+          "KNOWN_DIFFERENCE": 1
+        },
+        "bidi-animation": {
+          "MATCH": 6
+        },
+        "corpus": {
+          "MATCH": 43,
+          "KNOWN_DIFFERENCE": 8
+        },
+        "deferred-fragment-targets": {
+          "MATCH": 13
+        },
+        "bidi-mixed-word": {
+          "MATCH": 19
+        },
+        "deferred-initial-corpus": {
+          "MATCH": 48,
+          "KNOWN_DIFFERENCE": 3
+        },
+        "bidi-geometry": {
+          "MATCH": 30
+        },
+        "deferred-disjoint-runs": {
+          "MATCH": 2
+        }
+      },
+      "sourceHashes": {
+        "torph-compose/src/androidTest/kotlin/des/c5inco/torph/compose/SegmentBoundsTest.kt": "27d5160e1f7e843692eb2bf85f39b0eb698d6802f659aaca952b2e6125f7239c",
+        "torph-compose/src/androidTest/kotlin/des/c5inco/torph/compose/BidiGeometryTest.kt": "7826f88a64d93456aefd1cf3cdb59ca06e19591a0099d218600ed107a6caad0f",
+        "torph-compose/src/androidTest/kotlin/des/c5inco/torph/compose/DrawAllocationTest.kt": "81a0be265979b430c4b3422611435bdde03c0fa50f244d6d74ed7ef6fa104a10",
+        "torph-compose/src/androidTest/kotlin/des/c5inco/torph/compose/MorphParityHarness.kt": "957ab22a9c58d85cad0d5239d2888baa4d5ce8d404f4f0a63409796e394e207c",
+        "torph-compose/src/androidTest/kotlin/des/c5inco/torph/compose/SharedTextMeasurerTest.kt": "cd0e6605ba4324178010804e59d252e7a97edd67f3a94fb0ca662b36813edf57",
+        "torph-compose/src/androidTest/kotlin/des/c5inco/torph/compose/TypographyReferenceTest.kt": "c259a72a586a6ef24ff049a1310948ea7a866b716eb9299d674c0866871cefc2",
+        "torph-compose/src/androidTest/kotlin/des/c5inco/torph/compose/DeferredPreparationTest.kt": "a1048a0ed1dbcc61b4c8bb48b4c63b4a65fa6c5eaaa2e330ee918c81ba4e3576",
+        "torph-compose/src/androidTest/kotlin/des/c5inco/torph/compose/ReusableBoxPrefixTest.kt": "ba3580123f1e978045bf51044ef91353c05f4479f28f54e103992b336ce654fd",
+        "torph-compose/src/androidTest/kotlin/des/c5inco/torph/compose/DeferredFragmentHardwareTest.kt": "e91a58fdb72032c6c4ba67ccfb7f6b2ad4bef186e182cae3236f516081d8ce42",
+        "torph-compose/src/androidTest/kotlin/des/c5inco/torph/compose/MorphClipDrawTest.kt": "d480236895bf893ba5773ca4e4551b1a6fd06ad8c3dc4f5e276e573cee7f9530",
+        "torph-compose/src/androidTest/kotlin/des/c5inco/torph/compose/DeferredTestFont.kt": "040a65ae02bdb456575820c1477cf620011e6a112054442be6909c42d432f246",
+        "torph-compose/src/androidTest/kotlin/des/c5inco/torph/compose/RedrawIsolationTest.kt": "59112240f1c5e92fdfc4b3795cd3b5d4f1babcdadd867f46d1cfd83708d90803",
+        "torph-compose/src/androidTest/kotlin/des/c5inco/torph/compose/BidiRangeBoundsTest.kt": "a1db9c28f7f687d0bea7c5678d2a2569dc83539e38823f08350d4e63f763ec4a",
+        "torph-compose/src/androidTest/kotlin/des/c5inco/torph/compose/MorphFontAndMotionTest.kt": "e75d020719ce6159bcbad8e424f7f10e851757d7749f65b68cacef1a2290839d",
+        "torph-compose/src/androidTest/kotlin/des/c5inco/torph/compose/TextMorphTest.kt": "a4b5e37ece3ea247315f9f0fcadbdd0b6bbefb728126705a4eb853a2eaac96f9",
+        "torph-compose/src/androidTest/kotlin/des/c5inco/torph/compose/MorphRegressionTest.kt": "1d2aa59a64113f1239962de149fad7f1883feea564557a298d615219291592a3",
+        "torph-compose/src/androidTest/kotlin/des/c5inco/torph/compose/FirstLayoutInvestigationTest.kt": "3d8a0eff3eb4f97aa5c65062a6ee48f699137de656c12806993134674230dbe7",
+        "torph-compose/src/test/kotlin/des/c5inco/torph/compose/MorphClipTest.kt": "9344b58f087fd30d199201f91279325a2c5251b29c6f1289b65591ad74aa0ab7",
+        "torph-compose/src/main/AndroidManifest.xml": "571f2735faf5e857752ee057ac8ef63425576a721616c60b86ee5d4c0a2d682f",
+        "torph-compose/src/main/generated/baselineProfiles/baseline-prof.txt": "b2ca4af57fe068e8201b3555b2bce0f54788b04a0bbff3017347a2786672521f",
+        "torph-compose/src/main/kotlin/des/c5inco/torph/compose/TextMorph.kt": "6a14960f05931b697a86083a1de8eccc15e2be677c10b5b906041dad58e3712c",
+        "torph-compose/src/main/kotlin/des/c5inco/torph/compose/MorphOptions.kt": "3fa4703d51417e00ce5514f0a7ec9c1b0d75cc36c6ef93374197a2c4fefc9de1",
+        "torph-compose/src/main/kotlin/des/c5inco/torph/compose/IcuSegmenter.kt": "48c11f3f050865cb1fd4557c2f6eda060994f33f6a85354b923158f318543b9c",
+        "torph-compose/src/main/kotlin/des/c5inco/torph/compose/MorphDraw.kt": "9acf5ff300167b842bac3c5925efdc23aa3169037fbf8b585292f28201d46e3c",
+        "torph-compose/src/main/kotlin/des/c5inco/torph/compose/ReducedMotion.kt": "c8f4f1e376436722296ab0475a3c47facfa105de4324feb527e6d0adc94b2127",
+        "torph-compose/src/main/kotlin/des/c5inco/torph/compose/TextMorphState.kt": "de9c81e42cc4e6f0e5c73dfd9ea2bf8b5221a5671974d9400a02df57a041a447",
+        "torph-compose/src/main/kotlin/des/c5inco/torph/compose/BidiRangeBounds.kt": "01172a0ab8e2cfee6bc491adf3332f0a4a70dd6f0e7c6e34338dbca3df564c94",
+        "torph-compose/src/main/kotlin/des/c5inco/torph/compose/LiveSegment.kt": "ac56c4da2e2bbc667a50e461b9c171f67941e4079b60b8a1a3b1c19c8d846c27",
+        "torph-compose/src/main/kotlin/des/c5inco/torph/compose/Diagnostics.kt": "39db7fc9c113aa100bc0613a1b7c6bcd9d21d55199e7f847d70911b99061ffd4",
+        "torph-compose/src/main/kotlin/des/c5inco/torph/compose/MorphLayout.kt": "dcb2c148119c28891491971c886dfdacdfb2656fa79e71a8ba721a4ad9f580f9",
+        "torph-compose/src/main/kotlin/des/c5inco/torph/compose/Channel.kt": "064e8fe927a01e4f82a0e94db25c171681162c63f796de29608ee308b5e19a6c",
+        "torph-compose/src/main/kotlin/des/c5inco/torph/compose/Easing.kt": "8b06fd532e97c1b4d06be054153d911ca1481a4925c875154107a3e2a85cab53",
+        "torph-compose/src/main/kotlin/des/c5inco/torph/compose/SharedTextMeasurer.kt": "7083fb068dbd79b78916677af4a09542a53c70fcbd4c0ebabf0452ee8c6668d6",
+        "torph-core/src/test/kotlin/des/c5inco/torph/core/SpringTest.kt": "acf9fea420f7d13d0f18c524e9624dce29e1c69ae3f619b5f597c5505a04f28e",
+        "torph-core/src/test/kotlin/des/c5inco/torph/core/NumberMatcherTest.kt": "e75e422c035af8e665f56c4ecbfc22516358da9356827d55fa7aefd18b0bd30e",
+        "torph-core/src/test/kotlin/des/c5inco/torph/core/DiffTest.kt": "f1c0c8a2b6bc9c39a886e335b331054d9a0fb07ecb45fdad8d2f8a469a7711db",
+        "torph-core/src/main/kotlin/des/c5inco/torph/core/Spring.kt": "abf34953b728dba604c34e85e40ec18284e3d8f7234061b639f8cf572ca7051f",
+        "torph-core/src/main/kotlin/des/c5inco/torph/core/Diff.kt": "f30ae3092dad3fe9c2aa1157fa975873f805c9cf48aa5657647c34edae57ebf5",
+        "torph-core/src/main/kotlin/des/c5inco/torph/core/Locale.kt": "5bac96f4930bdd4fc4626c05728f157cfc0625c56f1f2e48f3135176c806e54e",
+        "torph-core/src/main/kotlin/des/c5inco/torph/core/Segmenter.kt": "f8d68a72b6ff311d8c28c8b32f2022e558b9f59fc336eb4e2a64cc9a38a44882",
+        "torph-core/src/main/kotlin/des/c5inco/torph/core/Segmentation.kt": "00ca9239ef324f711978b15f93425cc171af51c3ea8eef4a40c70d01819a4614",
+        "torph-core/src/main/kotlin/des/c5inco/torph/core/Segment.kt": "f283c5d3cd518316a8e6798b8194b8def77d90ab7b725898624bfd59b7c1cb28",
+        "torph-core/src/main/kotlin/des/c5inco/torph/core/NumberMatcher.kt": "593e855a9730d9d4a46e960397edde81a518ffdec650998dbd9bbbb7b40e61f3",
+        "demo/src/main/AndroidManifest.xml": "375c70c05b6ffa450cece2d166e948ea15532820d8a26f8f18c9cd66bf2fcc93",
+        "demo/src/main/res/values/themes.xml": "1027144d84656279d24bbb5540a60cc80b7d8150a8250c66443a3c561ce8510d",
+        "demo/src/main/res/font/geist.ttf": "73894e0448cae90a92b6c2f8732b7bb9acb7b94c418bff559dad4a18e1de9659",
+        "demo/src/main/res/font/geist_mono.ttf": "d00e590b8eb3a59acc329b2d044fd143ae935090b7da33199ebee27cc7de8196",
+        "demo/src/main/res/font/bitcount_single.ttf": "007608c704d41cfff140892070b71f31971ec6d85b9f8ad5fdd0d2625f517c70",
+        "demo/src/main/kotlin/des/c5inco/torph/demo/MainActivity.kt": "e090e4edde48105131311ea0594f57c887a506bb3d7f67763e95b00cb2528cdd",
+        "demo/src/main/kotlin/des/c5inco/torph/demo/DemoType.kt": "48e6b8cb5d4c4f4fbac0492764dd6ed5c2ba44c6a774af73a1dc6465ec6dce6b",
+        "demo/src/main/kotlin/des/c5inco/torph/demo/Ui.kt": "adac0e3c2c1c69209603bfd2f13eb153a865537f25ca487cc323c94a558bcaa9",
+        "demo/src/main/kotlin/des/c5inco/torph/demo/DemoApp.kt": "4c53a39d93def610eaf2425f376f9d7d0258c66ddd8554486c1be148939d7ac4",
+        "demo/src/main/kotlin/des/c5inco/torph/demo/screens/MultiLineScreen.kt": "b441fcbe83695b949830558bab5b994cc400d3877b5a1b21f96bb65336a7845e",
+        "demo/src/main/kotlin/des/c5inco/torph/demo/screens/NumbersScreen.kt": "fd37a56ccc95bdb50b44a0dd0d34747385588d9fda6486f9dad057146aa0995e",
+        "demo/src/main/kotlin/des/c5inco/torph/demo/screens/FirstLayoutScreen.kt": "9f4f1f181efa01033e45311a0a4de4b86b0b4763b0a59a26141d9a61c4f881f5",
+        "demo/src/main/kotlin/des/c5inco/torph/demo/screens/TypingScreen.kt": "947d38f193371b47a94b06a11bf1768a53db49f6896cb872ba11fa13ef174198",
+        "demo/src/main/kotlin/des/c5inco/torph/demo/screens/InterruptionScreen.kt": "a5efa48572bedf99de484e294202cd1a1e6d374ff64ffb7c977eb37ef2b3d9eb",
+        "demo/src/main/kotlin/des/c5inco/torph/demo/screens/PlaygroundScreen.kt": "cfde0f3f2c6ed239ddbdb76bd9bae45709e74c89dbdc0e700faa033881f7324d",
+        "demo/src/main/kotlin/des/c5inco/torph/demo/screens/DebugScreen.kt": "cb555781debce6588a6838ac47c20100b0b347d0252e0d1de459fbecb25f2e80",
+        "demo/src/main/kotlin/des/c5inco/torph/demo/screens/PerfScreen.kt": "64dfeb44a066b009e30de850d511c0fd78465b831a9a2ab9183c3d5326997221",
+        "demo/src/main/kotlin/des/c5inco/torph/demo/screens/ScriptsScreen.kt": "76a4ee6e6486fa775e3dd3ff6ec19911afe433c19e19681ad749e50f1ef08808",
+        "benchmark/src/main/AndroidManifest.xml": "571f2735faf5e857752ee057ac8ef63425576a721616c60b86ee5d4c0a2d682f",
+        "benchmark/src/main/kotlin/des/c5inco/torph/benchmark/PerfScreenBenchmark.kt": "7f6fee5309f5b7dc8339b45899684841e5b3f0c7a7629ba31ef6c45aaf04d8b0",
+        "benchmark/src/main/kotlin/des/c5inco/torph/benchmark/BaselineProfileGenerator.kt": "6baa30af0f515249b4b542ec2b147f590e0c08541f4919516b8eadefca73bb0d",
+        "benchmark/src/main/kotlin/des/c5inco/torph/benchmark/BenchmarkDeviceState.kt": "b4f1a930f4eaabb95831cd88f2e8094d8c5effab2db50624e74025c78448865d",
+        "benchmark/src/main/kotlin/des/c5inco/torph/benchmark/GeometryWorkload.kt": "016ead04fd73e067763bc8fcfe5410485421f19f96805e93ab0893de9f5c54bc",
+        "benchmark/src/main/kotlin/des/c5inco/torph/benchmark/ColdChangeBenchmark.kt": "dd5184660ca8cdd14e4a6fe85a98ec3c89545f970f98a8897c3745465f62da88",
+        "benchmark/src/main/kotlin/des/c5inco/torph/benchmark/FirstLayoutBenchmark.kt": "ab53d86da852f7a92e846679f50d083c3ca83f43b12ef50db0bf2bcb01dc95f2",
+        "benchmark/src/main/kotlin/des/c5inco/torph/benchmark/FeatureBenchmark.kt": "41f6cb175ac07da1d3cade17590587269cca93a8b3fa056b8b071afa775eae71"
+      }
+    },
+    "pr7-pixel4xl": {
+      "suite": {
+        "tests": "56",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0",
+        "time": "0.000",
+        "timestamp": "2026-11-02T03:49:53",
+        "hostname": "localhost"
+      },
+      "reports": {
+        "oracle-self-check": {
+          "MATCH": 1,
+          "KNOWN_DIFFERENCE": 1
+        },
+        "bidi-animation": {
+          "MATCH": 6
+        },
+        "corpus": {
+          "MATCH": 43,
+          "KNOWN_DIFFERENCE": 8
+        },
+        "deferred-fragment-targets": {
+          "MATCH": 13
+        },
+        "bidi-mixed-word": {
+          "MATCH": 19
+        },
+        "deferred-initial-corpus": {
+          "MATCH": 48,
+          "KNOWN_DIFFERENCE": 3
+        },
+        "bidi-geometry": {
+          "MATCH": 30
+        },
+        "deferred-disjoint-runs": {
+          "MATCH": 2
+        }
+      },
+      "sourceHashes": {
+        "torph-compose/src/androidTest/kotlin/des/c5inco/torph/compose/SegmentBoundsTest.kt": "27d5160e1f7e843692eb2bf85f39b0eb698d6802f659aaca952b2e6125f7239c",
+        "torph-compose/src/androidTest/kotlin/des/c5inco/torph/compose/BidiGeometryTest.kt": "7826f88a64d93456aefd1cf3cdb59ca06e19591a0099d218600ed107a6caad0f",
+        "torph-compose/src/androidTest/kotlin/des/c5inco/torph/compose/DrawAllocationTest.kt": "81a0be265979b430c4b3422611435bdde03c0fa50f244d6d74ed7ef6fa104a10",
+        "torph-compose/src/androidTest/kotlin/des/c5inco/torph/compose/MorphParityHarness.kt": "957ab22a9c58d85cad0d5239d2888baa4d5ce8d404f4f0a63409796e394e207c",
+        "torph-compose/src/androidTest/kotlin/des/c5inco/torph/compose/SharedTextMeasurerTest.kt": "cd0e6605ba4324178010804e59d252e7a97edd67f3a94fb0ca662b36813edf57",
+        "torph-compose/src/androidTest/kotlin/des/c5inco/torph/compose/TypographyReferenceTest.kt": "c259a72a586a6ef24ff049a1310948ea7a866b716eb9299d674c0866871cefc2",
+        "torph-compose/src/androidTest/kotlin/des/c5inco/torph/compose/DeferredPreparationTest.kt": "a1048a0ed1dbcc61b4c8bb48b4c63b4a65fa6c5eaaa2e330ee918c81ba4e3576",
+        "torph-compose/src/androidTest/kotlin/des/c5inco/torph/compose/ReusableBoxPrefixTest.kt": "ba3580123f1e978045bf51044ef91353c05f4479f28f54e103992b336ce654fd",
+        "torph-compose/src/androidTest/kotlin/des/c5inco/torph/compose/DeferredFragmentHardwareTest.kt": "e91a58fdb72032c6c4ba67ccfb7f6b2ad4bef186e182cae3236f516081d8ce42",
+        "torph-compose/src/androidTest/kotlin/des/c5inco/torph/compose/MorphClipDrawTest.kt": "d480236895bf893ba5773ca4e4551b1a6fd06ad8c3dc4f5e276e573cee7f9530",
+        "torph-compose/src/androidTest/kotlin/des/c5inco/torph/compose/DeferredTestFont.kt": "040a65ae02bdb456575820c1477cf620011e6a112054442be6909c42d432f246",
+        "torph-compose/src/androidTest/kotlin/des/c5inco/torph/compose/RedrawIsolationTest.kt": "59112240f1c5e92fdfc4b3795cd3b5d4f1babcdadd867f46d1cfd83708d90803",
+        "torph-compose/src/androidTest/kotlin/des/c5inco/torph/compose/BidiRangeBoundsTest.kt": "a1db9c28f7f687d0bea7c5678d2a2569dc83539e38823f08350d4e63f763ec4a",
+        "torph-compose/src/androidTest/kotlin/des/c5inco/torph/compose/MorphFontAndMotionTest.kt": "e75d020719ce6159bcbad8e424f7f10e851757d7749f65b68cacef1a2290839d",
+        "torph-compose/src/androidTest/kotlin/des/c5inco/torph/compose/TextMorphTest.kt": "a4b5e37ece3ea247315f9f0fcadbdd0b6bbefb728126705a4eb853a2eaac96f9",
+        "torph-compose/src/androidTest/kotlin/des/c5inco/torph/compose/MorphRegressionTest.kt": "1d2aa59a64113f1239962de149fad7f1883feea564557a298d615219291592a3",
+        "torph-compose/src/androidTest/kotlin/des/c5inco/torph/compose/FirstLayoutInvestigationTest.kt": "3d8a0eff3eb4f97aa5c65062a6ee48f699137de656c12806993134674230dbe7",
+        "torph-compose/src/test/kotlin/des/c5inco/torph/compose/MorphClipTest.kt": "9344b58f087fd30d199201f91279325a2c5251b29c6f1289b65591ad74aa0ab7",
+        "torph-compose/src/main/AndroidManifest.xml": "571f2735faf5e857752ee057ac8ef63425576a721616c60b86ee5d4c0a2d682f",
+        "torph-compose/src/main/generated/baselineProfiles/baseline-prof.txt": "b2ca4af57fe068e8201b3555b2bce0f54788b04a0bbff3017347a2786672521f",
+        "torph-compose/src/main/kotlin/des/c5inco/torph/compose/TextMorph.kt": "6a14960f05931b697a86083a1de8eccc15e2be677c10b5b906041dad58e3712c",
+        "torph-compose/src/main/kotlin/des/c5inco/torph/compose/MorphOptions.kt": "3fa4703d51417e00ce5514f0a7ec9c1b0d75cc36c6ef93374197a2c4fefc9de1",
+        "torph-compose/src/main/kotlin/des/c5inco/torph/compose/IcuSegmenter.kt": "48c11f3f050865cb1fd4557c2f6eda060994f33f6a85354b923158f318543b9c",
+        "torph-compose/src/main/kotlin/des/c5inco/torph/compose/MorphDraw.kt": "9acf5ff300167b842bac3c5925efdc23aa3169037fbf8b585292f28201d46e3c",
+        "torph-compose/src/main/kotlin/des/c5inco/torph/compose/ReducedMotion.kt": "c8f4f1e376436722296ab0475a3c47facfa105de4324feb527e6d0adc94b2127",
+        "torph-compose/src/main/kotlin/des/c5inco/torph/compose/TextMorphState.kt": "de9c81e42cc4e6f0e5c73dfd9ea2bf8b5221a5671974d9400a02df57a041a447",
+        "torph-compose/src/main/kotlin/des/c5inco/torph/compose/BidiRangeBounds.kt": "01172a0ab8e2cfee6bc491adf3332f0a4a70dd6f0e7c6e34338dbca3df564c94",
+        "torph-compose/src/main/kotlin/des/c5inco/torph/compose/LiveSegment.kt": "ac56c4da2e2bbc667a50e461b9c171f67941e4079b60b8a1a3b1c19c8d846c27",
+        "torph-compose/src/main/kotlin/des/c5inco/torph/compose/Diagnostics.kt": "39db7fc9c113aa100bc0613a1b7c6bcd9d21d55199e7f847d70911b99061ffd4",
+        "torph-compose/src/main/kotlin/des/c5inco/torph/compose/MorphLayout.kt": "dcb2c148119c28891491971c886dfdacdfb2656fa79e71a8ba721a4ad9f580f9",
+        "torph-compose/src/main/kotlin/des/c5inco/torph/compose/Channel.kt": "064e8fe927a01e4f82a0e94db25c171681162c63f796de29608ee308b5e19a6c",
+        "torph-compose/src/main/kotlin/des/c5inco/torph/compose/Easing.kt": "8b06fd532e97c1b4d06be054153d911ca1481a4925c875154107a3e2a85cab53",
+        "torph-compose/src/main/kotlin/des/c5inco/torph/compose/SharedTextMeasurer.kt": "7083fb068dbd79b78916677af4a09542a53c70fcbd4c0ebabf0452ee8c6668d6",
+        "torph-core/src/test/kotlin/des/c5inco/torph/core/SpringTest.kt": "acf9fea420f7d13d0f18c524e9624dce29e1c69ae3f619b5f597c5505a04f28e",
+        "torph-core/src/test/kotlin/des/c5inco/torph/core/NumberMatcherTest.kt": "e75e422c035af8e665f56c4ecbfc22516358da9356827d55fa7aefd18b0bd30e",
+        "torph-core/src/test/kotlin/des/c5inco/torph/core/DiffTest.kt": "f1c0c8a2b6bc9c39a886e335b331054d9a0fb07ecb45fdad8d2f8a469a7711db",
+        "torph-core/src/main/kotlin/des/c5inco/torph/core/Spring.kt": "abf34953b728dba604c34e85e40ec18284e3d8f7234061b639f8cf572ca7051f",
+        "torph-core/src/main/kotlin/des/c5inco/torph/core/Diff.kt": "f30ae3092dad3fe9c2aa1157fa975873f805c9cf48aa5657647c34edae57ebf5",
+        "torph-core/src/main/kotlin/des/c5inco/torph/core/Locale.kt": "5bac96f4930bdd4fc4626c05728f157cfc0625c56f1f2e48f3135176c806e54e",
+        "torph-core/src/main/kotlin/des/c5inco/torph/core/Segmenter.kt": "f8d68a72b6ff311d8c28c8b32f2022e558b9f59fc336eb4e2a64cc9a38a44882",
+        "torph-core/src/main/kotlin/des/c5inco/torph/core/Segmentation.kt": "00ca9239ef324f711978b15f93425cc171af51c3ea8eef4a40c70d01819a4614",
+        "torph-core/src/main/kotlin/des/c5inco/torph/core/Segment.kt": "f283c5d3cd518316a8e6798b8194b8def77d90ab7b725898624bfd59b7c1cb28",
+        "torph-core/src/main/kotlin/des/c5inco/torph/core/NumberMatcher.kt": "593e855a9730d9d4a46e960397edde81a518ffdec650998dbd9bbbb7b40e61f3",
+        "demo/src/main/AndroidManifest.xml": "375c70c05b6ffa450cece2d166e948ea15532820d8a26f8f18c9cd66bf2fcc93",
+        "demo/src/main/res/values/themes.xml": "1027144d84656279d24bbb5540a60cc80b7d8150a8250c66443a3c561ce8510d",
+        "demo/src/main/res/font/geist.ttf": "73894e0448cae90a92b6c2f8732b7bb9acb7b94c418bff559dad4a18e1de9659",
+        "demo/src/main/res/font/geist_mono.ttf": "d00e590b8eb3a59acc329b2d044fd143ae935090b7da33199ebee27cc7de8196",
+        "demo/src/main/res/font/bitcount_single.ttf": "007608c704d41cfff140892070b71f31971ec6d85b9f8ad5fdd0d2625f517c70",
+        "demo/src/main/kotlin/des/c5inco/torph/demo/MainActivity.kt": "e090e4edde48105131311ea0594f57c887a506bb3d7f67763e95b00cb2528cdd",
+        "demo/src/main/kotlin/des/c5inco/torph/demo/DemoType.kt": "48e6b8cb5d4c4f4fbac0492764dd6ed5c2ba44c6a774af73a1dc6465ec6dce6b",
+        "demo/src/main/kotlin/des/c5inco/torph/demo/Ui.kt": "adac0e3c2c1c69209603bfd2f13eb153a865537f25ca487cc323c94a558bcaa9",
+        "demo/src/main/kotlin/des/c5inco/torph/demo/DemoApp.kt": "4c53a39d93def610eaf2425f376f9d7d0258c66ddd8554486c1be148939d7ac4",
+        "demo/src/main/kotlin/des/c5inco/torph/demo/screens/MultiLineScreen.kt": "b441fcbe83695b949830558bab5b994cc400d3877b5a1b21f96bb65336a7845e",
+        "demo/src/main/kotlin/des/c5inco/torph/demo/screens/NumbersScreen.kt": "fd37a56ccc95bdb50b44a0dd0d34747385588d9fda6486f9dad057146aa0995e",
+        "demo/src/main/kotlin/des/c5inco/torph/demo/screens/FirstLayoutScreen.kt": "9f4f1f181efa01033e45311a0a4de4b86b0b4763b0a59a26141d9a61c4f881f5",
+        "demo/src/main/kotlin/des/c5inco/torph/demo/screens/TypingScreen.kt": "947d38f193371b47a94b06a11bf1768a53db49f6896cb872ba11fa13ef174198",
+        "demo/src/main/kotlin/des/c5inco/torph/demo/screens/InterruptionScreen.kt": "a5efa48572bedf99de484e294202cd1a1e6d374ff64ffb7c977eb37ef2b3d9eb",
+        "demo/src/main/kotlin/des/c5inco/torph/demo/screens/PlaygroundScreen.kt": "cfde0f3f2c6ed239ddbdb76bd9bae45709e74c89dbdc0e700faa033881f7324d",
+        "demo/src/main/kotlin/des/c5inco/torph/demo/screens/DebugScreen.kt": "cb555781debce6588a6838ac47c20100b0b347d0252e0d1de459fbecb25f2e80",
+        "demo/src/main/kotlin/des/c5inco/torph/demo/screens/PerfScreen.kt": "64dfeb44a066b009e30de850d511c0fd78465b831a9a2ab9183c3d5326997221",
+        "demo/src/main/kotlin/des/c5inco/torph/demo/screens/ScriptsScreen.kt": "76a4ee6e6486fa775e3dd3ff6ec19911afe433c19e19681ad749e50f1ef08808",
+        "benchmark/src/main/AndroidManifest.xml": "571f2735faf5e857752ee057ac8ef63425576a721616c60b86ee5d4c0a2d682f",
+        "benchmark/src/main/kotlin/des/c5inco/torph/benchmark/PerfScreenBenchmark.kt": "7f6fee5309f5b7dc8339b45899684841e5b3f0c7a7629ba31ef6c45aaf04d8b0",
+        "benchmark/src/main/kotlin/des/c5inco/torph/benchmark/BaselineProfileGenerator.kt": "6baa30af0f515249b4b542ec2b147f590e0c08541f4919516b8eadefca73bb0d",
+        "benchmark/src/main/kotlin/des/c5inco/torph/benchmark/BenchmarkDeviceState.kt": "b4f1a930f4eaabb95831cd88f2e8094d8c5effab2db50624e74025c78448865d",
+        "benchmark/src/main/kotlin/des/c5inco/torph/benchmark/GeometryWorkload.kt": "016ead04fd73e067763bc8fcfe5410485421f19f96805e93ab0893de9f5c54bc",
+        "benchmark/src/main/kotlin/des/c5inco/torph/benchmark/ColdChangeBenchmark.kt": "dd5184660ca8cdd14e4a6fe85a98ec3c89545f970f98a8897c3745465f62da88",
+        "benchmark/src/main/kotlin/des/c5inco/torph/benchmark/FirstLayoutBenchmark.kt": "ab53d86da852f7a92e846679f50d083c3ca83f43b12ef50db0bf2bcb01dc95f2",
+        "benchmark/src/main/kotlin/des/c5inco/torph/benchmark/FeatureBenchmark.kt": "41f6cb175ac07da1d3cade17590587269cca93a8b3fa056b8b071afa775eae71"
+      }
     }
-  }
+  },
+  "combinedSourceResourceFiles": 69,
+  "combinedBuildLog": "/Users/christop/Library/Application Support/atc/logs/gradle.tasks-2026-11-02T03-51-12-353Z-72573.log"
 }

@@ -55,10 +55,10 @@ Each phone reports 48 exact matches / 3 named wrapping findings in the fresh opt
 the explicit legacy corpus remains 43 exact / 8 known. All 15 prepared-region hardware/software
 fixtures and 135 software region reconstructions pass, with negative displacement controls.
 
-All 69 source/resource files across the four modules are byte-identical to the preserved combined
+At initial extraction head `026e714`, all 69 source/resource files across the four modules were byte-identical to the preserved combined
 implementation, including benchmark sources. Thus the previously recorded final validated-launch
 performance evidence applies to this extracted tree; the matrices were not rerun or their samples
-mixed with earlier exploratory data during packaging. All 22 core/library production files match.
+mixed with earlier exploratory data during packaging. All 22 core/library production files matched at that head.
 The existing b7965c3 geometry and benchmark-device controls remain intact.
 
 Core test task passed (18 passing unit-test results). Release library, debug demo, benchmark APK
@@ -87,3 +87,9 @@ lands. These drafts are not merged, main is not pushed, and issue #3 remains ope
 historical cache/bidi gains with the final eager-versus-deferred comparison: that eager baseline
 already includes both improvements. The remaining wrapping coverage and animation frame-pacing
 findings are separate follow-ups, not hidden within this stack.
+
+## Subsequent bidi review correction
+
+The source-identity claims and counts above describe the initial extraction heads. The later
+[mixed-script word correction](BIDI_REVIEW_FOLLOWUP.md) changes the bidi direction helper and adds
+one regression method; its current checks and hashes are recorded separately in that follow-up.

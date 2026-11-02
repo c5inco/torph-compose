@@ -14826,5 +14826,6 @@
       "SharedTextMeasurer.kt": "7083fb068dbd79b78916677af4a09542a53c70fcbd4c0ebabf0452ee8c6668d6"
     },
     "mirrorIdentical": true
-  }
+  },
+  "postReviewNotice": "Historical data for initial extraction head 026e714, before the mixed-script direction fix. Retained hashes describe the measured/initial source. Current validation is in BIDI_REVIEW_FOLLOWUP_RESULTS.json; full timing matrices have not been rerun on the revised source."
 }

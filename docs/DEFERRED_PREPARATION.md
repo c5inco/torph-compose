@@ -1,5 +1,7 @@
 # Issue #3: bounded deferred preparation
 
+Performance tables and byte-identity claims below describe initial extraction head `026e714`, before the [mixed-script bidi review correction](BIDI_REVIEW_FOLLOWUP.md). Current source includes that correction; its device validation is recorded in the follow-up. The full timing matrices have not been rerun on the revised source.
+
 This follow-up implements the first-layout change requested in issue #3. The earlier shared cache
 and bidi geometry work remain intact. The eager baseline in this comparison already contains
 those optimizations; it is not the original uncached renderer.
@@ -222,9 +224,10 @@ contains `exec build-brief ./gradlew "$@"`. Raw Gradle logs, retained for deeper
 ## PR extraction validation
 
 See [STACK_VALIDATION.md](STACK_VALIDATION.md) for checks on each extracted revision.
-The complete production, test and benchmark source/resources are byte-identical to the
-preserved combined implementation measured above; extraction adds documentation only.
+At initial extraction head `026e714`, the complete production, test and benchmark source/resources
+were byte-identical to the preserved combined implementation measured above. The later review
+correction and its new regression test are recorded in the linked follow-up.
 
-The extracted final tree subsequently passed the full **55-test suite on both physical phones**,
-zero failures/errors/skips. All 69 source/resource files match the preserved measured implementation.
+The initial extracted tree (`026e714`) passed the full **55-test suite on both physical phones**,
+zero failures/errors/skips. At that point all 69 source/resource files matched the measured implementation.
 See the linked stack validation for the new per-device logs and structured source hashes.
