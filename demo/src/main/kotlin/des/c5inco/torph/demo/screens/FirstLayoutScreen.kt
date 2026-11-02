@@ -24,6 +24,7 @@ import des.c5inco.torph.core.Segmentation
 @Composable
 fun FirstLayoutScreen(mode: String, count: Int, repeated: Boolean, log: Boolean) {
     TextMorphDiagnostics.traceSections = true
+    TextMorphDiagnostics.forceEagerPreparation = !mode.contains("Lazy")
     TextMorphDiagnostics.logTimings = log
     val markers = remember { FirstLayoutMarkers() }
     var changed by remember { mutableStateOf(false) }

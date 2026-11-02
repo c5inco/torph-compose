@@ -23,6 +23,8 @@ internal class LiveSegment(
     val y = Channel(initial.y)
     val alpha = Channel(initialAlpha)
     val scale = Channel(initialScale)
+    /** Old-side paragraph region; avoids shaping old segments again on the first update. */
+    var paragraphSlice: ParagraphSlice? = null
     var exiting = false
     var entering = false
     /** Clip rect for a digit sliding in or out of its cell, null otherwise. */
@@ -34,8 +36,8 @@ internal class LiveSegment(
     /** Index into [strip] (fractional) of the digit currently at the target position. */
     val stripProgress = Channel(0f)
     var stripRoll: Int = 0
-    val width: Float get() = layout.size.width.toFloat()
-    val height: Float get() = layout.size.height.toFloat()
+    val width: Float get() = paragraphSlice?.bounds?.width ?: layout.size.width.toFloat()
+    val height: Float get() = paragraphSlice?.bounds?.height ?: layout.size.height.toFloat()
 
     fun tick(now: Long): Boolean {
         var active = x.tick(now)
@@ -52,3 +54,5 @@ internal class LiveSegment(
         return active
     }
 }
+
+internal class ParagraphSlice(val bounds: Rect, val baseline: Float, var clipRect: Rect? = null, val clipIntervals: FloatArray? = null)

@@ -1,5 +1,7 @@
 package des.c5inco.torph.compose
 
+import androidx.compose.animation.core.FloatTweenSpec
+import androidx.compose.animation.core.LinearEasing
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
@@ -77,10 +79,48 @@ public class TextMorphState internal constructor(
     public var layoutResult: TextLayoutResult? = null
         private set
 
-    /** Number of live (drawn) segments, including ones still exiting. */
-    public val liveCount: Int get() = live.size
+    /** Number of logical displayed segments, including ones still exiting. */
+    public val liveCount: Int get() = if (deferredLayout != null) segments.size else live.size
 
-    internal val live = ArrayList<LiveSegment>()
+    private val preparedLive = ArrayList<LiveSegment>()
+    private var preparingDeferred = false
+    internal val preparedSegmentCount: Int get() = preparedLive.size
+
+    // Geometry/debug consumers can request individual segments explicitly. The normal
+    // paragraph draw returns before this getter and never prepares segments during drawing.
+    internal val live: ArrayList<LiveSegment>
+        get() {
+            if (deferredLayout != null && !preparingDeferred && preparedLive.size != segments.size) {
+                val full = deferredLayout!!
+                preparingDeferred = true
+                preparationKey = lastKey
+                try {
+                    morphTrace("Morph:prepareInspected") {
+                        snapToLayout(full, Size(full.size.width.toFloat(), full.size.height.toFloat()), false)
+                    }
+                } finally {
+                    preparationKey = null
+                    preparingDeferred = false
+                }
+            }
+            return preparedLive
+        }
+
+    /** Per-state baseline override; eligible production layouts defer preparation by default. */
+    internal var deferInitialPreparation = !TextMorphDiagnostics.forceEagerPreparation
+    internal var deferredLayout: TextLayoutResult? = null
+        private set
+    private var preparationKey: LayoutKey? = null
+    internal var handoffSource: TextLayoutResult? = null
+        private set
+    internal val handoffProgress = Channel(1f)
+    internal var handoffBounds = Rect.Zero
+        private set
+    internal var useParagraphFragments = false
+        private set
+    private var fragmentLayout: TextLayoutResult? = null
+    private var fragmentSegments: List<Segment>? = null
+    private val fragmentSlices = HashMap<Long, ParagraphSlice>()
 
     /** Bumped once per animation frame (and per structural change); the draw lambda reads it. */
     internal val frameTick = mutableIntStateOf(0)
@@ -137,7 +177,7 @@ public class TextMorphState internal constructor(
         // Keep an in-flight morph's frozen layouts until it settles when only fonts change.
         // Reading isAnimating here subscribes layout to completion, so the refresh is not lost.
         val refreshFonts = layoutResult?.multiParagraph?.intrinsics?.hasStaleResolvedFonts == true && !isAnimating
-        if (key != prev || refreshFonts) {
+        if (key != prev || refreshFonts || (deferredLayout != null && opts.debug)) {
             lastKey = key
             morphTrace(if (prev == null) "Morph:firstApply" else "Morph:apply") { apply(key, opts, prev) }
         }
@@ -155,6 +195,30 @@ public class TextMorphState internal constructor(
         if (diag) timings.reset()
         val applyStart = if (diag) System.nanoTime() else 0L
         var mark = applyStart
+        val deferred = deferredLayout
+        val allowFragments = prev == null || deferred != null || useParagraphFragments
+        val fullHandoff = deferred ?: if (useParagraphFragments && !isAnimating) layoutResult else null
+        if (deferred != null) {
+            deferredLayout = null
+            if (prev != null && key.text != prev.text && !opts.snap) {
+                // Prepare the OLD paragraph with its original style/direction before changing
+                // layoutResult or clearing its cache for the new environment.
+                preparationKey = prev
+                try {
+                    morphTrace("Morph:prepareDeferred") {
+                        prepareDeferredParagraph(deferred)
+                    }
+                } finally {
+                    preparationKey = null
+                }
+            }
+        }
+        if (diag && deferred != null) {
+            val deferredNs = System.nanoTime() - applyStart
+            timings.reset()
+            timings.deferred = deferredNs
+            mark = System.nanoTime()
+        }
         val full = morphTrace("Morph:fullMeasure") {
             textMeasurer.measure(
                 text = AnnotatedString(key.text),
@@ -194,11 +258,32 @@ public class TextMorphState internal constructor(
             nextId = diff.nextId
         }
 
+        val eligible = canDeferPreparation(full)
+        useParagraphFragments = allowFragments && deferInitialPreparation && eligible &&
+            !opts.debug
+        if (!useParagraphFragments) {
+            fragmentLayout = null
+            fragmentSegments = null
+            fragmentSlices.clear()
+        }
+
         if (diff == null || !textChanged || prev == null || opts.snap) {
             // Initial layout, re-wrap or re-segment without a text change, or snapping: rebuild
             // everything in place. A snapped text change still fires its callbacks, in order.
             morphTrace("Morph:prepareSnap") {
-                snapToLayout(full, newSize, notify = textChanged && prev != null && diff?.isEmpty == false)
+                if ((prev == null || deferred != null) && deferInitialPreparation && eligible && !opts.debug) {
+                    finishGeneration(cancelled = true)
+                    live.clear()
+                    deferredLayout = full
+                    width.snapTo(newSize.width)
+                    height.snapTo(newSize.height)
+                    frameTick.intValue++
+                    if (textChanged && prev != null && diff?.isEmpty == false) {
+                        scope.launch { onAnimationStart?.invoke(); onAnimationComplete?.invoke() }
+                    }
+                } else {
+                    snapToLayout(full, newSize, notify = textChanged && prev != null && diff?.isEmpty == false)
+                }
             }
             if (diag) timings.log(
                 totalNs = System.nanoTime() - applyStart,
@@ -209,7 +294,7 @@ public class TextMorphState internal constructor(
             return
         }
 
-        startMorph(diff, full, newSize, opts)
+        startMorph(diff, full, newSize, opts, fullHandoff)
         if (diag) {
             val n = System.nanoTime()
             // Placement and segment measuring happen inside startMorph; the rest is animation setup.
@@ -225,12 +310,146 @@ public class TextMorphState internal constructor(
         }
     }
 
+    private fun refreshHandoffBounds(full: TextLayoutResult) {
+        val source = handoffSource ?: return
+        var extentX = maxOf(source.size.width.toFloat(), full.size.width.toFloat(), source.size.height.toFloat(), full.size.height.toFloat())
+        var extentY = maxOf(source.size.height.toFloat(), full.size.height.toFloat())
+        for (segment in preparedLive) {
+            extentX = maxOf(extentX, kotlin.math.abs(segment.x.value) + segment.width, segment.cell.right)
+            extentY = maxOf(extentY, kotlin.math.abs(segment.y.value) + segment.height, segment.cell.bottom)
+        }
+        handoffBounds = Rect(-extentX, -extentY, extentX * 2f, extentY * 2f)
+    }
+
+    private fun canDeferPreparation(full: TextLayoutResult): Boolean =
+        full.lineCount == 1 && full.layoutInput.text.length <= 64 &&
+            full.layoutInput.text.length.toLong() * segments.size <= 4096 &&
+            !(full.layoutInput.style.letterSpacing.value < 0f) &&
+            (full.layoutInput.style.textGeometricTransform?.scaleX ?: 1f) > 0f &&
+            full.layoutInput.style.shadow == null && full.layoutInput.style.baselineShift == null
+
+    private fun prepareDeferredParagraph(full: TextLayoutResult) {
+        preparedLive.clear()
+        for (segment in segments) {
+            val slice = fragmentSlice(segment, full)
+            preparedLive.add(LiveSegment(segment, full, slice.bounds, slice.bounds.topLeft).also {
+                it.paragraphSlice = slice
+            })
+        }
+    }
+
+    private fun canUseAsciiRegions(full: TextLayoutResult): Boolean =
+        full.lineCount == 1 && full.getParagraphDirection(0) == ResolvedTextDirection.Ltr &&
+            full.layoutInput.text.text.all { it in ' '..'~' }
+
+    private fun regionBounds(full: TextLayoutResult, segment: Segment, ranges: BidiRangeBounds, boxes: FloatArray?): Rect {
+        if (boxes == null) return ranges.bounds(full, segment.index, segment.end)
+        var left = Float.POSITIVE_INFINITY
+        var right = Float.NEGATIVE_INFINITY
+        for (i in segment.index until segment.end) {
+            left = minOf(left, boxes[i * 4])
+            right = maxOf(right, boxes[i * 4 + 2])
+        }
+        return Rect(left, full.getLineTop(0), right, full.getLineBottom(0))
+    }
+
+    /** Union native unit selections into nonoverlapping visual intervals (single line only). */
+    private fun selectionIntervals(full: TextLayoutResult, segment: Segment, ranges: BidiRangeBounds): FloatArray {
+        val intervals = FloatArray((segment.end - segment.index) * 2)
+        var count = 0
+        for (offset in segment.index until segment.end) {
+            val rect = ranges.bounds(full, offset, offset + 1)
+            if (rect.width <= 0f) continue
+            var at = count
+            while (at > 0 && intervals[(at - 1) * 2] > rect.left) {
+                intervals[at * 2] = intervals[(at - 1) * 2]
+                intervals[at * 2 + 1] = intervals[(at - 1) * 2 + 1]
+                at--
+            }
+            intervals[at * 2] = rect.left
+            intervals[at * 2 + 1] = rect.right
+            count++
+        }
+        var merged = 0
+        for (i in 0 until count) {
+            val left = intervals[i * 2]
+            val right = intervals[i * 2 + 1]
+            if (merged > 0 && left <= intervals[merged * 2 - 1]) {
+                intervals[merged * 2 - 1] = maxOf(intervals[merged * 2 - 1], right)
+            } else {
+                intervals[merged * 2] = left
+                intervals[merged * 2 + 1] = right
+                merged++
+            }
+        }
+        return intervals.copyOf(merged * 2)
+    }
+
+    private fun fragmentSlice(segment: Segment, full: TextLayoutResult): ParagraphSlice {
+        if (fragmentLayout !== full || fragmentSegments !== segments) {
+            fragmentLayout = full
+            fragmentSegments = segments
+            fragmentSlices.clear()
+            val ranges = BidiRangeBounds()
+            val boxes = if (canUseAsciiRegions(full)) charBoxes(full) else null
+            var left: ParagraphSlice? = null
+            var right: ParagraphSlice? = null
+            for (s in segments) {
+                val cell = regionBounds(full, s, ranges, boxes)
+                val direction = full.getBidiRunDirection(s.index)
+                val singleRun = (s.index until s.end).all { full.getBidiRunDirection(it) == direction }
+                val slice = if (singleRun) {
+                    ParagraphSlice(cell, full.getLineBaseline(0) - cell.top,
+                        clipRect = Rect(cell.left, -1_000_000f, cell.right, 1_000_000f))
+                } else {
+                    val intervals = selectionIntervals(full, s, ranges)
+                    if (intervals.size <= 2) {
+                        ParagraphSlice(cell, full.getLineBaseline(0) - cell.top,
+                            clipRect = Rect(intervals.getOrElse(0) { cell.left }, -1_000_000f,
+                                intervals.getOrElse(1) { cell.right }, 1_000_000f))
+                    } else ParagraphSlice(cell, full.getLineBaseline(0) - cell.top, clipIntervals = intervals)
+                }
+                fragmentSlices[s.id] = slice
+                if (cell.width > 0f) {
+                    if (left == null || cell.left < left.bounds.left) left = slice
+                    if (right == null || cell.right > right.bounds.right) right = slice
+                }
+            }
+            // Give outer overhang to the visual edge regions. Hard adjacent clips partition
+            // the complete paragraph, including ink outside its advance/line boxes.
+            if (left == null && segments.isNotEmpty()) {
+                val first = fragmentSlices.getValue(segments.first().id)
+                left = first
+                right = first
+            }
+            left?.let {
+                val rect = it.clipRect
+                if (rect != null) it.clipRect = rect.copy(left = -1_000_000f)
+                else it.clipIntervals!![0] = -1_000_000f
+            }
+            right?.let {
+                val rect = it.clipRect
+                if (rect != null) it.clipRect = rect.copy(right = 1_000_000f)
+                else it.clipIntervals!![it.clipIntervals.lastIndex] = 1_000_000f
+            }
+        }
+        return fragmentSlices.getValue(segment.id)
+    }
+
+    private fun makeLiveSegment(segment: Segment, layout: TextLayoutResult, cell: Rect, initial: Offset,
+        alpha: Float = 1f, scale: Float = 1f): LiveSegment =
+        LiveSegment(segment, layout, cell, initial, alpha, scale).also {
+            if (useParagraphFragments) it.paragraphSlice = fragmentSlice(segment, layoutResult!!)
+        }
+
     private fun snapToLayout(full: TextLayoutResult, newSize: Size, notify: Boolean) {
         finishGeneration(cancelled = true)
+        handoffSource = null
+        handoffProgress.snapTo(1f)
         live.clear()
         for (s in segments) {
             val (target, cell) = place(s, full)
-            live.add(LiveSegment(s, segmentLayout(s), cell, target))
+            live.add(makeLiveSegment(s, segmentLayout(s), cell, target))
         }
         width.snapTo(newSize.width)
         height.snapTo(newSize.height)
@@ -238,7 +457,7 @@ public class TextMorphState internal constructor(
         if (notify) scope.launch { onAnimationStart?.invoke(); onAnimationComplete?.invoke() }
     }
 
-    private fun startMorph(diff: DiffResult, full: TextLayoutResult, newSize: Size, opts: MorphOptions) {
+    private fun startMorph(diff: DiffResult, full: TextLayoutResult, newSize: Size, opts: MorphOptions, fullHandoff: TextLayoutResult?) {
         val now = if (loop?.isActive == true) lastFrameNanos else Channel.UNSET
         val moveSpec = opts.ease.toFloatSpec(opts.duration, 0.5f)
         val fadeSpec = opts.ease.toFloatSpec(opts.duration, 0.001f)
@@ -251,7 +470,7 @@ public class TextMorphState internal constructor(
             val ls = byId[old.id]
             val (target, cell) = place(new, full)
             if (ls == null) {
-                live.add(LiveSegment(new, segmentLayout(new), cell, target))
+                live.add(makeLiveSegment(new, segmentLayout(new), cell, target))
                 continue
             }
             ls.segment = new
@@ -261,13 +480,32 @@ public class TextMorphState internal constructor(
             val textDirection = if (useBidiSelectionBounds) {
                 if (direction == LayoutDirection.Rtl) TextDirection.Rtl else TextDirection.Ltr
             } else style.textDirection
-            if (ls.layout.multiParagraph.intrinsics.hasStaleResolvedFonts ||
+            val slice = ls.paragraphSlice
+            if (useParagraphFragments) {
+                val refreshStrip = ls.layout.multiParagraph.intrinsics.hasStaleResolvedFonts ||
+                    ls.layout.layoutInput.style != full.layoutInput.style ||
+                    ls.layout.layoutInput.layoutDirection != full.layoutInput.layoutDirection
+                val replacement = fragmentSlice(new, full)
+                val oldLeft = if (slice == null) ls.layout.getLineLeft(0) else 0f
+                val oldBaseline = slice?.baseline ?: ls.layout.firstBaseline
+                ls.x.snapTo(ls.x.value + oldLeft, ls.x.velocityAt(now))
+                ls.y.snapTo(ls.y.value + oldBaseline - replacement.baseline, ls.y.velocityAt(now))
+                ls.layout = full
+                ls.paragraphSlice = replacement
+                if (refreshStrip) ls.strip = ls.strip?.map {
+                    cachedSegmentLayout(it.layoutInput.text.text, if (useBidiSelectionBounds) LayoutDirection.Ltr else direction)
+                }
+            } else if (slice != null || ls.layout.multiParagraph.intrinsics.hasStaleResolvedFonts ||
                 ls.layout.layoutInput.layoutDirection != direction ||
                 ls.layout.layoutInput.style.textDirection != textDirection) {
                 val replacement = segmentLayout(new)
                 // Keep the current visual origin/baseline when a retained neutral changes run.
                 // Its standalone RTL inset may differ even though the logical text is unchanged.
-                if (ls.layout.layoutInput.layoutDirection != direction ||
+                if (slice != null) {
+                    ls.x.snapTo(ls.x.value - replacement.getLineLeft(0), ls.x.velocityAt(now))
+                    ls.y.snapTo(ls.y.value + slice.baseline - replacement.firstBaseline, ls.y.velocityAt(now))
+                    ls.paragraphSlice = null
+                } else if (ls.layout.layoutInput.layoutDirection != direction ||
                     ls.layout.layoutInput.style.textDirection != textDirection) {
                     ls.x.snapTo(ls.x.value + ls.layout.getLineLeft(0) - replacement.getLineLeft(0), ls.x.velocityAt(now))
                     ls.y.snapTo(ls.y.value + ls.layout.firstBaseline - replacement.firstBaseline, ls.y.velocityAt(now))
@@ -306,7 +544,7 @@ public class TextMorphState internal constructor(
                 claimed.add(from.id)
                 val previous = byId[from.id]
                 val previousStrip = previous?.strip
-                val ls = LiveSegment(new, layout, cell, target)
+                val ls = makeLiveSegment(new, layout, cell, target)
                 ls.entering = true
                 ls.stripRoll = roll
                 val strip: List<TextLayoutResult>
@@ -328,7 +566,7 @@ public class TextMorphState internal constructor(
                 continue
             }
             val startY = if (roll != 0) target.y + roll * cell.height else target.y
-            val ls = LiveSegment(new, layout, cell, Offset(target.x, startY), if (roll != 0) 1f else 0f, if (roll != 0) 1f else minScale)
+            val ls = makeLiveSegment(new, layout, cell, Offset(target.x, startY), if (roll != 0) 1f else 0f, if (roll != 0) 1f else minScale)
             ls.entering = true
             if (roll != 0) ls.clip = cell
             live.add(ls)
@@ -366,6 +604,16 @@ public class TextMorphState internal constructor(
             height.animateTo(newSize.height, moveSpec, now)
         }
 
+        if (fullHandoff != null) {
+            val handoffMs = if (opts.ease is MorphEase.Spring) 64 else opts.duration.inWholeMilliseconds.coerceIn(0, 64).toInt()
+            if (handoffMs > 0) {
+                handoffSource = fullHandoff
+                handoffProgress.snapTo(0f)
+                handoffProgress.animateTo(1f, FloatTweenSpec(handoffMs, 0, LinearEasing), Channel.UNSET)
+            }
+        }
+        refreshHandoffBounds(full)
+
         // Exactly one of complete/cancel per morph: a new morph cancels the one in flight.
         finishGeneration(cancelled = true)
         generationAnimating = true
@@ -394,6 +642,8 @@ public class TextMorphState internal constructor(
     internal fun dispose() {
         loop?.cancel()
         loop = null
+        deferredLayout = null
+        handoffSource = null
         lastFrameNanos = Channel.UNSET
         // The remembered scope may already be cancelled during composition disposal.
         finishGeneration(cancelled = true, immediate = true)
@@ -414,7 +664,8 @@ public class TextMorphState internal constructor(
     /** Advance every channel to [now]; drop settled exits. Returns true while anything still moves. */
     private fun tick(now: Long): Boolean {
         lastFrameNanos = now
-        var active = false
+        var active = handoffProgress.tick(now)
+        if (!handoffProgress.active) handoffSource = null
         var i = 0
         while (i < live.size) {
             val ls = live[i]
@@ -487,6 +738,10 @@ public class TextMorphState internal constructor(
                 if (boundaryPositions.size < textLen + 1) boundaryPositions = boundaryPositions.copyOf(textLen + 1)
                 boundaryPositions.fill(Float.NaN, reused, textLen + 1)
             }
+        }
+        if (useParagraphFragments) {
+            val slice = fragmentSlice(s, full)
+            return slice.bounds.topLeft to slice.bounds
         }
         if (useBidiSelectionBounds) {
             val ranges = bidiRangeBounds ?: BidiRangeBounds().also { bidiRangeBounds = it }
@@ -581,13 +836,14 @@ public class TextMorphState internal constructor(
                 offset++
             }
             if (resolved == ResolvedTextDirection.Rtl) LayoutDirection.Rtl else LayoutDirection.Ltr
-        } else lastKey?.direction ?: LayoutDirection.Ltr
+        } else preparationKey?.direction ?: lastKey?.direction ?: LayoutDirection.Ltr
     }
 
     private fun segmentLayout(s: Segment): TextLayoutResult =
-        cachedSegmentLayout(if (s.kind == SegmentKind.NEWLINE) "" else s.text, segmentLayoutDirection(s))
+        if (useParagraphFragments) layoutResult!! else cachedSegmentLayout(if (s.kind == SegmentKind.NEWLINE) "" else s.text, segmentLayoutDirection(s))
 
     private fun cachedSegmentLayout(text: String, direction: LayoutDirection = lastKey?.direction ?: LayoutDirection.Ltr): TextLayoutResult {
+        val segmentStyle = preparationKey?.style ?: style
         val cache = if (!useBidiSelectionBounds) layoutCache else if (direction == LayoutDirection.Rtl) {
             bidiRtlLayoutCache ?: HashMap<String, TextLayoutResult>().also { bidiRtlLayoutCache = it }
         } else {
@@ -599,8 +855,8 @@ public class TextMorphState internal constructor(
         val measured = morphTrace("Morph:segmentMeasure") {
             textMeasurer.measure(
                 text = AnnotatedString(text),
-                style = if (useBidiSelectionBounds) style.copy(textDirection =
-                    if (direction == LayoutDirection.Rtl) TextDirection.Rtl else TextDirection.Ltr) else style,
+                style = if (useBidiSelectionBounds) segmentStyle.copy(textDirection =
+                    if (direction == LayoutDirection.Rtl) TextDirection.Rtl else TextDirection.Ltr) else segmentStyle,
                 softWrap = false,
                 maxLines = 1,
                 layoutDirection = direction,

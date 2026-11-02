@@ -166,6 +166,11 @@ Requires a JDK (uses a Java 17 toolchain) and, for Android modules, an Android S
 | `./gradlew :torph-compose:connectedDebugAndroidTest` | Compose instrumentation tests (includes `DrawAllocationTest`). |
 | `./gradlew :benchmark:connectedBenchmarkAndroidTest` | Macrobenchmarks (long text, number rolling, interruption, multi-line reflow). |
 
+See [docs/REGRESSION_TESTING.md](docs/REGRESSION_TESTING.md) for rendering/lifecycle coverage,
+[the independent typography reference](docs/TYPOGRAPHY_REFERENCE.md) for exact rendering contracts,
+and [the issue #3 implementation report](docs/DEFERRED_PREPARATION.md) for first-layout savings,
+first-update tradeoffs and native-text validation.
+
 See [docs/BENCHMARKS.md](docs/BENCHMARKS.md) for benchmark results and frame-phase breakdowns, and [docs/STATUS.md](docs/STATUS.md) for implementation status.
 
 ## License and attribution
@@ -174,5 +179,5 @@ MIT licensed. See [LICENSE](LICENSE) and [NOTICE](NOTICE).
 
 This is an independent Kotlin port of [torph](https://torph.lochie.me) by [Lochie Axon](https://github.com/lochie) (MIT). It is a personal project by [Chris Sinco](https://github.com/c5inco) and is not affiliated with, endorsed by, or supported by Google LLC.
 
-See [rendering regression coverage](docs/REGRESSION_TESTING.md) and
-[the independent typography reference](docs/TYPOGRAPHY_REFERENCE.md) for the investigation harness.
+The ordered changes and checks on each extracted revision are recorded in
+[docs/STACK_VALIDATION.md](docs/STACK_VALIDATION.md).

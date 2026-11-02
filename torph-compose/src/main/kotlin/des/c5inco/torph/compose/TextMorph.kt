@@ -20,7 +20,8 @@ import kotlin.time.Duration.Companion.milliseconds
  * Text that morphs between values: shared characters glide to their new position, new ones fade
  * in, removed ones fade out, and digits roll by place value. A port of torph for Jetpack Compose.
  *
- * Everything is drawn on one node; per-frame work is one `drawText` per live segment.
+ * Everything is drawn on one node. Eligible first layouts draw the whole paragraph once;
+ * short-label morphs reuse its shaped regions rather than laying out each glyph separately.
  *
  * @param text Target string. Any change starts (or retargets) a morph.
  * @param style Text style. Its colour is used unless [color] is specified.

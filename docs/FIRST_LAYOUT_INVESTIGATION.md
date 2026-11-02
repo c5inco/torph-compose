@@ -1,7 +1,8 @@
 # Issue #3: first appearance of multiple morphing labels
 
-Historical investigation before PR extraction. Its timings and test counts describe that run;
-current extracted-stage validation is recorded in [STACK_VALIDATION.md](STACK_VALIDATION.md).
+Current implementation and validation: [bounded deferred preparation for issue #3](DEFERRED_PREPARATION.md).
+The results below describe the earlier investigation/renderer; the linked report distinguishes
+the final optimized path, its fallback limits and the latest device measurements.
 
 Investigation baseline: `b7965c3efbf13a4324c6c0e5377d3d0ac75fefb8`.
 Issue: https://github.com/c5inco/torph-compose/issues/3 (left open).

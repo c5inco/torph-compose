@@ -75,7 +75,7 @@ internal data class TypographyCase(
 )
 
 /** Reusable independent reference. No morph geometry or segment layout feeds BasicText. */
-internal class TypographyReferenceHarness(private val rule: androidx.compose.ui.test.junit4.ComposeContentTestRule, reportName: String = "corpus", private val freshInitial: Boolean = false, private val subject: MorphSubject = sharedSubject) {
+internal class TypographyReferenceHarness(private val rule: androidx.compose.ui.test.junit4.ComposeContentTestRule, reportName: String = "corpus", private val freshInitial: Boolean = false, private val deferInitial: Boolean = false, private val subject: MorphSubject = sharedSubject) {
     private var scene by mutableStateOf(TypographyCase("initial", "12345", policy = TypographyPolicy.Exact))
     lateinit var state: TextMorphState
         private set
@@ -103,6 +103,7 @@ internal class TypographyReferenceHarness(private val rule: androidx.compose.ui.
                     Pane("typography-morph") {
                         key(if (freshInitial) scene.id else "retained") {
                         state = subject.rememberState()
+                        state.deferInitialPreparation = deferInitial
                         TextMorph(scene.text, state = state, style = scene.style,
                             segmentation = scene.mode, disabled = !animate, respectReducedMotion = false,
                             modifier = Modifier.onSizeChanged { morphSize = it })
@@ -251,6 +252,66 @@ internal class TypographyReferenceHarness(private val rule: androidx.compose.ui.
         assertEquals("$label hardware handoff", 0, difference(previous.second, current.second).first)
     }
 
+    /** Render the real fragment path at target positions before the animation loop completes. */
+    fun assertPreparedFragmentTarget(label: String, perturb: Float = 0f) {
+        lateinit var softwareReference: Bitmap
+        lateinit var softwareCandidate: Bitmap
+        rule.runOnIdle {
+            assertTrue("Must test fragments, not the resting full-string shortcut", state.isAnimating)
+            assertTrue(state.useParagraphFragments)
+            assertNull(state.handoffSource)
+            state.live.removeAll { it.exiting }
+            assertTrue(state.live.isNotEmpty())
+            if (label.startsWith("disjoint-bidi")) {
+                assertTrue("The fixture must exercise two disjoint visual-region interval sets", state.live.count { (it.paragraphSlice?.clipIntervals?.size ?: 0) > 2 } >= 2)
+            }
+            for (live in state.live) {
+                assertNotNull(live.paragraphSlice)
+                assertTrue(live.paragraphSlice!!.clipRect != null || live.paragraphSlice!!.clipIntervals != null)
+                val expected = plain.getPathForRange(live.segment.index, live.segment.end).getBounds()
+                assertEquals(label, expected.left, live.cell.left, 0f)
+                assertEquals(label, expected.right, live.cell.right, 0f)
+                live.x.snapTo(live.cell.left + perturb)
+                live.y.snapTo(live.cell.top)
+                live.alpha.snapTo(1f)
+                live.scale.snapTo(1f)
+                live.strip = null
+                live.clip = null
+            }
+            state.frameTick.intValue++
+            softwareReference = raster { drawText(plain) }
+            softwareCandidate = raster { state.draw(this) }
+        }
+        val hardwareReference = rule.onNodeWithTag("typography-plain").captureToImage().asAndroidBitmap()
+        val hardwareCandidate = rule.onNodeWithTag("typography-morph").captureToImage().asAndroidBitmap()
+        val directory = File(output, label).apply { mkdirs() }
+        save(directory, "software-reference", softwareReference)
+        save(directory, "software-fragments", softwareCandidate)
+        save(directory, "hardware-reference", hardwareReference)
+        save(directory, "hardware-fragments", hardwareCandidate)
+        rule.runOnIdle {
+            val fullDifference = difference(softwareReference, raster { drawText(state.layoutResult!!) }).first
+            android.util.Log.i("FragmentTarget", "$label fullDifference=$fullDifference reference=${plain.size}/${plain.getLineLeft(0)}/${plain.getLineRight(0)} source=${state.layoutResult!!.size}/${state.layoutResult!!.getLineLeft(0)}/${state.layoutResult!!.getLineRight(0)}")
+            File(directory, "regions.json").writeText(JSONArray().also { a -> state.live.forEach { live ->
+                a.put(JSONObject().put("text", live.segment.text).put("cell", live.cell.toString())
+                    .put("sourceText", live.layout.layoutInput.text.text).put("sourceCell", live.paragraphSlice?.bounds.toString())
+                    .put("clipRect", live.paragraphSlice?.clipRect.toString()).put("clipIntervals", live.paragraphSlice?.clipIntervals?.contentToString())
+                    .put("x", live.x.value).put("y", live.y.value))
+            } }.toString(2))
+        }
+        val sw = difference(softwareReference, softwareCandidate).first
+        val hw = difference(hardwareReference, hardwareCandidate).first
+        File(directory, "result.json").writeText(JSONObject().put("softwareChangedPixels", sw)
+            .put("hardwareChangedPixels", hw).put("perturb", perturb).toString(2))
+        if (perturb == 0f) {
+            assertEquals("$label software fragments", 0, sw)
+            assertEquals("$label hardware fragments", 0, hw)
+        } else {
+            assertTrue("$label software oracle must detect displaced fragments", sw > 0)
+            assertTrue("$label hardware oracle must detect displaced fragments", hw > 0)
+        }
+    }
+
     private fun frames() {
         repeat(2) { rule.mainClock.advanceTimeByFrame() }
         rule.waitForIdle()
@@ -326,6 +387,21 @@ class TypographyReferenceTest {
             try { h.compare(case) } catch (e: AssertionError) { failures += "${case.id}: ${e.message}" }
         }
         assertTrue(failures.joinToString("\n"), failures.isEmpty())
+    }
+
+    @Test fun deferredInitialRendererMatchesEveryIndependentCorpusCase() {
+        val h = TypographyReferenceHarness(rule, "deferred-initial-corpus", freshInitial = true, deferInitial = true)
+        h.mount()
+        for (case in typographyCases()) {
+            val policy = if (case.id.startsWith("wrapped")) case.policy else TypographyPolicy.Exact
+            h.compare(case.copy(policy = policy))
+            rule.runOnIdle {
+                if (h.state.layoutResult!!.lineCount == 1) {
+                    assertNotNull(case.id, h.state.deferredLayout)
+                    assertEquals(case.id, 0, h.state.preparedSegmentCount)
+                } else assertNull("Wrapped input must use the eager fallback", h.state.deferredLayout)
+            }
+        }
     }
 
     @Test fun independentReferenceDetectsDeliberatelyDisplacedGlyph() {

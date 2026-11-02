@@ -22,6 +22,9 @@ public object TextMorphDiagnostics {
     /** Emit phase slices for first-layout investigations; disabled by default. */
     public var traceSections: Boolean = false
 
+    /** Controlled eager-renderer baseline for profiling. Captured when a state is created. */
+    public var forceEagerPreparation: Boolean = false
+
     /** Logcat tag for the breakdown lines. */
     public const val TAG: String = "TextMorphPerf"
 }
@@ -39,6 +42,7 @@ internal class MorphTimings {
     var box = 0L
     var segmentLayout = 0L
     var animation = 0L
+    var deferred = 0L
 
     var boxCalls = 0
     var placeCalls = 0
@@ -47,6 +51,7 @@ internal class MorphTimings {
 
     fun reset() {
         measureText = 0; segment = 0; diff = 0; place = 0; box = 0; segmentLayout = 0; animation = 0
+        deferred = 0
         boxCalls = 0; placeCalls = 0; layoutMisses = 0
     }
 
@@ -57,7 +62,7 @@ internal class MorphTimings {
                 "total=${ms(totalNs)} | measureText=${ms(measureText)} segment=${ms(segment)} " +
                 "diff=${ms(diff)} place=${ms(place)} (box=${ms(box)} over $boxCalls chars, " +
                 "$placeCalls calls) segLayout=${ms(segmentLayout)} ($layoutMisses local miss) " +
-                "anim=${ms(animation)}",
+                "anim=${ms(animation)} deferred=${ms(deferred)}",
         )
     }
 

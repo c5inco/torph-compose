@@ -8,6 +8,8 @@ import androidx.activity.enableEdgeToEdge
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // Each benchmark warm-up opens the normal demo with the same renderer configuration.
+        des.c5inco.torph.compose.TextMorphDiagnostics.forceEagerPreparation = false
         enableEdgeToEdge()
         setContent {
             val mode = intent.getStringExtra("firstLayout")
