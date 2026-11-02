@@ -1,6 +1,7 @@
 package des.c5inco.torph.compose
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -16,7 +17,6 @@ import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.TextMeasurer
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.ResolvedTextDirection
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.IntSize
@@ -93,6 +93,7 @@ public class TextMorphState internal constructor(
     private var lastKey: LayoutKey? = null
     private val layoutCache = HashMap<String, TextLayoutResult>()
     private var cacheStyle: TextStyle? = null
+    private var cacheDirection: LayoutDirection? = null
     /** Per-character (left, top, right, bottom) boxes of [charBoxesFor], filled once per layout for [place]. */
     private var charBoxes = FloatArray(0)
     private var charBoxesFor: TextLayoutResult? = null
@@ -125,7 +126,10 @@ public class TextMorphState internal constructor(
         val maxWidth = if (constraints.hasBoundedWidth) constraints.maxWidth else Constraints.Infinity
         val key = LayoutKey(text, style, maxWidth, direction, opts.segmentation, opts.numbers, opts.locale, opts.maxSegments)
         val prev = lastKey
-        if (key != prev) {
+        // Keep an in-flight morph's frozen layouts until it settles when only fonts change.
+        // Reading isAnimating here subscribes layout to completion, so the refresh is not lost.
+        val refreshFonts = layoutResult?.multiParagraph?.intrinsics?.hasStaleResolvedFonts == true && !isAnimating
+        if (key != prev || refreshFonts) {
             lastKey = key
             morphTrace(if (prev == null) "Morph:firstApply" else "Morph:apply") { apply(key, opts, prev) }
         }
@@ -148,6 +152,7 @@ public class TextMorphState internal constructor(
                 text = AnnotatedString(key.text),
                 style = key.style,
                 softWrap = true,
+                layoutDirection = key.direction,
                 constraints = if (key.maxWidth == Constraints.Infinity) Constraints() else Constraints(maxWidth = key.maxWidth),
             )
         }
@@ -155,7 +160,11 @@ public class TextMorphState internal constructor(
         layoutResult = full
         // Text that keeps introducing new words would otherwise grow the cache without bound. Live
         // segments hold their own layouts, so clearing only costs re-measuring the next change.
-        if (cacheStyle != key.style || layoutCache.size > MAX_CACHED_LAYOUTS) { layoutCache.clear(); cacheStyle = key.style }
+        if (cacheStyle != key.style || cacheDirection != key.direction || layoutCache.size > MAX_CACHED_LAYOUTS) {
+            layoutCache.clear()
+            cacheStyle = key.style
+            cacheDirection = key.direction
+        }
         val newSize = Size(full.size.width.toFloat(), full.size.height.toFloat())
 
         val textChanged = key.text != prev?.text
@@ -235,6 +244,12 @@ public class TextMorphState internal constructor(
                 continue
             }
             ls.segment = new
+            // A font may complete in the same pass as a text change. Persisting segments must
+            // pick up the fresh layout too; otherwise only enters would use the loaded font.
+            if (ls.layout.multiParagraph.intrinsics.hasStaleResolvedFonts) {
+                ls.layout = segmentLayout(new)
+                ls.strip = ls.strip?.map { cachedSegmentLayout(it.layoutInput.text.text) }
+            }
             ls.cell = cell
             if (ls.strip == null) { ls.entering = false; ls.clip = null }
             ls.x.animateTo(target.x, moveSpec, now)
@@ -336,17 +351,28 @@ public class TextMorphState internal constructor(
         ensureLoop()
     }
 
-    private fun finishGeneration(cancelled: Boolean) {
+    private fun finishGeneration(cancelled: Boolean, immediate: Boolean = false) {
         if (!generationAnimating) return
         generationAnimating = false
         isAnimating = false
         val cb = if (cancelled) onAnimationCancel else onAnimationComplete
-        if (cb != null) scope.launch { cb() }
+        if (cb != null) {
+            if (immediate) cb() else scope.launch { cb() }
+        }
     }
 
     // endregion
 
     // region frame loop
+
+    /** Forgotten remembered states must not keep animating or leave a start without its cancel. */
+    internal fun dispose() {
+        loop?.cancel()
+        loop = null
+        lastFrameNanos = Channel.UNSET
+        // The remembered scope may already be cancelled during composition disposal.
+        finishGeneration(cancelled = true, immediate = true)
+    }
 
     private fun ensureLoop() {
         if (loop?.isActive == true) return
@@ -494,20 +520,24 @@ public class TextMorphState internal constructor(
         return charBoxes
     }
 
-    private fun segmentLayout(s: Segment): TextLayoutResult {
-        layoutCache[s.text]?.let { return it }
+    private fun segmentLayout(s: Segment): TextLayoutResult =
+        cachedSegmentLayout(if (s.kind == SegmentKind.NEWLINE) "" else s.text)
+
+    private fun cachedSegmentLayout(text: String): TextLayoutResult {
+        layoutCache[text]?.let { if (!it.multiParagraph.intrinsics.hasStaleResolvedFonts) return it }
         val diag = TextMorphDiagnostics.logTimings
         val t0 = if (diag) System.nanoTime() else 0L
         val measured = morphTrace("Morph:segmentMeasure") {
             textMeasurer.measure(
-                text = AnnotatedString(if (s.kind == SegmentKind.NEWLINE) "" else s.text),
+                text = AnnotatedString(text),
                 style = style,
                 softWrap = false,
                 maxLines = 1,
+                layoutDirection = lastKey?.direction ?: LayoutDirection.Ltr,
             )
         }
         if (diag) { timings.segmentLayout += System.nanoTime() - t0; timings.layoutMisses++ }
-        layoutCache[s.text] = measured
+        layoutCache[text] = measured
         return measured
     }
 
@@ -521,9 +551,7 @@ public class TextMorphState internal constructor(
         for (k in 0..steps) {
             val d = if (roll > 0) (a + k) % 10 else (a - k + 10) % 10
             val ch = (zero + d).toString()
-            out.add(layoutCache.getOrPut(ch) {
-                textMeasurer.measure(AnnotatedString(ch), style, softWrap = false, maxLines = 1)
-            })
+            out.add(cachedSegmentLayout(ch))
         }
         return out
     }
@@ -535,14 +563,22 @@ public class TextMorphState internal constructor(
 
 /**
  * Creates and remembers a [TextMorphState]. A new state is created when the text measurer's
- * environment (density, font resolver, layout direction) changes.
+ * environment (owning view, density, font resolver, layout direction, default locales) changes. Layouts are
+ * shared through a bounded cache with other states in the same Compose view and environment;
+ * segment ids, animation channels and geometry remain per state.
  */
 @Composable
 public fun rememberTextMorphState(): TextMorphState {
-    val measurer = rememberTextMeasurer(cacheSize = 0)
+    return rememberTextMorphState(rememberSharedTextMeasurer())
+}
+
+@Composable
+internal fun rememberTextMorphState(measurer: TextMeasurer): TextMorphState {
     val scope = rememberCoroutineScope()
     val segmenter = remember { IcuSegmenter() }
-    return remember(measurer) { TextMorphState(measurer, scope, segmenter) }
+    val state = remember(measurer) { TextMorphState(measurer, scope, segmenter) }
+    DisposableEffect(state) { onDispose { state.dispose() } }
+    return state
 }
 
 /**
@@ -552,6 +588,8 @@ public fun rememberTextMorphState(): TextMorphState {
  * compares the laid-out lines rather than assuming the text before an edit keeps its layout.
  */
 internal fun reusableBoxPrefix(old: TextLayoutResult, new: TextLayoutResult): Int {
+    // Font completion can change interior advances even when the line's total extent is equal.
+    if (old.multiParagraph.intrinsics.hasStaleResolvedFonts) return 0
     val a = old.layoutInput
     val b = new.layoutInput
     if (a.style != b.style || a.constraints != b.constraints || a.layoutDirection != b.layoutDirection ||

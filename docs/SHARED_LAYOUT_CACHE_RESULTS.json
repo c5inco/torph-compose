@@ -1,0 +1,5047 @@
+{
+  "baseline": "b7965c3 + investigation diagnostics (before-source snapshot)",
+  "units": "milliseconds except Count metrics",
+  "scope": "fresh label subtree measurement in a warm process; excludes composition/draw",
+  "devices": {
+    "pixel4xl": {
+      "before": {
+        "context": {
+          "build": {
+            "brand": "google",
+            "device": "coral",
+            "fingerprint": "google/coral/coral:13/TP1A.221005.002.B2/9382335:user/release-keys",
+            "id": "TP1A.221005.002.B2",
+            "model": "Pixel 4 XL",
+            "type": "user",
+            "version": {
+              "codename": "REL",
+              "sdk": 33
+            }
+          },
+          "cpuCoreCount": 8,
+          "cpuLocked": true,
+          "cpuMaxFreqHz": 2841600000,
+          "memTotalBytes": 5730906112,
+          "sustainedPerformanceModeEnabled": false,
+          "artMainlineVersion": 330443000,
+          "osCodenameAbbreviated": "T",
+          "compilationMode": "run-from-apk",
+          "payload": {}
+        },
+        "rawDirectory": "/tmp/torph-shared-cache-20261031/pixel4xl-before",
+        "benchmarks": {
+          "warmMorph16": {
+            "iterations": 5,
+            "metrics": {
+              "Labels:firstMeasureCount": {
+                "minimum": 1.0,
+                "maximum": 1.0,
+                "median": 1.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  1.0,
+                  1.0,
+                  1.0,
+                  1.0,
+                  1.0
+                ]
+              },
+              "Labels:firstMeasureSumMs": {
+                "minimum": 10.234116,
+                "maximum": 11.418387,
+                "median": 10.555158,
+                "coefficientOfVariation": 0.04177855890518843,
+                "runs": [
+                  11.418387,
+                  10.234116,
+                  10.49297,
+                  10.555158,
+                  10.651719
+                ]
+              },
+              "Morph:firstApplyCount": {
+                "minimum": 16.0,
+                "maximum": 16.0,
+                "median": 16.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  16.0,
+                  16.0,
+                  16.0,
+                  16.0,
+                  16.0
+                ]
+              },
+              "Morph:firstApplySumMs": {
+                "minimum": 9.79167,
+                "maximum": 10.800678,
+                "median": 10.083385,
+                "coefficientOfVariation": 0.03708625543861412,
+                "runs": [
+                  10.800678,
+                  9.79167,
+                  10.029584,
+                  10.083385,
+                  10.141094
+                ]
+              },
+              "Morph:fullMeasureCount": {
+                "minimum": 16.0,
+                "maximum": 16.0,
+                "median": 16.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  16.0,
+                  16.0,
+                  16.0,
+                  16.0,
+                  16.0
+                ]
+              },
+              "Morph:fullMeasureSumMs": {
+                "minimum": 0.791614,
+                "maximum": 0.946354,
+                "median": 0.810468,
+                "coefficientOfVariation": 0.07495775530703411,
+                "runs": [
+                  0.946354,
+                  0.791614,
+                  0.808957,
+                  0.810468,
+                  0.822702
+                ]
+              },
+              "Morph:prepareSnapCount": {
+                "minimum": 16.0,
+                "maximum": 16.0,
+                "median": 16.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  16.0,
+                  16.0,
+                  16.0,
+                  16.0,
+                  16.0
+                ]
+              },
+              "Morph:prepareSnapSumMs": {
+                "minimum": 8.088337,
+                "maximum": 8.58125,
+                "median": 8.381041,
+                "coefficientOfVariation": 0.021294510367529867,
+                "runs": [
+                  8.58125,
+                  8.088337,
+                  8.305261,
+                  8.389114,
+                  8.381041
+                ]
+              },
+              "Morph:segmentCount": {
+                "minimum": 16.0,
+                "maximum": 16.0,
+                "median": 16.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  16.0,
+                  16.0,
+                  16.0,
+                  16.0,
+                  16.0
+                ]
+              },
+              "Morph:segmentMeasureCount": {
+                "minimum": 158.0,
+                "maximum": 158.0,
+                "median": 158.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  158.0,
+                  158.0,
+                  158.0,
+                  158.0,
+                  158.0
+                ]
+              },
+              "Morph:segmentMeasureSumMs": {
+                "minimum": 6.37182,
+                "maximum": 6.738282,
+                "median": 6.555264,
+                "coefficientOfVariation": 0.019976519761211717,
+                "runs": [
+                  6.738282,
+                  6.37182,
+                  6.555264,
+                  6.536622,
+                  6.590107
+                ]
+              },
+              "Morph:segmentSumMs": {
+                "minimum": 0.584947,
+                "maximum": 0.872761,
+                "median": 0.602604,
+                "coefficientOfVariation": 0.18758457241556856,
+                "runs": [
+                  0.872761,
+                  0.584947,
+                  0.602604,
+                  0.585573,
+                  0.631145
+                ]
+              },
+              "TextLayout:initLayoutCount": {
+                "minimum": 174.0,
+                "maximum": 174.0,
+                "median": 174.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  174.0,
+                  174.0,
+                  174.0,
+                  174.0,
+                  174.0
+                ]
+              },
+              "TextLayout:initLayoutSumMs": {
+                "minimum": 0.884052,
+                "maximum": 0.94868,
+                "median": 0.917182,
+                "coefficientOfVariation": 0.03309666749783939,
+                "runs": [
+                  0.948492,
+                  0.892131,
+                  0.884052,
+                  0.94868,
+                  0.917182
+                ]
+              }
+            },
+            "traces": [
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 0",
+                "filename": "FirstLayoutBenchmark_warmMorph16_iter000_2026-10-31-22-44-41.perfetto-trace"
+              },
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 1",
+                "filename": "FirstLayoutBenchmark_warmMorph16_iter001_2026-10-31-22-44-43.perfetto-trace"
+              },
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 2",
+                "filename": "FirstLayoutBenchmark_warmMorph16_iter002_2026-10-31-22-44-46.perfetto-trace"
+              },
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 3",
+                "filename": "FirstLayoutBenchmark_warmMorph16_iter003_2026-10-31-22-44-49.perfetto-trace"
+              },
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 4",
+                "filename": "FirstLayoutBenchmark_warmMorph16_iter004_2026-10-31-22-44-51.perfetto-trace"
+              }
+            ]
+          },
+          "warmMorph16Auto": {
+            "iterations": 5,
+            "metrics": {
+              "Labels:firstMeasureCount": {
+                "minimum": 1.0,
+                "maximum": 1.0,
+                "median": 1.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  1.0,
+                  1.0,
+                  1.0,
+                  1.0,
+                  1.0
+                ]
+              },
+              "Labels:firstMeasureSumMs": {
+                "minimum": 5.845782,
+                "maximum": 7.584063,
+                "median": 6.086615,
+                "coefficientOfVariation": 0.11242962164656141,
+                "runs": [
+                  5.902396,
+                  7.584063,
+                  6.086615,
+                  6.419532,
+                  5.845782
+                ]
+              },
+              "Morph:firstApplyCount": {
+                "minimum": 16.0,
+                "maximum": 16.0,
+                "median": 16.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  16.0,
+                  16.0,
+                  16.0,
+                  16.0,
+                  16.0
+                ]
+              },
+              "Morph:firstApplySumMs": {
+                "minimum": 5.446825,
+                "maximum": 7.06073,
+                "median": 5.712866,
+                "coefficientOfVariation": 0.11299104217411322,
+                "runs": [
+                  5.461094,
+                  7.06073,
+                  5.712866,
+                  5.855002,
+                  5.446825
+                ]
+              },
+              "Morph:fullMeasureCount": {
+                "minimum": 16.0,
+                "maximum": 16.0,
+                "median": 16.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  16.0,
+                  16.0,
+                  16.0,
+                  16.0,
+                  16.0
+                ]
+              },
+              "Morph:fullMeasureSumMs": {
+                "minimum": 0.781825,
+                "maximum": 0.885726,
+                "median": 0.844583,
+                "coefficientOfVariation": 0.04849903934934819,
+                "runs": [
+                  0.781825,
+                  0.885726,
+                  0.808387,
+                  0.853905,
+                  0.844583
+                ]
+              },
+              "Morph:prepareSnapCount": {
+                "minimum": 16.0,
+                "maximum": 16.0,
+                "median": 16.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  16.0,
+                  16.0,
+                  16.0,
+                  16.0,
+                  16.0
+                ]
+              },
+              "Morph:prepareSnapSumMs": {
+                "minimum": 3.798801,
+                "maximum": 4.977554,
+                "median": 4.069115,
+                "coefficientOfVariation": 0.114615596759968,
+                "runs": [
+                  3.837138,
+                  4.977554,
+                  4.142397,
+                  4.069115,
+                  3.798801
+                ]
+              },
+              "Morph:segmentCount": {
+                "minimum": 16.0,
+                "maximum": 16.0,
+                "median": 16.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  16.0,
+                  16.0,
+                  16.0,
+                  16.0,
+                  16.0
+                ]
+              },
+              "Morph:segmentMeasureCount": {
+                "minimum": 68.0,
+                "maximum": 68.0,
+                "median": 68.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  68.0,
+                  68.0,
+                  68.0,
+                  68.0,
+                  68.0
+                ]
+              },
+              "Morph:segmentMeasureSumMs": {
+                "minimum": 2.720466,
+                "maximum": 3.775833,
+                "median": 2.895521,
+                "coefficientOfVariation": 0.14453941098613932,
+                "runs": [
+                  2.754117,
+                  3.775833,
+                  2.895521,
+                  2.913954,
+                  2.720466
+                ]
+              },
+              "Morph:segmentSumMs": {
+                "minimum": 0.50969,
+                "maximum": 0.903386,
+                "median": 0.537757,
+                "coefficientOfVariation": 0.2635086779937511,
+                "runs": [
+                  0.529165,
+                  0.903386,
+                  0.50969,
+                  0.63224,
+                  0.537757
+                ]
+              },
+              "TextLayout:initLayoutCount": {
+                "minimum": 84.0,
+                "maximum": 84.0,
+                "median": 84.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  84.0,
+                  84.0,
+                  84.0,
+                  84.0,
+                  84.0
+                ]
+              },
+              "TextLayout:initLayoutSumMs": {
+                "minimum": 0.443024,
+                "maximum": 0.464789,
+                "median": 0.45599,
+                "coefficientOfVariation": 0.020032793531130993,
+                "runs": [
+                  0.443024,
+                  0.45599,
+                  0.464789,
+                  0.457914,
+                  0.445304
+                ]
+              }
+            },
+            "traces": [
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 0",
+                "filename": "FirstLayoutBenchmark_warmMorph16Auto_iter000_2026-10-31-22-44-58.perfetto-trace"
+              },
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 1",
+                "filename": "FirstLayoutBenchmark_warmMorph16Auto_iter001_2026-10-31-22-45-01.perfetto-trace"
+              },
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 2",
+                "filename": "FirstLayoutBenchmark_warmMorph16Auto_iter002_2026-10-31-22-45-04.perfetto-trace"
+              },
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 3",
+                "filename": "FirstLayoutBenchmark_warmMorph16Auto_iter003_2026-10-31-22-45-06.perfetto-trace"
+              },
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 4",
+                "filename": "FirstLayoutBenchmark_warmMorph16Auto_iter004_2026-10-31-22-45-09.perfetto-trace"
+              }
+            ]
+          },
+          "warmMorph8": {
+            "iterations": 5,
+            "metrics": {
+              "Labels:firstMeasureCount": {
+                "minimum": 1.0,
+                "maximum": 1.0,
+                "median": 1.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  1.0,
+                  1.0,
+                  1.0,
+                  1.0,
+                  1.0
+                ]
+              },
+              "Labels:firstMeasureSumMs": {
+                "minimum": 5.112188,
+                "maximum": 6.536198,
+                "median": 5.491928,
+                "coefficientOfVariation": 0.09810772811301045,
+                "runs": [
+                  6.536198,
+                  5.491928,
+                  5.112188,
+                  5.604897,
+                  5.306354
+                ]
+              },
+              "Morph:firstApplyCount": {
+                "minimum": 8.0,
+                "maximum": 8.0,
+                "median": 8.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0
+                ]
+              },
+              "Morph:firstApplySumMs": {
+                "minimum": 4.850938,
+                "maximum": 6.005573,
+                "median": 5.133178,
+                "coefficientOfVariation": 0.0869540202730392,
+                "runs": [
+                  6.005573,
+                  5.133178,
+                  4.850938,
+                  5.252813,
+                  4.955001
+                ]
+              },
+              "Morph:fullMeasureCount": {
+                "minimum": 8.0,
+                "maximum": 8.0,
+                "median": 8.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0
+                ]
+              },
+              "Morph:fullMeasureSumMs": {
+                "minimum": 0.436616,
+                "maximum": 0.529635,
+                "median": 0.453124,
+                "coefficientOfVariation": 0.07898129908317271,
+                "runs": [
+                  0.529635,
+                  0.466144,
+                  0.436616,
+                  0.453124,
+                  0.447187
+                ]
+              },
+              "Morph:prepareSnapCount": {
+                "minimum": 8.0,
+                "maximum": 8.0,
+                "median": 8.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0
+                ]
+              },
+              "Morph:prepareSnapSumMs": {
+                "minimum": 3.964166,
+                "maximum": 4.734324,
+                "median": 4.152344,
+                "coefficientOfVariation": 0.07305864516250793,
+                "runs": [
+                  4.734324,
+                  4.152344,
+                  3.964166,
+                  4.236667,
+                  4.007397
+                ]
+              },
+              "Morph:segmentCount": {
+                "minimum": 8.0,
+                "maximum": 8.0,
+                "median": 8.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0
+                ]
+              },
+              "Morph:segmentMeasureCount": {
+                "minimum": 79.0,
+                "maximum": 79.0,
+                "median": 79.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  79.0,
+                  79.0,
+                  79.0,
+                  79.0,
+                  79.0
+                ]
+              },
+              "Morph:segmentMeasureSumMs": {
+                "minimum": 3.146566,
+                "maximum": 3.721043,
+                "median": 3.279425,
+                "coefficientOfVariation": 0.07031794485460857,
+                "runs": [
+                  3.721043,
+                  3.279425,
+                  3.157085,
+                  3.33396,
+                  3.146566
+                ]
+              },
+              "Morph:segmentSumMs": {
+                "minimum": 0.303959,
+                "maximum": 0.518592,
+                "median": 0.342136,
+                "coefficientOfVariation": 0.22262865328400655,
+                "runs": [
+                  0.518592,
+                  0.340675,
+                  0.303959,
+                  0.371511,
+                  0.342136
+                ]
+              },
+              "TextLayout:initLayoutCount": {
+                "minimum": 87.0,
+                "maximum": 87.0,
+                "median": 87.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  87.0,
+                  87.0,
+                  87.0,
+                  87.0,
+                  87.0
+                ]
+              },
+              "TextLayout:initLayoutSumMs": {
+                "minimum": 0.450366,
+                "maximum": 0.549476,
+                "median": 0.484268,
+                "coefficientOfVariation": 0.08293530909125751,
+                "runs": [
+                  0.519899,
+                  0.549476,
+                  0.484268,
+                  0.463125,
+                  0.450366
+                ]
+              }
+            },
+            "traces": [
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 0",
+                "filename": "FirstLayoutBenchmark_warmMorph8_iter000_2026-10-31-22-45-15.perfetto-trace"
+              },
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 1",
+                "filename": "FirstLayoutBenchmark_warmMorph8_iter001_2026-10-31-22-45-17.perfetto-trace"
+              },
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 2",
+                "filename": "FirstLayoutBenchmark_warmMorph8_iter002_2026-10-31-22-45-20.perfetto-trace"
+              },
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 3",
+                "filename": "FirstLayoutBenchmark_warmMorph8_iter003_2026-10-31-22-45-22.perfetto-trace"
+              },
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 4",
+                "filename": "FirstLayoutBenchmark_warmMorph8_iter004_2026-10-31-22-45-25.perfetto-trace"
+              }
+            ]
+          },
+          "warmMorph8Auto": {
+            "iterations": 5,
+            "metrics": {
+              "Labels:firstMeasureCount": {
+                "minimum": 1.0,
+                "maximum": 1.0,
+                "median": 1.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  1.0,
+                  1.0,
+                  1.0,
+                  1.0,
+                  1.0
+                ]
+              },
+              "Labels:firstMeasureSumMs": {
+                "minimum": 3.137761,
+                "maximum": 4.914375,
+                "median": 3.677604,
+                "coefficientOfVariation": 0.17758369415217268,
+                "runs": [
+                  3.816771,
+                  3.446979,
+                  4.914375,
+                  3.677604,
+                  3.137761
+                ]
+              },
+              "Morph:firstApplyCount": {
+                "minimum": 8.0,
+                "maximum": 8.0,
+                "median": 8.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0
+                ]
+              },
+              "Morph:firstApplySumMs": {
+                "minimum": 2.86948,
+                "maximum": 3.875208,
+                "median": 3.080835,
+                "coefficientOfVariation": 0.12777332175937067,
+                "runs": [
+                  3.080835,
+                  2.907864,
+                  3.875208,
+                  3.256617,
+                  2.86948
+                ]
+              },
+              "Morph:fullMeasureCount": {
+                "minimum": 8.0,
+                "maximum": 8.0,
+                "median": 8.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0
+                ]
+              },
+              "Morph:fullMeasureSumMs": {
+                "minimum": 0.446356,
+                "maximum": 0.689739,
+                "median": 0.483334,
+                "coefficientOfVariation": 0.19269649268286507,
+                "runs": [
+                  0.541198,
+                  0.446356,
+                  0.483334,
+                  0.689739,
+                  0.452394
+                ]
+              },
+              "Morph:prepareSnapCount": {
+                "minimum": 8.0,
+                "maximum": 8.0,
+                "median": 8.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0
+                ]
+              },
+              "Morph:prepareSnapSumMs": {
+                "minimum": 1.95896,
+                "maximum": 2.931979,
+                "median": 2.048855,
+                "coefficientOfVariation": 0.18494559451536266,
+                "runs": [
+                  2.048855,
+                  1.95896,
+                  2.931979,
+                  2.136356,
+                  1.979271
+                ]
+              },
+              "Morph:segmentCount": {
+                "minimum": 8.0,
+                "maximum": 8.0,
+                "median": 8.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0
+                ]
+              },
+              "Morph:segmentMeasureCount": {
+                "minimum": 34.0,
+                "maximum": 34.0,
+                "median": 34.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  34.0,
+                  34.0,
+                  34.0,
+                  34.0,
+                  34.0
+                ]
+              },
+              "Morph:segmentMeasureSumMs": {
+                "minimum": 1.392813,
+                "maximum": 2.244586,
+                "median": 1.45052,
+                "coefficientOfVariation": 0.22254940790856487,
+                "runs": [
+                  1.45052,
+                  1.392813,
+                  2.244586,
+                  1.538125,
+                  1.42708
+                ]
+              },
+              "Morph:segmentSumMs": {
+                "minimum": 0.285312,
+                "maximum": 0.367966,
+                "median": 0.313438,
+                "coefficientOfVariation": 0.10301027332388885,
+                "runs": [
+                  0.34005,
+                  0.367966,
+                  0.313438,
+                  0.285312,
+                  0.299115
+                ]
+              },
+              "TextLayout:initLayoutCount": {
+                "minimum": 42.0,
+                "maximum": 42.0,
+                "median": 42.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  42.0,
+                  42.0,
+                  42.0,
+                  42.0,
+                  42.0
+                ]
+              },
+              "TextLayout:initLayoutSumMs": {
+                "minimum": 0.185626,
+                "maximum": 0.419632,
+                "median": 0.233332,
+                "coefficientOfVariation": 0.36259024847288596,
+                "runs": [
+                  0.233332,
+                  0.211042,
+                  0.185626,
+                  0.419632,
+                  0.23485
+                ]
+              }
+            },
+            "traces": [
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 0",
+                "filename": "FirstLayoutBenchmark_warmMorph8Auto_iter000_2026-10-31-22-45-31.perfetto-trace"
+              },
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 1",
+                "filename": "FirstLayoutBenchmark_warmMorph8Auto_iter001_2026-10-31-22-45-34.perfetto-trace"
+              },
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 2",
+                "filename": "FirstLayoutBenchmark_warmMorph8Auto_iter002_2026-10-31-22-45-36.perfetto-trace"
+              },
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 3",
+                "filename": "FirstLayoutBenchmark_warmMorph8Auto_iter003_2026-10-31-22-45-39.perfetto-trace"
+              },
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 4",
+                "filename": "FirstLayoutBenchmark_warmMorph8Auto_iter004_2026-10-31-22-45-42.perfetto-trace"
+              }
+            ]
+          },
+          "warmPlain8": {
+            "iterations": 5,
+            "metrics": {
+              "Labels:firstMeasureCount": {
+                "minimum": 1.0,
+                "maximum": 1.0,
+                "median": 1.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  1.0,
+                  1.0,
+                  1.0,
+                  1.0,
+                  1.0
+                ]
+              },
+              "Labels:firstMeasureSumMs": {
+                "minimum": 0.547552,
+                "maximum": 0.723437,
+                "median": 0.63125,
+                "coefficientOfVariation": 0.1036687347718918,
+                "runs": [
+                  0.618542,
+                  0.547552,
+                  0.63125,
+                  0.723437,
+                  0.679584
+                ]
+              },
+              "Morph:firstApplyCount": {
+                "minimum": 0.0,
+                "maximum": 0.0,
+                "median": 0.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "Morph:firstApplySumMs": {
+                "minimum": 0.0,
+                "maximum": 0.0,
+                "median": 0.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "Morph:fullMeasureCount": {
+                "minimum": 0.0,
+                "maximum": 0.0,
+                "median": 0.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "Morph:fullMeasureSumMs": {
+                "minimum": 0.0,
+                "maximum": 0.0,
+                "median": 0.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "Morph:prepareSnapCount": {
+                "minimum": 0.0,
+                "maximum": 0.0,
+                "median": 0.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "Morph:prepareSnapSumMs": {
+                "minimum": 0.0,
+                "maximum": 0.0,
+                "median": 0.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "Morph:segmentCount": {
+                "minimum": 0.0,
+                "maximum": 0.0,
+                "median": 0.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "Morph:segmentMeasureCount": {
+                "minimum": 0.0,
+                "maximum": 0.0,
+                "median": 0.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "Morph:segmentMeasureSumMs": {
+                "minimum": 0.0,
+                "maximum": 0.0,
+                "median": 0.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "Morph:segmentSumMs": {
+                "minimum": 0.0,
+                "maximum": 0.0,
+                "median": 0.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "TextLayout:initLayoutCount": {
+                "minimum": 8.0,
+                "maximum": 8.0,
+                "median": 8.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0
+                ]
+              },
+              "TextLayout:initLayoutSumMs": {
+                "minimum": 0.033125,
+                "maximum": 0.051458,
+                "median": 0.043958,
+                "coefficientOfVariation": 0.15210709499871078,
+                "runs": [
+                  0.051458,
+                  0.033125,
+                  0.043958,
+                  0.045677,
+                  0.0438
+                ]
+              }
+            },
+            "traces": [
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 0",
+                "filename": "FirstLayoutBenchmark_warmPlain8_iter000_2026-10-31-22-45-48.perfetto-trace"
+              },
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 1",
+                "filename": "FirstLayoutBenchmark_warmPlain8_iter001_2026-10-31-22-45-50.perfetto-trace"
+              },
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 2",
+                "filename": "FirstLayoutBenchmark_warmPlain8_iter002_2026-10-31-22-45-53.perfetto-trace"
+              },
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 3",
+                "filename": "FirstLayoutBenchmark_warmPlain8_iter003_2026-10-31-22-45-56.perfetto-trace"
+              },
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 4",
+                "filename": "FirstLayoutBenchmark_warmPlain8_iter004_2026-10-31-22-45-58.perfetto-trace"
+              }
+            ]
+          },
+          "warmPlain8Repeated": {
+            "iterations": 5,
+            "metrics": {
+              "Labels:firstMeasureCount": {
+                "minimum": 1.0,
+                "maximum": 1.0,
+                "median": 1.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  1.0,
+                  1.0,
+                  1.0,
+                  1.0,
+                  1.0
+                ]
+              },
+              "Labels:firstMeasureSumMs": {
+                "minimum": 0.615416,
+                "maximum": 0.900364,
+                "median": 0.643646,
+                "coefficientOfVariation": 0.16749684064425258,
+                "runs": [
+                  0.643646,
+                  0.638229,
+                  0.615416,
+                  0.900364,
+                  0.753073
+                ]
+              },
+              "Morph:firstApplyCount": {
+                "minimum": 0.0,
+                "maximum": 0.0,
+                "median": 0.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "Morph:firstApplySumMs": {
+                "minimum": 0.0,
+                "maximum": 0.0,
+                "median": 0.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "Morph:fullMeasureCount": {
+                "minimum": 0.0,
+                "maximum": 0.0,
+                "median": 0.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "Morph:fullMeasureSumMs": {
+                "minimum": 0.0,
+                "maximum": 0.0,
+                "median": 0.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "Morph:prepareSnapCount": {
+                "minimum": 0.0,
+                "maximum": 0.0,
+                "median": 0.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "Morph:prepareSnapSumMs": {
+                "minimum": 0.0,
+                "maximum": 0.0,
+                "median": 0.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "Morph:segmentCount": {
+                "minimum": 0.0,
+                "maximum": 0.0,
+                "median": 0.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "Morph:segmentMeasureCount": {
+                "minimum": 0.0,
+                "maximum": 0.0,
+                "median": 0.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "Morph:segmentMeasureSumMs": {
+                "minimum": 0.0,
+                "maximum": 0.0,
+                "median": 0.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "Morph:segmentSumMs": {
+                "minimum": 0.0,
+                "maximum": 0.0,
+                "median": 0.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "TextLayout:initLayoutCount": {
+                "minimum": 8.0,
+                "maximum": 8.0,
+                "median": 8.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0
+                ]
+              },
+              "TextLayout:initLayoutSumMs": {
+                "minimum": 0.04099,
+                "maximum": 0.053023,
+                "median": 0.04875,
+                "coefficientOfVariation": 0.10122190223393178,
+                "runs": [
+                  0.049896,
+                  0.053023,
+                  0.04875,
+                  0.04099,
+                  0.044065
+                ]
+              }
+            },
+            "traces": [
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 0",
+                "filename": "FirstLayoutBenchmark_warmPlain8Repeated_iter000_2026-10-31-22-46-04.perfetto-trace"
+              },
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 1",
+                "filename": "FirstLayoutBenchmark_warmPlain8Repeated_iter001_2026-10-31-22-46-07.perfetto-trace"
+              },
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 2",
+                "filename": "FirstLayoutBenchmark_warmPlain8Repeated_iter002_2026-10-31-22-46-10.perfetto-trace"
+              },
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 3",
+                "filename": "FirstLayoutBenchmark_warmPlain8Repeated_iter003_2026-10-31-22-46-12.perfetto-trace"
+              },
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 4",
+                "filename": "FirstLayoutBenchmark_warmPlain8Repeated_iter004_2026-10-31-22-46-15.perfetto-trace"
+              }
+            ]
+          },
+          "warmMorph8Repeated": {
+            "iterations": 5,
+            "metrics": {
+              "Labels:firstMeasureCount": {
+                "minimum": 1.0,
+                "maximum": 1.0,
+                "median": 1.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  1.0,
+                  1.0,
+                  1.0,
+                  1.0,
+                  1.0
+                ]
+              },
+              "Labels:firstMeasureSumMs": {
+                "minimum": 3.455626,
+                "maximum": 4.339583,
+                "median": 3.685626,
+                "coefficientOfVariation": 0.08772842446320757,
+                "runs": [
+                  3.685626,
+                  3.752396,
+                  3.455626,
+                  4.339583,
+                  3.670365
+                ]
+              },
+              "Morph:firstApplyCount": {
+                "minimum": 8.0,
+                "maximum": 8.0,
+                "median": 8.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0
+                ]
+              },
+              "Morph:firstApplySumMs": {
+                "minimum": 3.224689,
+                "maximum": 3.835938,
+                "median": 3.341251,
+                "coefficientOfVariation": 0.07031019646440974,
+                "runs": [
+                  3.341251,
+                  3.320781,
+                  3.224689,
+                  3.835938,
+                  3.359428
+                ]
+              },
+              "Morph:fullMeasureCount": {
+                "minimum": 8.0,
+                "maximum": 8.0,
+                "median": 8.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0
+                ]
+              },
+              "Morph:fullMeasureSumMs": {
+                "minimum": 0.438957,
+                "maximum": 0.544948,
+                "median": 0.453959,
+                "coefficientOfVariation": 0.09515251864132193,
+                "runs": [
+                  0.453959,
+                  0.438957,
+                  0.495208,
+                  0.544948,
+                  0.441457
+                ]
+              },
+              "Morph:prepareSnapCount": {
+                "minimum": 8.0,
+                "maximum": 8.0,
+                "median": 8.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0
+                ]
+              },
+              "Morph:prepareSnapSumMs": {
+                "minimum": 2.498802,
+                "maximum": 2.973385,
+                "median": 2.610209,
+                "coefficientOfVariation": 0.06840825594677673,
+                "runs": [
+                  2.610209,
+                  2.579114,
+                  2.498802,
+                  2.973385,
+                  2.680626
+                ]
+              },
+              "Morph:segmentCount": {
+                "minimum": 8.0,
+                "maximum": 8.0,
+                "median": 8.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0
+                ]
+              },
+              "Morph:segmentMeasureCount": {
+                "minimum": 48.0,
+                "maximum": 48.0,
+                "median": 48.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  48.0,
+                  48.0,
+                  48.0,
+                  48.0,
+                  48.0
+                ]
+              },
+              "Morph:segmentMeasureSumMs": {
+                "minimum": 1.979949,
+                "maximum": 2.312966,
+                "median": 2.054581,
+                "coefficientOfVariation": 0.06272597706455176,
+                "runs": [
+                  2.026667,
+                  2.054581,
+                  1.979949,
+                  2.312966,
+                  2.151716
+                ]
+              },
+              "Morph:segmentSumMs": {
+                "minimum": 0.078958,
+                "maximum": 0.119635,
+                "median": 0.0887,
+                "coefficientOfVariation": 0.17073555571550478,
+                "runs": [
+                  0.106876,
+                  0.0887,
+                  0.078958,
+                  0.119635,
+                  0.087969
+                ]
+              },
+              "TextLayout:initLayoutCount": {
+                "minimum": 56.0,
+                "maximum": 56.0,
+                "median": 56.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  56.0,
+                  56.0,
+                  56.0,
+                  56.0,
+                  56.0
+                ]
+              },
+              "TextLayout:initLayoutSumMs": {
+                "minimum": 0.286407,
+                "maximum": 0.330882,
+                "median": 0.303175,
+                "coefficientOfVariation": 0.05937523438573081,
+                "runs": [
+                  0.294326,
+                  0.286407,
+                  0.303175,
+                  0.330882,
+                  0.319585
+                ]
+              }
+            },
+            "traces": [
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 0",
+                "filename": "FirstLayoutBenchmark_warmMorph8Repeated_iter000_2026-10-31-22-46-21.perfetto-trace"
+              },
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 1",
+                "filename": "FirstLayoutBenchmark_warmMorph8Repeated_iter001_2026-10-31-22-46-24.perfetto-trace"
+              },
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 2",
+                "filename": "FirstLayoutBenchmark_warmMorph8Repeated_iter002_2026-10-31-22-46-26.perfetto-trace"
+              },
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 3",
+                "filename": "FirstLayoutBenchmark_warmMorph8Repeated_iter003_2026-10-31-22-46-29.perfetto-trace"
+              },
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 4",
+                "filename": "FirstLayoutBenchmark_warmMorph8Repeated_iter004_2026-10-31-22-46-31.perfetto-trace"
+              }
+            ]
+          },
+          "warmPlain16": {
+            "iterations": 5,
+            "metrics": {
+              "Labels:firstMeasureCount": {
+                "minimum": 1.0,
+                "maximum": 1.0,
+                "median": 1.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  1.0,
+                  1.0,
+                  1.0,
+                  1.0,
+                  1.0
+                ]
+              },
+              "Labels:firstMeasureSumMs": {
+                "minimum": 1.037812,
+                "maximum": 1.451928,
+                "median": 1.079584,
+                "coefficientOfVariation": 0.14806666778320288,
+                "runs": [
+                  1.037812,
+                  1.079584,
+                  1.118854,
+                  1.451928,
+                  1.068803
+                ]
+              },
+              "Morph:firstApplyCount": {
+                "minimum": 0.0,
+                "maximum": 0.0,
+                "median": 0.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "Morph:firstApplySumMs": {
+                "minimum": 0.0,
+                "maximum": 0.0,
+                "median": 0.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "Morph:fullMeasureCount": {
+                "minimum": 0.0,
+                "maximum": 0.0,
+                "median": 0.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "Morph:fullMeasureSumMs": {
+                "minimum": 0.0,
+                "maximum": 0.0,
+                "median": 0.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "Morph:prepareSnapCount": {
+                "minimum": 0.0,
+                "maximum": 0.0,
+                "median": 0.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "Morph:prepareSnapSumMs": {
+                "minimum": 0.0,
+                "maximum": 0.0,
+                "median": 0.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "Morph:segmentCount": {
+                "minimum": 0.0,
+                "maximum": 0.0,
+                "median": 0.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "Morph:segmentMeasureCount": {
+                "minimum": 0.0,
+                "maximum": 0.0,
+                "median": 0.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "Morph:segmentMeasureSumMs": {
+                "minimum": 0.0,
+                "maximum": 0.0,
+                "median": 0.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "Morph:segmentSumMs": {
+                "minimum": 0.0,
+                "maximum": 0.0,
+                "median": 0.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "TextLayout:initLayoutCount": {
+                "minimum": 16.0,
+                "maximum": 16.0,
+                "median": 16.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  16.0,
+                  16.0,
+                  16.0,
+                  16.0,
+                  16.0
+                ]
+              },
+              "TextLayout:initLayoutSumMs": {
+                "minimum": 0.082968,
+                "maximum": 0.113383,
+                "median": 0.089113,
+                "coefficientOfVariation": 0.1330073860993257,
+                "runs": [
+                  0.089113,
+                  0.089741,
+                  0.085106,
+                  0.113383,
+                  0.082968
+                ]
+              }
+            },
+            "traces": [
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 0",
+                "filename": "FirstLayoutBenchmark_warmPlain16_iter000_2026-10-31-22-46-38.perfetto-trace"
+              },
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 1",
+                "filename": "FirstLayoutBenchmark_warmPlain16_iter001_2026-10-31-22-46-40.perfetto-trace"
+              },
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 2",
+                "filename": "FirstLayoutBenchmark_warmPlain16_iter002_2026-10-31-22-46-43.perfetto-trace"
+              },
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 3",
+                "filename": "FirstLayoutBenchmark_warmPlain16_iter003_2026-10-31-22-46-45.perfetto-trace"
+              },
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 4",
+                "filename": "FirstLayoutBenchmark_warmPlain16_iter004_2026-10-31-22-46-48.perfetto-trace"
+              }
+            ]
+          }
+        }
+      },
+      "after": {
+        "context": {
+          "build": {
+            "brand": "google",
+            "device": "coral",
+            "fingerprint": "google/coral/coral:13/TP1A.221005.002.B2/9382335:user/release-keys",
+            "id": "TP1A.221005.002.B2",
+            "model": "Pixel 4 XL",
+            "type": "user",
+            "version": {
+              "codename": "REL",
+              "sdk": 33
+            }
+          },
+          "cpuCoreCount": 8,
+          "cpuLocked": true,
+          "cpuMaxFreqHz": 2841600000,
+          "memTotalBytes": 5730906112,
+          "sustainedPerformanceModeEnabled": false,
+          "artMainlineVersion": 330443000,
+          "osCodenameAbbreviated": "T",
+          "compilationMode": "run-from-apk",
+          "payload": {}
+        },
+        "rawDirectory": "/tmp/torph-shared-cache-20261031/pixel4xl-after",
+        "benchmarks": {
+          "warmMorph16": {
+            "iterations": 5,
+            "metrics": {
+              "Labels:firstMeasureCount": {
+                "minimum": 1.0,
+                "maximum": 1.0,
+                "median": 1.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  1.0,
+                  1.0,
+                  1.0,
+                  1.0,
+                  1.0
+                ]
+              },
+              "Labels:firstMeasureSumMs": {
+                "minimum": 5.552553,
+                "maximum": 6.761302,
+                "median": 5.88349,
+                "coefficientOfVariation": 0.0779619062706109,
+                "runs": [
+                  5.74172,
+                  6.761302,
+                  6.147344,
+                  5.552553,
+                  5.88349
+                ]
+              },
+              "Morph:firstApplyCount": {
+                "minimum": 16.0,
+                "maximum": 16.0,
+                "median": 16.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  16.0,
+                  16.0,
+                  16.0,
+                  16.0,
+                  16.0
+                ]
+              },
+              "Morph:firstApplySumMs": {
+                "minimum": 5.063908,
+                "maximum": 6.287345,
+                "median": 5.282397,
+                "coefficientOfVariation": 0.08941992048993998,
+                "runs": [
+                  5.282397,
+                  6.287345,
+                  5.41578,
+                  5.063908,
+                  5.186252
+                ]
+              },
+              "Morph:fullMeasureCount": {
+                "minimum": 16.0,
+                "maximum": 16.0,
+                "median": 16.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  16.0,
+                  16.0,
+                  16.0,
+                  16.0,
+                  16.0
+                ]
+              },
+              "Morph:fullMeasureSumMs": {
+                "minimum": 0.517083,
+                "maximum": 0.548747,
+                "median": 0.545523,
+                "coefficientOfVariation": 0.024109426764944274,
+                "runs": [
+                  0.517083,
+                  0.548747,
+                  0.536512,
+                  0.546147,
+                  0.545523
+                ]
+              },
+              "Morph:prepareSnapCount": {
+                "minimum": 16.0,
+                "maximum": 16.0,
+                "median": 16.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  16.0,
+                  16.0,
+                  16.0,
+                  16.0,
+                  16.0
+                ]
+              },
+              "Morph:prepareSnapSumMs": {
+                "minimum": 3.590472,
+                "maximum": 4.74724,
+                "median": 3.845261,
+                "coefficientOfVariation": 0.11510236414816451,
+                "runs": [
+                  3.845261,
+                  4.74724,
+                  3.982134,
+                  3.590472,
+                  3.700312
+                ]
+              },
+              "Morph:segmentCount": {
+                "minimum": 16.0,
+                "maximum": 16.0,
+                "median": 16.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  16.0,
+                  16.0,
+                  16.0,
+                  16.0,
+                  16.0
+                ]
+              },
+              "Morph:segmentMeasureCount": {
+                "minimum": 158.0,
+                "maximum": 158.0,
+                "median": 158.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  158.0,
+                  158.0,
+                  158.0,
+                  158.0,
+                  158.0
+                ]
+              },
+              "Morph:segmentMeasureSumMs": {
+                "minimum": 2.166199,
+                "maximum": 3.356662,
+                "median": 2.22714,
+                "coefficientOfVariation": 0.2072584793862668,
+                "runs": [
+                  2.328436,
+                  3.356662,
+                  2.166199,
+                  2.190105,
+                  2.22714
+                ]
+              },
+              "Morph:segmentSumMs": {
+                "minimum": 0.603697,
+                "maximum": 0.642032,
+                "median": 0.61792,
+                "coefficientOfVariation": 0.022641734052294634,
+                "runs": [
+                  0.616355,
+                  0.642032,
+                  0.603697,
+                  0.61792,
+                  0.625259
+                ]
+              },
+              "TextLayout:initLayoutCount": {
+                "minimum": 45.0,
+                "maximum": 45.0,
+                "median": 45.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  45.0,
+                  45.0,
+                  45.0,
+                  45.0,
+                  45.0
+                ]
+              },
+              "TextLayout:initLayoutSumMs": {
+                "minimum": 0.242916,
+                "maximum": 1.332186,
+                "median": 0.259744,
+                "coefficientOfVariation": 1.0253074344319726,
+                "runs": [
+                  0.255106,
+                  1.332186,
+                  0.260469,
+                  0.242916,
+                  0.259744
+                ]
+              }
+            },
+            "traces": [
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 0",
+                "filename": "FirstLayoutBenchmark_warmMorph16_iter000_2026-10-31-22-48-16.perfetto-trace"
+              },
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 1",
+                "filename": "FirstLayoutBenchmark_warmMorph16_iter001_2026-10-31-22-48-19.perfetto-trace"
+              },
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 2",
+                "filename": "FirstLayoutBenchmark_warmMorph16_iter002_2026-10-31-22-48-21.perfetto-trace"
+              },
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 3",
+                "filename": "FirstLayoutBenchmark_warmMorph16_iter003_2026-10-31-22-48-23.perfetto-trace"
+              },
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 4",
+                "filename": "FirstLayoutBenchmark_warmMorph16_iter004_2026-10-31-22-48-26.perfetto-trace"
+              }
+            ]
+          },
+          "warmMorph16Auto": {
+            "iterations": 5,
+            "metrics": {
+              "Labels:firstMeasureCount": {
+                "minimum": 1.0,
+                "maximum": 1.0,
+                "median": 1.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  1.0,
+                  1.0,
+                  1.0,
+                  1.0,
+                  1.0
+                ]
+              },
+              "Labels:firstMeasureSumMs": {
+                "minimum": 3.743229,
+                "maximum": 4.666458,
+                "median": 3.769167,
+                "coefficientOfVariation": 0.10129004495435388,
+                "runs": [
+                  4.666458,
+                  3.769167,
+                  3.828074,
+                  3.756198,
+                  3.743229
+                ]
+              },
+              "Morph:firstApplyCount": {
+                "minimum": 16.0,
+                "maximum": 16.0,
+                "median": 16.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  16.0,
+                  16.0,
+                  16.0,
+                  16.0,
+                  16.0
+                ]
+              },
+              "Morph:firstApplySumMs": {
+                "minimum": 3.348489,
+                "maximum": 4.040366,
+                "median": 3.363335,
+                "coefficientOfVariation": 0.08565213596593182,
+                "runs": [
+                  4.040366,
+                  3.363335,
+                  3.419948,
+                  3.348489,
+                  3.355939
+                ]
+              },
+              "Morph:fullMeasureCount": {
+                "minimum": 16.0,
+                "maximum": 16.0,
+                "median": 16.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  16.0,
+                  16.0,
+                  16.0,
+                  16.0,
+                  16.0
+                ]
+              },
+              "Morph:fullMeasureSumMs": {
+                "minimum": 0.492863,
+                "maximum": 0.514738,
+                "median": 0.497659,
+                "coefficientOfVariation": 0.018780448001212206,
+                "runs": [
+                  0.492863,
+                  0.514738,
+                  0.497659,
+                  0.493855,
+                  0.507134
+                ]
+              },
+              "Morph:prepareSnapCount": {
+                "minimum": 16.0,
+                "maximum": 16.0,
+                "median": 16.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  16.0,
+                  16.0,
+                  16.0,
+                  16.0,
+                  16.0
+                ]
+              },
+              "Morph:prepareSnapSumMs": {
+                "minimum": 2.109271,
+                "maximum": 2.79943,
+                "median": 2.127812,
+                "coefficientOfVariation": 0.1315629472810857,
+                "runs": [
+                  2.79943,
+                  2.109271,
+                  2.197606,
+                  2.127812,
+                  2.112082
+                ]
+              },
+              "Morph:segmentCount": {
+                "minimum": 16.0,
+                "maximum": 16.0,
+                "median": 16.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  16.0,
+                  16.0,
+                  16.0,
+                  16.0,
+                  16.0
+                ]
+              },
+              "Morph:segmentMeasureCount": {
+                "minimum": 68.0,
+                "maximum": 68.0,
+                "median": 68.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  68.0,
+                  68.0,
+                  68.0,
+                  68.0,
+                  68.0
+                ]
+              },
+              "Morph:segmentMeasureSumMs": {
+                "minimum": 1.174902,
+                "maximum": 1.257343,
+                "median": 1.234528,
+                "coefficientOfVariation": 0.02616514937070317,
+                "runs": [
+                  1.246303,
+                  1.174902,
+                  1.257343,
+                  1.234528,
+                  1.219479
+                ]
+              },
+              "Morph:segmentSumMs": {
+                "minimum": 0.477135,
+                "maximum": 0.497292,
+                "median": 0.493904,
+                "coefficientOfVariation": 0.016817587032935184,
+                "runs": [
+                  0.497292,
+                  0.493904,
+                  0.477135,
+                  0.494897,
+                  0.486303
+                ]
+              },
+              "TextLayout:initLayoutCount": {
+                "minimum": 32.0,
+                "maximum": 32.0,
+                "median": 32.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  32.0,
+                  32.0,
+                  32.0,
+                  32.0,
+                  32.0
+                ]
+              },
+              "TextLayout:initLayoutSumMs": {
+                "minimum": 0.161148,
+                "maximum": 0.176195,
+                "median": 0.165779,
+                "coefficientOfVariation": 0.035397968006348625,
+                "runs": [
+                  0.165779,
+                  0.161148,
+                  0.167972,
+                  0.162706,
+                  0.176195
+                ]
+              }
+            },
+            "traces": [
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 0",
+                "filename": "FirstLayoutBenchmark_warmMorph16Auto_iter000_2026-10-31-22-48-33.perfetto-trace"
+              },
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 1",
+                "filename": "FirstLayoutBenchmark_warmMorph16Auto_iter001_2026-10-31-22-48-35.perfetto-trace"
+              },
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 2",
+                "filename": "FirstLayoutBenchmark_warmMorph16Auto_iter002_2026-10-31-22-48-38.perfetto-trace"
+              },
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 3",
+                "filename": "FirstLayoutBenchmark_warmMorph16Auto_iter003_2026-10-31-22-48-40.perfetto-trace"
+              },
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 4",
+                "filename": "FirstLayoutBenchmark_warmMorph16Auto_iter004_2026-10-31-22-48-43.perfetto-trace"
+              }
+            ]
+          },
+          "warmMorph8": {
+            "iterations": 5,
+            "metrics": {
+              "Labels:firstMeasureCount": {
+                "minimum": 1.0,
+                "maximum": 1.0,
+                "median": 1.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  1.0,
+                  1.0,
+                  1.0,
+                  1.0,
+                  1.0
+                ]
+              },
+              "Labels:firstMeasureSumMs": {
+                "minimum": 3.846615,
+                "maximum": 10.970678,
+                "median": 3.940105,
+                "coefficientOfVariation": 0.5917279840212066,
+                "runs": [
+                  3.909011,
+                  3.846615,
+                  3.940105,
+                  3.982344,
+                  10.970678
+                ]
+              },
+              "Morph:firstApplyCount": {
+                "minimum": 8.0,
+                "maximum": 8.0,
+                "median": 8.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0
+                ]
+              },
+              "Morph:firstApplySumMs": {
+                "minimum": 3.523959,
+                "maximum": 10.153177,
+                "median": 3.622551,
+                "coefficientOfVariation": 0.6010425592728549,
+                "runs": [
+                  3.523959,
+                  3.538959,
+                  3.626353,
+                  3.622551,
+                  10.153177
+                ]
+              },
+              "Morph:fullMeasureCount": {
+                "minimum": 8.0,
+                "maximum": 8.0,
+                "median": 8.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0
+                ]
+              },
+              "Morph:fullMeasureSumMs": {
+                "minimum": 0.430572,
+                "maximum": 1.032761,
+                "median": 0.47125,
+                "coefficientOfVariation": 0.4421066267762052,
+                "runs": [
+                  0.47125,
+                  0.464585,
+                  0.488594,
+                  0.430572,
+                  1.032761
+                ]
+              },
+              "Morph:prepareSnapCount": {
+                "minimum": 8.0,
+                "maximum": 8.0,
+                "median": 8.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0
+                ]
+              },
+              "Morph:prepareSnapSumMs": {
+                "minimum": 2.59474,
+                "maximum": 7.853436,
+                "median": 2.670731,
+                "coefficientOfVariation": 0.6290184266846366,
+                "runs": [
+                  2.59474,
+                  2.610939,
+                  2.670731,
+                  2.750262,
+                  7.853436
+                ]
+              },
+              "Morph:segmentCount": {
+                "minimum": 8.0,
+                "maximum": 8.0,
+                "median": 8.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0
+                ]
+              },
+              "Morph:segmentMeasureCount": {
+                "minimum": 79.0,
+                "maximum": 79.0,
+                "median": 79.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  79.0,
+                  79.0,
+                  79.0,
+                  79.0,
+                  79.0
+                ]
+              },
+              "Morph:segmentMeasureSumMs": {
+                "minimum": 1.539325,
+                "maximum": 5.128435,
+                "median": 1.823127,
+                "coefficientOfVariation": 0.6209140884699164,
+                "runs": [
+                  1.823127,
+                  1.806926,
+                  1.874579,
+                  1.539325,
+                  5.128435
+                ]
+              },
+              "Morph:segmentSumMs": {
+                "minimum": 0.295574,
+                "maximum": 0.843175,
+                "median": 0.311041,
+                "coefficientOfVariation": 0.5826834412883892,
+                "runs": [
+                  0.311041,
+                  0.302082,
+                  0.312812,
+                  0.295574,
+                  0.843175
+                ]
+              },
+              "TextLayout:initLayoutCount": {
+                "minimum": 45.0,
+                "maximum": 45.0,
+                "median": 45.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  45.0,
+                  45.0,
+                  45.0,
+                  45.0,
+                  45.0
+                ]
+              },
+              "TextLayout:initLayoutSumMs": {
+                "minimum": 0.206773,
+                "maximum": 1.130416,
+                "median": 0.254062,
+                "coefficientOfVariation": 0.9389092704717885,
+                "runs": [
+                  0.254062,
+                  0.243599,
+                  0.27719,
+                  0.206773,
+                  1.130416
+                ]
+              }
+            },
+            "traces": [
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 0",
+                "filename": "FirstLayoutBenchmark_warmMorph8_iter000_2026-10-31-22-48-49.perfetto-trace"
+              },
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 1",
+                "filename": "FirstLayoutBenchmark_warmMorph8_iter001_2026-10-31-22-48-52.perfetto-trace"
+              },
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 2",
+                "filename": "FirstLayoutBenchmark_warmMorph8_iter002_2026-10-31-22-48-54.perfetto-trace"
+              },
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 3",
+                "filename": "FirstLayoutBenchmark_warmMorph8_iter003_2026-10-31-22-48-57.perfetto-trace"
+              },
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 4",
+                "filename": "FirstLayoutBenchmark_warmMorph8_iter004_2026-10-31-22-48-59.perfetto-trace"
+              }
+            ]
+          },
+          "warmMorph8Auto": {
+            "iterations": 5,
+            "metrics": {
+              "Labels:firstMeasureCount": {
+                "minimum": 1.0,
+                "maximum": 1.0,
+                "median": 1.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  1.0,
+                  1.0,
+                  1.0,
+                  1.0,
+                  1.0
+                ]
+              },
+              "Labels:firstMeasureSumMs": {
+                "minimum": 2.486979,
+                "maximum": 3.39474,
+                "median": 2.836563,
+                "coefficientOfVariation": 0.1178022273249859,
+                "runs": [
+                  2.486979,
+                  2.698385,
+                  2.836563,
+                  2.941771,
+                  3.39474
+                ]
+              },
+              "Morph:firstApplyCount": {
+                "minimum": 8.0,
+                "maximum": 8.0,
+                "median": 8.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0
+                ]
+              },
+              "Morph:firstApplySumMs": {
+                "minimum": 2.120886,
+                "maximum": 3.02922,
+                "median": 2.594635,
+                "coefficientOfVariation": 0.12789733967489683,
+                "runs": [
+                  2.120886,
+                  2.459582,
+                  2.594635,
+                  2.656979,
+                  3.02922
+                ]
+              },
+              "Morph:fullMeasureCount": {
+                "minimum": 8.0,
+                "maximum": 8.0,
+                "median": 8.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0
+                ]
+              },
+              "Morph:fullMeasureSumMs": {
+                "minimum": 0.416354,
+                "maximum": 0.563958,
+                "median": 0.472292,
+                "coefficientOfVariation": 0.11072933619884315,
+                "runs": [
+                  0.416354,
+                  0.471458,
+                  0.473334,
+                  0.472292,
+                  0.563958
+                ]
+              },
+              "Morph:prepareSnapCount": {
+                "minimum": 8.0,
+                "maximum": 8.0,
+                "median": 8.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0
+                ]
+              },
+              "Morph:prepareSnapSumMs": {
+                "minimum": 1.349951,
+                "maximum": 1.921409,
+                "median": 1.714011,
+                "coefficientOfVariation": 0.1293764084870346,
+                "runs": [
+                  1.349951,
+                  1.572865,
+                  1.714011,
+                  1.762656,
+                  1.921409
+                ]
+              },
+              "Morph:segmentCount": {
+                "minimum": 8.0,
+                "maximum": 8.0,
+                "median": 8.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0
+                ]
+              },
+              "Morph:segmentMeasureCount": {
+                "minimum": 34.0,
+                "maximum": 34.0,
+                "median": 34.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  34.0,
+                  34.0,
+                  34.0,
+                  34.0,
+                  34.0
+                ]
+              },
+              "Morph:segmentMeasureSumMs": {
+                "minimum": 0.901352,
+                "maximum": 1.283696,
+                "median": 1.132187,
+                "coefficientOfVariation": 0.1319277694654316,
+                "runs": [
+                  0.901352,
+                  1.03813,
+                  1.132187,
+                  1.189061,
+                  1.283696
+                ]
+              },
+              "Morph:segmentSumMs": {
+                "minimum": 0.240781,
+                "maximum": 0.368126,
+                "median": 0.282032,
+                "coefficientOfVariation": 0.1615663325761698,
+                "runs": [
+                  0.240781,
+                  0.277448,
+                  0.282916,
+                  0.282032,
+                  0.368126
+                ]
+              },
+              "TextLayout:initLayoutCount": {
+                "minimum": 32.0,
+                "maximum": 32.0,
+                "median": 32.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  32.0,
+                  32.0,
+                  32.0,
+                  32.0,
+                  32.0
+                ]
+              },
+              "TextLayout:initLayoutSumMs": {
+                "minimum": 0.136825,
+                "maximum": 0.195577,
+                "median": 0.164063,
+                "coefficientOfVariation": 0.14780095544632812,
+                "runs": [
+                  0.136825,
+                  0.153803,
+                  0.164063,
+                  0.190888,
+                  0.195577
+                ]
+              }
+            },
+            "traces": [
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 0",
+                "filename": "FirstLayoutBenchmark_warmMorph8Auto_iter000_2026-10-31-22-49-05.perfetto-trace"
+              },
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 1",
+                "filename": "FirstLayoutBenchmark_warmMorph8Auto_iter001_2026-10-31-22-49-08.perfetto-trace"
+              },
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 2",
+                "filename": "FirstLayoutBenchmark_warmMorph8Auto_iter002_2026-10-31-22-49-10.perfetto-trace"
+              },
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 3",
+                "filename": "FirstLayoutBenchmark_warmMorph8Auto_iter003_2026-10-31-22-49-13.perfetto-trace"
+              },
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 4",
+                "filename": "FirstLayoutBenchmark_warmMorph8Auto_iter004_2026-10-31-22-49-15.perfetto-trace"
+              }
+            ]
+          },
+          "warmPlain8": {
+            "iterations": 5,
+            "metrics": {
+              "Labels:firstMeasureCount": {
+                "minimum": 1.0,
+                "maximum": 1.0,
+                "median": 1.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  1.0,
+                  1.0,
+                  1.0,
+                  1.0,
+                  1.0
+                ]
+              },
+              "Labels:firstMeasureSumMs": {
+                "minimum": 0.61099,
+                "maximum": 0.707969,
+                "median": 0.660313,
+                "coefficientOfVariation": 0.05773340605408251,
+                "runs": [
+                  0.634687,
+                  0.707969,
+                  0.61099,
+                  0.660313,
+                  0.68125
+                ]
+              },
+              "Morph:firstApplyCount": {
+                "minimum": 0.0,
+                "maximum": 0.0,
+                "median": 0.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "Morph:firstApplySumMs": {
+                "minimum": 0.0,
+                "maximum": 0.0,
+                "median": 0.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "Morph:fullMeasureCount": {
+                "minimum": 0.0,
+                "maximum": 0.0,
+                "median": 0.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "Morph:fullMeasureSumMs": {
+                "minimum": 0.0,
+                "maximum": 0.0,
+                "median": 0.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "Morph:prepareSnapCount": {
+                "minimum": 0.0,
+                "maximum": 0.0,
+                "median": 0.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "Morph:prepareSnapSumMs": {
+                "minimum": 0.0,
+                "maximum": 0.0,
+                "median": 0.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "Morph:segmentCount": {
+                "minimum": 0.0,
+                "maximum": 0.0,
+                "median": 0.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "Morph:segmentMeasureCount": {
+                "minimum": 0.0,
+                "maximum": 0.0,
+                "median": 0.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "Morph:segmentMeasureSumMs": {
+                "minimum": 0.0,
+                "maximum": 0.0,
+                "median": 0.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "Morph:segmentSumMs": {
+                "minimum": 0.0,
+                "maximum": 0.0,
+                "median": 0.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "TextLayout:initLayoutCount": {
+                "minimum": 8.0,
+                "maximum": 8.0,
+                "median": 8.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0
+                ]
+              },
+              "TextLayout:initLayoutSumMs": {
+                "minimum": 0.033906,
+                "maximum": 0.043698,
+                "median": 0.041199,
+                "coefficientOfVariation": 0.0991902429505413,
+                "runs": [
+                  0.037082,
+                  0.043698,
+                  0.041199,
+                  0.041406,
+                  0.033906
+                ]
+              }
+            },
+            "traces": [
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 0",
+                "filename": "FirstLayoutBenchmark_warmPlain8_iter000_2026-10-31-22-49-21.perfetto-trace"
+              },
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 1",
+                "filename": "FirstLayoutBenchmark_warmPlain8_iter001_2026-10-31-22-49-24.perfetto-trace"
+              },
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 2",
+                "filename": "FirstLayoutBenchmark_warmPlain8_iter002_2026-10-31-22-49-27.perfetto-trace"
+              },
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 3",
+                "filename": "FirstLayoutBenchmark_warmPlain8_iter003_2026-10-31-22-49-29.perfetto-trace"
+              },
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 4",
+                "filename": "FirstLayoutBenchmark_warmPlain8_iter004_2026-10-31-22-49-31.perfetto-trace"
+              }
+            ]
+          },
+          "warmPlain8Repeated": {
+            "iterations": 5,
+            "metrics": {
+              "Labels:firstMeasureCount": {
+                "minimum": 1.0,
+                "maximum": 1.0,
+                "median": 1.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  1.0,
+                  1.0,
+                  1.0,
+                  1.0,
+                  1.0
+                ]
+              },
+              "Labels:firstMeasureSumMs": {
+                "minimum": 0.625052,
+                "maximum": 0.72401,
+                "median": 0.646927,
+                "coefficientOfVariation": 0.05870696323572186,
+                "runs": [
+                  0.667708,
+                  0.638438,
+                  0.72401,
+                  0.625052,
+                  0.646927
+                ]
+              },
+              "Morph:firstApplyCount": {
+                "minimum": 0.0,
+                "maximum": 0.0,
+                "median": 0.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "Morph:firstApplySumMs": {
+                "minimum": 0.0,
+                "maximum": 0.0,
+                "median": 0.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "Morph:fullMeasureCount": {
+                "minimum": 0.0,
+                "maximum": 0.0,
+                "median": 0.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "Morph:fullMeasureSumMs": {
+                "minimum": 0.0,
+                "maximum": 0.0,
+                "median": 0.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "Morph:prepareSnapCount": {
+                "minimum": 0.0,
+                "maximum": 0.0,
+                "median": 0.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "Morph:prepareSnapSumMs": {
+                "minimum": 0.0,
+                "maximum": 0.0,
+                "median": 0.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "Morph:segmentCount": {
+                "minimum": 0.0,
+                "maximum": 0.0,
+                "median": 0.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "Morph:segmentMeasureCount": {
+                "minimum": 0.0,
+                "maximum": 0.0,
+                "median": 0.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "Morph:segmentMeasureSumMs": {
+                "minimum": 0.0,
+                "maximum": 0.0,
+                "median": 0.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "Morph:segmentSumMs": {
+                "minimum": 0.0,
+                "maximum": 0.0,
+                "median": 0.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "TextLayout:initLayoutCount": {
+                "minimum": 8.0,
+                "maximum": 8.0,
+                "median": 8.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0
+                ]
+              },
+              "TextLayout:initLayoutSumMs": {
+                "minimum": 0.039063,
+                "maximum": 0.049272,
+                "median": 0.043646,
+                "coefficientOfVariation": 0.09374797510654809,
+                "runs": [
+                  0.049272,
+                  0.039063,
+                  0.043646,
+                  0.048699,
+                  0.043644
+                ]
+              }
+            },
+            "traces": [
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 0",
+                "filename": "FirstLayoutBenchmark_warmPlain8Repeated_iter000_2026-10-31-22-49-38.perfetto-trace"
+              },
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 1",
+                "filename": "FirstLayoutBenchmark_warmPlain8Repeated_iter001_2026-10-31-22-49-40.perfetto-trace"
+              },
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 2",
+                "filename": "FirstLayoutBenchmark_warmPlain8Repeated_iter002_2026-10-31-22-49-43.perfetto-trace"
+              },
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 3",
+                "filename": "FirstLayoutBenchmark_warmPlain8Repeated_iter003_2026-10-31-22-49-45.perfetto-trace"
+              },
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 4",
+                "filename": "FirstLayoutBenchmark_warmPlain8Repeated_iter004_2026-10-31-22-49-48.perfetto-trace"
+              }
+            ]
+          },
+          "warmMorph8Repeated": {
+            "iterations": 5,
+            "metrics": {
+              "Labels:firstMeasureCount": {
+                "minimum": 1.0,
+                "maximum": 1.0,
+                "median": 1.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  1.0,
+                  1.0,
+                  1.0,
+                  1.0,
+                  1.0
+                ]
+              },
+              "Labels:firstMeasureSumMs": {
+                "minimum": 1.377135,
+                "maximum": 4.039532,
+                "median": 1.498854,
+                "coefficientOfVariation": 0.5830023482507484,
+                "runs": [
+                  1.377135,
+                  4.039532,
+                  1.550313,
+                  1.429166,
+                  1.498854
+                ]
+              },
+              "Morph:firstApplyCount": {
+                "minimum": 8.0,
+                "maximum": 8.0,
+                "median": 8.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0
+                ]
+              },
+              "Morph:firstApplySumMs": {
+                "minimum": 1.088855,
+                "maximum": 3.437813,
+                "median": 1.20552,
+                "coefficientOfVariation": 0.6248636599936529,
+                "runs": [
+                  1.109949,
+                  3.437813,
+                  1.2875,
+                  1.088855,
+                  1.20552
+                ]
+              },
+              "Morph:fullMeasureCount": {
+                "minimum": 8.0,
+                "maximum": 8.0,
+                "median": 8.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0
+                ]
+              },
+              "Morph:fullMeasureSumMs": {
+                "minimum": 0.157187,
+                "maximum": 0.599164,
+                "median": 0.167447,
+                "coefficientOfVariation": 0.7762334294483115,
+                "runs": [
+                  0.158178,
+                  0.599164,
+                  0.167447,
+                  0.172658,
+                  0.157187
+                ]
+              },
+              "Morph:prepareSnapCount": {
+                "minimum": 8.0,
+                "maximum": 8.0,
+                "median": 8.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0
+                ]
+              },
+              "Morph:prepareSnapSumMs": {
+                "minimum": 0.71578,
+                "maximum": 2.376927,
+                "median": 0.835522,
+                "coefficientOfVariation": 0.632222242433884,
+                "runs": [
+                  0.769689,
+                  2.376927,
+                  0.892449,
+                  0.71578,
+                  0.835522
+                ]
+              },
+              "Morph:segmentCount": {
+                "minimum": 8.0,
+                "maximum": 8.0,
+                "median": 8.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0
+                ]
+              },
+              "Morph:segmentMeasureCount": {
+                "minimum": 48.0,
+                "maximum": 48.0,
+                "median": 48.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  48.0,
+                  48.0,
+                  48.0,
+                  48.0,
+                  48.0
+                ]
+              },
+              "Morph:segmentMeasureSumMs": {
+                "minimum": 0.339481,
+                "maximum": 1.421825,
+                "median": 0.425733,
+                "coefficientOfVariation": 0.744199086648661,
+                "runs": [
+                  0.414064,
+                  1.421825,
+                  0.456145,
+                  0.339481,
+                  0.425733
+                ]
+              },
+              "Morph:segmentSumMs": {
+                "minimum": 0.069115,
+                "maximum": 0.16078,
+                "median": 0.073541,
+                "coefficientOfVariation": 0.4339953649671177,
+                "runs": [
+                  0.069115,
+                  0.16078,
+                  0.081301,
+                  0.073541,
+                  0.069374
+                ]
+              },
+              "TextLayout:initLayoutCount": {
+                "minimum": 7.0,
+                "maximum": 7.0,
+                "median": 7.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  7.0,
+                  7.0,
+                  7.0,
+                  7.0,
+                  7.0
+                ]
+              },
+              "TextLayout:initLayoutSumMs": {
+                "minimum": 0.028698,
+                "maximum": 0.07026,
+                "median": 0.038751,
+                "coefficientOfVariation": 0.3748175252280723,
+                "runs": [
+                  0.043645,
+                  0.07026,
+                  0.038751,
+                  0.028698,
+                  0.034167
+                ]
+              }
+            },
+            "traces": [
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 0",
+                "filename": "FirstLayoutBenchmark_warmMorph8Repeated_iter000_2026-10-31-22-49-54.perfetto-trace"
+              },
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 1",
+                "filename": "FirstLayoutBenchmark_warmMorph8Repeated_iter001_2026-10-31-22-49-56.perfetto-trace"
+              },
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 2",
+                "filename": "FirstLayoutBenchmark_warmMorph8Repeated_iter002_2026-10-31-22-49-59.perfetto-trace"
+              },
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 3",
+                "filename": "FirstLayoutBenchmark_warmMorph8Repeated_iter003_2026-10-31-22-50-02.perfetto-trace"
+              },
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 4",
+                "filename": "FirstLayoutBenchmark_warmMorph8Repeated_iter004_2026-10-31-22-50-04.perfetto-trace"
+              }
+            ]
+          },
+          "warmPlain16": {
+            "iterations": 5,
+            "metrics": {
+              "Labels:firstMeasureCount": {
+                "minimum": 1.0,
+                "maximum": 1.0,
+                "median": 1.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  1.0,
+                  1.0,
+                  1.0,
+                  1.0,
+                  1.0
+                ]
+              },
+              "Labels:firstMeasureSumMs": {
+                "minimum": 0.868698,
+                "maximum": 1.108177,
+                "median": 1.030886,
+                "coefficientOfVariation": 0.09172514330158105,
+                "runs": [
+                  1.108177,
+                  1.010469,
+                  1.030886,
+                  1.084636,
+                  0.868698
+                ]
+              },
+              "Morph:firstApplyCount": {
+                "minimum": 0.0,
+                "maximum": 0.0,
+                "median": 0.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "Morph:firstApplySumMs": {
+                "minimum": 0.0,
+                "maximum": 0.0,
+                "median": 0.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "Morph:fullMeasureCount": {
+                "minimum": 0.0,
+                "maximum": 0.0,
+                "median": 0.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "Morph:fullMeasureSumMs": {
+                "minimum": 0.0,
+                "maximum": 0.0,
+                "median": 0.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "Morph:prepareSnapCount": {
+                "minimum": 0.0,
+                "maximum": 0.0,
+                "median": 0.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "Morph:prepareSnapSumMs": {
+                "minimum": 0.0,
+                "maximum": 0.0,
+                "median": 0.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "Morph:segmentCount": {
+                "minimum": 0.0,
+                "maximum": 0.0,
+                "median": 0.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "Morph:segmentMeasureCount": {
+                "minimum": 0.0,
+                "maximum": 0.0,
+                "median": 0.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "Morph:segmentMeasureSumMs": {
+                "minimum": 0.0,
+                "maximum": 0.0,
+                "median": 0.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "Morph:segmentSumMs": {
+                "minimum": 0.0,
+                "maximum": 0.0,
+                "median": 0.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "TextLayout:initLayoutCount": {
+                "minimum": 16.0,
+                "maximum": 16.0,
+                "median": 16.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  16.0,
+                  16.0,
+                  16.0,
+                  16.0,
+                  16.0
+                ]
+              },
+              "TextLayout:initLayoutSumMs": {
+                "minimum": 0.072812,
+                "maximum": 0.093177,
+                "median": 0.080991,
+                "coefficientOfVariation": 0.10256955399148364,
+                "runs": [
+                  0.093177,
+                  0.074949,
+                  0.080991,
+                  0.086615,
+                  0.072812
+                ]
+              }
+            },
+            "traces": [
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 0",
+                "filename": "FirstLayoutBenchmark_warmPlain16_iter000_2026-10-31-22-50-11.perfetto-trace"
+              },
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 1",
+                "filename": "FirstLayoutBenchmark_warmPlain16_iter001_2026-10-31-22-50-13.perfetto-trace"
+              },
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 2",
+                "filename": "FirstLayoutBenchmark_warmPlain16_iter002_2026-10-31-22-50-16.perfetto-trace"
+              },
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 3",
+                "filename": "FirstLayoutBenchmark_warmPlain16_iter003_2026-10-31-22-50-18.perfetto-trace"
+              },
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 4",
+                "filename": "FirstLayoutBenchmark_warmPlain16_iter004_2026-10-31-22-50-21.perfetto-trace"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "pixel7": {
+      "before": {
+        "context": {
+          "build": {
+            "brand": "google",
+            "device": "panther",
+            "fingerprint": "google/panther/panther:17/CP3A.261005.002.A1/16269273:user/release-keys",
+            "id": "CP3A.261005.002.A1",
+            "model": "Pixel 7",
+            "type": "user",
+            "version": {
+              "codename": "REL",
+              "sdk": 37
+            }
+          },
+          "cpuCoreCount": 8,
+          "cpuLocked": false,
+          "cpuMaxFreqHz": 2850000000,
+          "memTotalBytes": 7831076864,
+          "sustainedPerformanceModeEnabled": false,
+          "artMainlineVersion": 372038000,
+          "osCodenameAbbreviated": "REL",
+          "compilationMode": "run-from-apk",
+          "payload": {}
+        },
+        "rawDirectory": "/tmp/torph-shared-cache-20261031/pixel7-before",
+        "benchmarks": {
+          "warmMorph8": {
+            "iterations": 5,
+            "metrics": {
+              "Labels:firstMeasureCount": {
+                "minimum": 1.0,
+                "maximum": 1.0,
+                "median": 1.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  1.0,
+                  1.0,
+                  1.0,
+                  1.0,
+                  1.0
+                ]
+              },
+              "Labels:firstMeasureSumMs": {
+                "minimum": 3.195963,
+                "maximum": 3.999267,
+                "median": 3.531006,
+                "coefficientOfVariation": 0.09090016195681491,
+                "runs": [
+                  3.405477,
+                  3.999267,
+                  3.195963,
+                  3.531006,
+                  3.849528
+                ]
+              },
+              "Morph:firstApplyCount": {
+                "minimum": 8.0,
+                "maximum": 8.0,
+                "median": 8.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0
+                ]
+              },
+              "Morph:firstApplySumMs": {
+                "minimum": 2.881552,
+                "maximum": 3.582927,
+                "median": 3.247884,
+                "coefficientOfVariation": 0.09044641035953925,
+                "runs": [
+                  3.114216,
+                  3.582927,
+                  2.881552,
+                  3.247884,
+                  3.548421
+                ]
+              },
+              "Morph:fullMeasureCount": {
+                "minimum": 8.0,
+                "maximum": 8.0,
+                "median": 8.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0
+                ]
+              },
+              "Morph:fullMeasureSumMs": {
+                "minimum": 0.352217,
+                "maximum": 0.452718,
+                "median": 0.392049,
+                "coefficientOfVariation": 0.09843217902629257,
+                "runs": [
+                  0.392049,
+                  0.425253,
+                  0.352217,
+                  0.378907,
+                  0.452718
+                ]
+              },
+              "Morph:prepareSnapCount": {
+                "minimum": 8.0,
+                "maximum": 8.0,
+                "median": 8.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0
+                ]
+              },
+              "Morph:prepareSnapSumMs": {
+                "minimum": 2.20231,
+                "maximum": 2.790159,
+                "median": 2.551839,
+                "coefficientOfVariation": 0.09519776949272239,
+                "runs": [
+                  2.410441,
+                  2.790159,
+                  2.20231,
+                  2.551839,
+                  2.740399
+                ]
+              },
+              "Morph:segmentCount": {
+                "minimum": 8.0,
+                "maximum": 8.0,
+                "median": 8.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0
+                ]
+              },
+              "Morph:segmentMeasureCount": {
+                "minimum": 79.0,
+                "maximum": 79.0,
+                "median": 79.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  79.0,
+                  79.0,
+                  79.0,
+                  79.0,
+                  79.0
+                ]
+              },
+              "Morph:segmentMeasureSumMs": {
+                "minimum": 1.693685,
+                "maximum": 2.159305,
+                "median": 1.964801,
+                "coefficientOfVariation": 0.09472720849636851,
+                "runs": [
+                  1.855222,
+                  2.159305,
+                  1.693685,
+                  1.964801,
+                  2.084107
+                ]
+              },
+              "Morph:segmentSumMs": {
+                "minimum": 0.171263,
+                "maximum": 0.20699,
+                "median": 0.188477,
+                "coefficientOfVariation": 0.07710177206929293,
+                "runs": [
+                  0.180948,
+                  0.20699,
+                  0.171263,
+                  0.188477,
+                  0.201538
+                ]
+              },
+              "TextLayout:initLayoutCount": {
+                "minimum": 87.0,
+                "maximum": 87.0,
+                "median": 87.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  87.0,
+                  87.0,
+                  87.0,
+                  87.0,
+                  87.0
+                ]
+              },
+              "TextLayout:initLayoutSumMs": {
+                "minimum": 0.356118,
+                "maximum": 0.500278,
+                "median": 0.440433,
+                "coefficientOfVariation": 0.11911874073321281,
+                "runs": [
+                  0.440433,
+                  0.500278,
+                  0.356118,
+                  0.431156,
+                  0.450929
+                ]
+              }
+            },
+            "traces": [
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 0",
+                "filename": "FirstLayoutBenchmark_warmMorph8_iter000_2026-10-31-23-07-36.perfetto-trace"
+              },
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 1",
+                "filename": "FirstLayoutBenchmark_warmMorph8_iter001_2026-10-31-23-07-41.perfetto-trace"
+              },
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 2",
+                "filename": "FirstLayoutBenchmark_warmMorph8_iter002_2026-10-31-23-07-47.perfetto-trace"
+              },
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 3",
+                "filename": "FirstLayoutBenchmark_warmMorph8_iter003_2026-10-31-23-07-52.perfetto-trace"
+              },
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 4",
+                "filename": "FirstLayoutBenchmark_warmMorph8_iter004_2026-10-31-23-07-57.perfetto-trace"
+              }
+            ]
+          },
+          "warmMorph8Auto": {
+            "iterations": 5,
+            "metrics": {
+              "Labels:firstMeasureCount": {
+                "minimum": 1.0,
+                "maximum": 1.0,
+                "median": 1.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  1.0,
+                  1.0,
+                  1.0,
+                  1.0,
+                  1.0
+                ]
+              },
+              "Labels:firstMeasureSumMs": {
+                "minimum": 2.304322,
+                "maximum": 2.512451,
+                "median": 2.441122,
+                "coefficientOfVariation": 0.031625188585761625,
+                "runs": [
+                  2.39624,
+                  2.304322,
+                  2.441122,
+                  2.441854,
+                  2.512451
+                ]
+              },
+              "Morph:firstApplyCount": {
+                "minimum": 8.0,
+                "maximum": 8.0,
+                "median": 8.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0
+                ]
+              },
+              "Morph:firstApplySumMs": {
+                "minimum": 2.03475,
+                "maximum": 2.251628,
+                "median": 2.100424,
+                "coefficientOfVariation": 0.038073918647675856,
+                "runs": [
+                  2.100626,
+                  2.03475,
+                  2.100424,
+                  2.09379,
+                  2.251628
+                ]
+              },
+              "Morph:fullMeasureCount": {
+                "minimum": 8.0,
+                "maximum": 8.0,
+                "median": 8.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0
+                ]
+              },
+              "Morph:fullMeasureSumMs": {
+                "minimum": 0.343911,
+                "maximum": 0.425617,
+                "median": 0.372719,
+                "coefficientOfVariation": 0.07946499394612659,
+                "runs": [
+                  0.372719,
+                  0.369344,
+                  0.39026,
+                  0.425617,
+                  0.343911
+                ]
+              },
+              "Morph:prepareSnapCount": {
+                "minimum": 8.0,
+                "maximum": 8.0,
+                "median": 8.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0
+                ]
+              },
+              "Morph:prepareSnapSumMs": {
+                "minimum": 1.358724,
+                "maximum": 1.613526,
+                "median": 1.387207,
+                "coefficientOfVariation": 0.07428501794822531,
+                "runs": [
+                  1.402181,
+                  1.369953,
+                  1.387207,
+                  1.358724,
+                  1.613526
+                ]
+              },
+              "Morph:segmentCount": {
+                "minimum": 8.0,
+                "maximum": 8.0,
+                "median": 8.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0
+                ]
+              },
+              "Morph:segmentMeasureCount": {
+                "minimum": 34.0,
+                "maximum": 34.0,
+                "median": 34.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  34.0,
+                  34.0,
+                  34.0,
+                  34.0,
+                  34.0
+                ]
+              },
+              "Morph:segmentMeasureSumMs": {
+                "minimum": 0.932373,
+                "maximum": 0.98478,
+                "median": 0.947758,
+                "coefficientOfVariation": 0.021776780380508606,
+                "runs": [
+                  0.98478,
+                  0.954833,
+                  0.947758,
+                  0.936724,
+                  0.932373
+                ]
+              },
+              "Morph:segmentSumMs": {
+                "minimum": 0.1698,
+                "maximum": 0.18282,
+                "median": 0.174643,
+                "coefficientOfVariation": 0.026736390711308546,
+                "runs": [
+                  0.174643,
+                  0.175577,
+                  0.18282,
+                  0.1698,
+                  0.174397
+                ]
+              },
+              "TextLayout:initLayoutCount": {
+                "minimum": 42.0,
+                "maximum": 42.0,
+                "median": 42.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  42.0,
+                  42.0,
+                  42.0,
+                  42.0,
+                  42.0
+                ]
+              },
+              "TextLayout:initLayoutSumMs": {
+                "minimum": 0.210568,
+                "maximum": 0.2561,
+                "median": 0.235069,
+                "coefficientOfVariation": 0.080058701447786,
+                "runs": [
+                  0.2561,
+                  0.251261,
+                  0.210568,
+                  0.235069,
+                  0.224244
+                ]
+              }
+            },
+            "traces": [
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 0",
+                "filename": "FirstLayoutBenchmark_warmMorph8Auto_iter000_2026-10-31-23-08-13.perfetto-trace"
+              },
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 1",
+                "filename": "FirstLayoutBenchmark_warmMorph8Auto_iter001_2026-10-31-23-08-18.perfetto-trace"
+              },
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 2",
+                "filename": "FirstLayoutBenchmark_warmMorph8Auto_iter002_2026-10-31-23-08-23.perfetto-trace"
+              },
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 3",
+                "filename": "FirstLayoutBenchmark_warmMorph8Auto_iter003_2026-10-31-23-08-29.perfetto-trace"
+              },
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 4",
+                "filename": "FirstLayoutBenchmark_warmMorph8Auto_iter004_2026-10-31-23-08-34.perfetto-trace"
+              }
+            ]
+          },
+          "warmPlain8": {
+            "iterations": 5,
+            "metrics": {
+              "Labels:firstMeasureCount": {
+                "minimum": 1.0,
+                "maximum": 1.0,
+                "median": 1.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  1.0,
+                  1.0,
+                  1.0,
+                  1.0,
+                  1.0
+                ]
+              },
+              "Labels:firstMeasureSumMs": {
+                "minimum": 0.554932,
+                "maximum": 1.156373,
+                "median": 0.641927,
+                "coefficientOfVariation": 0.3247199370863627,
+                "runs": [
+                  0.781616,
+                  1.156373,
+                  0.554932,
+                  0.607218,
+                  0.641927
+                ]
+              },
+              "Morph:firstApplyCount": {
+                "minimum": 0.0,
+                "maximum": 0.0,
+                "median": 0.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "Morph:firstApplySumMs": {
+                "minimum": 0.0,
+                "maximum": 0.0,
+                "median": 0.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "Morph:fullMeasureCount": {
+                "minimum": 0.0,
+                "maximum": 0.0,
+                "median": 0.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "Morph:fullMeasureSumMs": {
+                "minimum": 0.0,
+                "maximum": 0.0,
+                "median": 0.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "Morph:prepareSnapCount": {
+                "minimum": 0.0,
+                "maximum": 0.0,
+                "median": 0.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "Morph:prepareSnapSumMs": {
+                "minimum": 0.0,
+                "maximum": 0.0,
+                "median": 0.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "Morph:segmentCount": {
+                "minimum": 0.0,
+                "maximum": 0.0,
+                "median": 0.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "Morph:segmentMeasureCount": {
+                "minimum": 0.0,
+                "maximum": 0.0,
+                "median": 0.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "Morph:segmentMeasureSumMs": {
+                "minimum": 0.0,
+                "maximum": 0.0,
+                "median": 0.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "Morph:segmentSumMs": {
+                "minimum": 0.0,
+                "maximum": 0.0,
+                "median": 0.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "TextLayout:initLayoutCount": {
+                "minimum": 8.0,
+                "maximum": 8.0,
+                "median": 8.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0
+                ]
+              },
+              "TextLayout:initLayoutSumMs": {
+                "minimum": 0.038086,
+                "maximum": 0.078044,
+                "median": 0.05371,
+                "coefficientOfVariation": 0.2939172319309491,
+                "runs": [
+                  0.049724,
+                  0.078044,
+                  0.038086,
+                  0.076172,
+                  0.05371
+                ]
+              }
+            },
+            "traces": [
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 0",
+                "filename": "FirstLayoutBenchmark_warmPlain8_iter000_2026-10-31-23-08-44.perfetto-trace"
+              },
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 1",
+                "filename": "FirstLayoutBenchmark_warmPlain8_iter001_2026-10-31-23-08-49.perfetto-trace"
+              },
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 2",
+                "filename": "FirstLayoutBenchmark_warmPlain8_iter002_2026-10-31-23-08-55.perfetto-trace"
+              },
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 3",
+                "filename": "FirstLayoutBenchmark_warmPlain8_iter003_2026-10-31-23-09-00.perfetto-trace"
+              },
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 4",
+                "filename": "FirstLayoutBenchmark_warmPlain8_iter004_2026-10-31-23-09-05.perfetto-trace"
+              }
+            ]
+          }
+        }
+      },
+      "after": {
+        "context": {
+          "build": {
+            "brand": "google",
+            "device": "panther",
+            "fingerprint": "google/panther/panther:17/CP3A.261005.002.A1/16269273:user/release-keys",
+            "id": "CP3A.261005.002.A1",
+            "model": "Pixel 7",
+            "type": "user",
+            "version": {
+              "codename": "REL",
+              "sdk": 37
+            }
+          },
+          "cpuCoreCount": 8,
+          "cpuLocked": false,
+          "cpuMaxFreqHz": 2850000000,
+          "memTotalBytes": 7831076864,
+          "sustainedPerformanceModeEnabled": false,
+          "artMainlineVersion": 372038000,
+          "osCodenameAbbreviated": "REL",
+          "compilationMode": "run-from-apk",
+          "payload": {}
+        },
+        "rawDirectory": "/tmp/torph-shared-cache-20261031/pixel7-after",
+        "benchmarks": {
+          "warmMorph8": {
+            "iterations": 5,
+            "metrics": {
+              "Labels:firstMeasureCount": {
+                "minimum": 1.0,
+                "maximum": 1.0,
+                "median": 1.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  1.0,
+                  1.0,
+                  1.0,
+                  1.0,
+                  1.0
+                ]
+              },
+              "Labels:firstMeasureSumMs": {
+                "minimum": 2.443319,
+                "maximum": 3.086426,
+                "median": 2.760254,
+                "coefficientOfVariation": 0.09234247370667908,
+                "runs": [
+                  2.760254,
+                  2.874023,
+                  2.443319,
+                  2.56425,
+                  3.086426
+                ]
+              },
+              "Morph:firstApplyCount": {
+                "minimum": 8.0,
+                "maximum": 8.0,
+                "median": 8.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0
+                ]
+              },
+              "Morph:firstApplySumMs": {
+                "minimum": 2.050212,
+                "maximum": 2.783203,
+                "median": 2.415323,
+                "coefficientOfVariation": 0.11860457992962714,
+                "runs": [
+                  2.471682,
+                  2.415323,
+                  2.184976,
+                  2.050212,
+                  2.783203
+                ]
+              },
+              "Morph:fullMeasureCount": {
+                "minimum": 8.0,
+                "maximum": 8.0,
+                "median": 8.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0
+                ]
+              },
+              "Morph:fullMeasureSumMs": {
+                "minimum": 0.353231,
+                "maximum": 0.704101,
+                "median": 0.39392,
+                "coefficientOfVariation": 0.3303690418611992,
+                "runs": [
+                  0.39392,
+                  0.397381,
+                  0.353231,
+                  0.3704,
+                  0.704101
+                ]
+              },
+              "Morph:prepareSnapCount": {
+                "minimum": 8.0,
+                "maximum": 8.0,
+                "median": 8.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0
+                ]
+              },
+              "Morph:prepareSnapSumMs": {
+                "minimum": 1.391236,
+                "maximum": 1.748456,
+                "median": 1.707112,
+                "coefficientOfVariation": 0.09859493397610342,
+                "runs": [
+                  1.748456,
+                  1.707112,
+                  1.513956,
+                  1.391236,
+                  1.739992
+                ]
+              },
+              "Morph:segmentCount": {
+                "minimum": 8.0,
+                "maximum": 8.0,
+                "median": 8.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0
+                ]
+              },
+              "Morph:segmentMeasureCount": {
+                "minimum": 79.0,
+                "maximum": 79.0,
+                "median": 79.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  79.0,
+                  79.0,
+                  79.0,
+                  79.0,
+                  79.0
+                ]
+              },
+              "Morph:segmentMeasureSumMs": {
+                "minimum": 0.93299,
+                "maximum": 1.196362,
+                "median": 1.173915,
+                "coefficientOfVariation": 0.10817198587638707,
+                "runs": [
+                  1.196362,
+                  1.173915,
+                  1.016238,
+                  0.93299,
+                  1.183965
+                ]
+              },
+              "Morph:segmentSumMs": {
+                "minimum": 0.169473,
+                "maximum": 0.205122,
+                "median": 0.179242,
+                "coefficientOfVariation": 0.08081678796083144,
+                "runs": [
+                  0.184732,
+                  0.169516,
+                  0.179242,
+                  0.169473,
+                  0.205122
+                ]
+              },
+              "TextLayout:initLayoutCount": {
+                "minimum": 45.0,
+                "maximum": 45.0,
+                "median": 45.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  45.0,
+                  45.0,
+                  45.0,
+                  45.0,
+                  45.0
+                ]
+              },
+              "TextLayout:initLayoutSumMs": {
+                "minimum": 0.19344,
+                "maximum": 0.280556,
+                "median": 0.242959,
+                "coefficientOfVariation": 0.15044578275466117,
+                "runs": [
+                  0.280556,
+                  0.242959,
+                  0.204958,
+                  0.19344,
+                  0.249188
+                ]
+              }
+            },
+            "traces": [
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 0",
+                "filename": "FirstLayoutBenchmark_warmMorph8_iter000_2026-10-31-23-11-05.perfetto-trace"
+              },
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 1",
+                "filename": "FirstLayoutBenchmark_warmMorph8_iter001_2026-10-31-23-11-10.perfetto-trace"
+              },
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 2",
+                "filename": "FirstLayoutBenchmark_warmMorph8_iter002_2026-10-31-23-11-15.perfetto-trace"
+              },
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 3",
+                "filename": "FirstLayoutBenchmark_warmMorph8_iter003_2026-10-31-23-11-20.perfetto-trace"
+              },
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 4",
+                "filename": "FirstLayoutBenchmark_warmMorph8_iter004_2026-10-31-23-11-26.perfetto-trace"
+              }
+            ]
+          },
+          "warmMorph8Auto": {
+            "iterations": 5,
+            "metrics": {
+              "Labels:firstMeasureCount": {
+                "minimum": 1.0,
+                "maximum": 1.0,
+                "median": 1.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  1.0,
+                  1.0,
+                  1.0,
+                  1.0,
+                  1.0
+                ]
+              },
+              "Labels:firstMeasureSumMs": {
+                "minimum": 2.129354,
+                "maximum": 2.459229,
+                "median": 2.343709,
+                "coefficientOfVariation": 0.057946898484893344,
+                "runs": [
+                  2.257853,
+                  2.431844,
+                  2.459229,
+                  2.129354,
+                  2.343709
+                ]
+              },
+              "Morph:firstApplyCount": {
+                "minimum": 8.0,
+                "maximum": 8.0,
+                "median": 8.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0
+                ]
+              },
+              "Morph:firstApplySumMs": {
+                "minimum": 1.682252,
+                "maximum": 2.148682,
+                "median": 1.991169,
+                "coefficientOfVariation": 0.11318925949726018,
+                "runs": [
+                  1.682252,
+                  2.148682,
+                  2.13517,
+                  1.735309,
+                  1.991169
+                ]
+              },
+              "Morph:fullMeasureCount": {
+                "minimum": 8.0,
+                "maximum": 8.0,
+                "median": 8.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0
+                ]
+              },
+              "Morph:fullMeasureSumMs": {
+                "minimum": 0.378866,
+                "maximum": 0.505126,
+                "median": 0.424765,
+                "coefficientOfVariation": 0.10836674919800743,
+                "runs": [
+                  0.433471,
+                  0.409871,
+                  0.505126,
+                  0.378866,
+                  0.424765
+                ]
+              },
+              "Morph:prepareSnapCount": {
+                "minimum": 8.0,
+                "maximum": 8.0,
+                "median": 8.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0
+                ]
+              },
+              "Morph:prepareSnapSumMs": {
+                "minimum": 0.993367,
+                "maximum": 1.421386,
+                "median": 1.233724,
+                "coefficientOfVariation": 0.14206977896681822,
+                "runs": [
+                  0.993367,
+                  1.421386,
+                  1.322185,
+                  1.091837,
+                  1.233724
+                ]
+              },
+              "Morph:segmentCount": {
+                "minimum": 8.0,
+                "maximum": 8.0,
+                "median": 8.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0
+                ]
+              },
+              "Morph:segmentMeasureCount": {
+                "minimum": 34.0,
+                "maximum": 34.0,
+                "median": 34.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  34.0,
+                  34.0,
+                  34.0,
+                  34.0,
+                  34.0
+                ]
+              },
+              "Morph:segmentMeasureSumMs": {
+                "minimum": 0.634928,
+                "maximum": 0.985922,
+                "median": 0.803958,
+                "coefficientOfVariation": 0.16855730128684637,
+                "runs": [
+                  0.634928,
+                  0.985922,
+                  0.807289,
+                  0.703288,
+                  0.803958
+                ]
+              },
+              "Morph:segmentSumMs": {
+                "minimum": 0.150146,
+                "maximum": 0.206216,
+                "median": 0.176514,
+                "coefficientOfVariation": 0.13563297140034167,
+                "runs": [
+                  0.150146,
+                  0.185465,
+                  0.176514,
+                  0.15198,
+                  0.206216
+                ]
+              },
+              "TextLayout:initLayoutCount": {
+                "minimum": 32.0,
+                "maximum": 32.0,
+                "median": 32.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  32.0,
+                  32.0,
+                  32.0,
+                  32.0,
+                  32.0
+                ]
+              },
+              "TextLayout:initLayoutSumMs": {
+                "minimum": 0.163452,
+                "maximum": 0.206663,
+                "median": 0.186198,
+                "coefficientOfVariation": 0.08914166271081078,
+                "runs": [
+                  0.206663,
+                  0.198241,
+                  0.180421,
+                  0.163452,
+                  0.186198
+                ]
+              }
+            },
+            "traces": [
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 0",
+                "filename": "FirstLayoutBenchmark_warmMorph8Auto_iter000_2026-10-31-23-17-12.perfetto-trace"
+              },
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 1",
+                "filename": "FirstLayoutBenchmark_warmMorph8Auto_iter001_2026-10-31-23-17-17.perfetto-trace"
+              },
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 2",
+                "filename": "FirstLayoutBenchmark_warmMorph8Auto_iter002_2026-10-31-23-17-23.perfetto-trace"
+              },
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 3",
+                "filename": "FirstLayoutBenchmark_warmMorph8Auto_iter003_2026-10-31-23-17-28.perfetto-trace"
+              },
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 4",
+                "filename": "FirstLayoutBenchmark_warmMorph8Auto_iter004_2026-10-31-23-17-33.perfetto-trace"
+              }
+            ],
+            "rawDirectory": "/tmp/torph-shared-cache-20261031/pixel7-after-auto-recheck/connected_android_test_additional_output/benchmark/connected/Pixel 7 - 17"
+          },
+          "warmPlain8": {
+            "iterations": 5,
+            "metrics": {
+              "Labels:firstMeasureCount": {
+                "minimum": 1.0,
+                "maximum": 1.0,
+                "median": 1.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  1.0,
+                  1.0,
+                  1.0,
+                  1.0,
+                  1.0
+                ]
+              },
+              "Labels:firstMeasureSumMs": {
+                "minimum": 0.54423,
+                "maximum": 0.703247,
+                "median": 0.663005,
+                "coefficientOfVariation": 0.09908188458403247,
+                "runs": [
+                  0.631917,
+                  0.703247,
+                  0.663005,
+                  0.54423,
+                  0.694417
+                ]
+              },
+              "Morph:firstApplyCount": {
+                "minimum": 0.0,
+                "maximum": 0.0,
+                "median": 0.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "Morph:firstApplySumMs": {
+                "minimum": 0.0,
+                "maximum": 0.0,
+                "median": 0.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "Morph:fullMeasureCount": {
+                "minimum": 0.0,
+                "maximum": 0.0,
+                "median": 0.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "Morph:fullMeasureSumMs": {
+                "minimum": 0.0,
+                "maximum": 0.0,
+                "median": 0.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "Morph:prepareSnapCount": {
+                "minimum": 0.0,
+                "maximum": 0.0,
+                "median": 0.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "Morph:prepareSnapSumMs": {
+                "minimum": 0.0,
+                "maximum": 0.0,
+                "median": 0.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "Morph:segmentCount": {
+                "minimum": 0.0,
+                "maximum": 0.0,
+                "median": 0.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "Morph:segmentMeasureCount": {
+                "minimum": 0.0,
+                "maximum": 0.0,
+                "median": 0.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "Morph:segmentMeasureSumMs": {
+                "minimum": 0.0,
+                "maximum": 0.0,
+                "median": 0.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "Morph:segmentSumMs": {
+                "minimum": 0.0,
+                "maximum": 0.0,
+                "median": 0.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "TextLayout:initLayoutCount": {
+                "minimum": 8.0,
+                "maximum": 8.0,
+                "median": 8.0,
+                "coefficientOfVariation": 0.0,
+                "runs": [
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0,
+                  8.0
+                ]
+              },
+              "TextLayout:initLayoutSumMs": {
+                "minimum": 0.039836,
+                "maximum": 0.076904,
+                "median": 0.041748,
+                "coefficientOfVariation": 0.3238810361927865,
+                "runs": [
+                  0.041545,
+                  0.076904,
+                  0.039836,
+                  0.041748,
+                  0.043782
+                ]
+              }
+            },
+            "traces": [
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 0",
+                "filename": "FirstLayoutBenchmark_warmPlain8_iter000_2026-10-31-23-12-45.perfetto-trace"
+              },
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 1",
+                "filename": "FirstLayoutBenchmark_warmPlain8_iter001_2026-10-31-23-12-50.perfetto-trace"
+              },
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 2",
+                "filename": "FirstLayoutBenchmark_warmPlain8_iter002_2026-10-31-23-12-55.perfetto-trace"
+              },
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 3",
+                "filename": "FirstLayoutBenchmark_warmPlain8_iter003_2026-10-31-23-13-00.perfetto-trace"
+              },
+              {
+                "type": "PerfettoTrace",
+                "label": "Trace Iteration 4",
+                "filename": "FirstLayoutBenchmark_warmPlain8_iter004_2026-10-31-23-13-05.perfetto-trace"
+              }
+            ]
+          }
+        }
+      },
+      "originalAfterAutoCapture": {
+        "iterations": 5,
+        "metrics": {
+          "Labels:firstMeasureCount": {
+            "minimum": 0.0,
+            "maximum": 1.0,
+            "median": 1.0,
+            "coefficientOfVariation": 0.5590169943749476,
+            "runs": [
+              1.0,
+              0.0,
+              1.0,
+              1.0,
+              1.0
+            ]
+          },
+          "Labels:firstMeasureSumMs": {
+            "minimum": 0.0,
+            "maximum": 2.425008,
+            "median": 2.115235,
+            "coefficientOfVariation": 0.5706247768682133,
+            "runs": [
+              2.115235,
+              0.0,
+              2.425008,
+              1.879801,
+              2.242594
+            ]
+          },
+          "Morph:firstApplyCount": {
+            "minimum": 0.0,
+            "maximum": 8.0,
+            "median": 8.0,
+            "coefficientOfVariation": 0.5590169943749476,
+            "runs": [
+              8.0,
+              0.0,
+              8.0,
+              8.0,
+              8.0
+            ]
+          },
+          "Morph:firstApplySumMs": {
+            "minimum": 0.0,
+            "maximum": 2.063191,
+            "median": 1.828164,
+            "coefficientOfVariation": 0.5721100966197377,
+            "runs": [
+              1.828164,
+              0.0,
+              2.063191,
+              1.565714,
+              1.893553
+            ]
+          },
+          "Morph:fullMeasureCount": {
+            "minimum": 8.0,
+            "maximum": 14.0,
+            "median": 8.0,
+            "coefficientOfVariation": 0.2916610405434509,
+            "runs": [
+              8.0,
+              14.0,
+              8.0,
+              8.0,
+              8.0
+            ]
+          },
+          "Morph:fullMeasureSumMs": {
+            "minimum": 0.358725,
+            "maximum": 13.679036,
+            "median": 0.404904,
+            "coefficientOfVariation": 1.944910676346594,
+            "runs": [
+              0.404904,
+              13.679036,
+              0.422242,
+              0.358725,
+              0.404824
+            ]
+          },
+          "Morph:prepareSnapCount": {
+            "minimum": 0.0,
+            "maximum": 8.0,
+            "median": 8.0,
+            "coefficientOfVariation": 0.5590169943749476,
+            "runs": [
+              8.0,
+              0.0,
+              8.0,
+              8.0,
+              8.0
+            ]
+          },
+          "Morph:prepareSnapSumMs": {
+            "minimum": 0.0,
+            "maximum": 1.234946,
+            "median": 1.134483,
+            "coefficientOfVariation": 0.5738010499012736,
+            "runs": [
+              1.134483,
+              0.0,
+              1.234946,
+              0.927492,
+              1.176067
+            ]
+          },
+          "Morph:segmentCount": {
+            "minimum": 8.0,
+            "maximum": 14.0,
+            "median": 8.0,
+            "coefficientOfVariation": 0.2916610405434509,
+            "runs": [
+              8.0,
+              14.0,
+              8.0,
+              8.0,
+              8.0
+            ]
+          },
+          "Morph:segmentMeasureCount": {
+            "minimum": 13.0,
+            "maximum": 34.0,
+            "median": 34.0,
+            "coefficientOfVariation": 0.3151505203187623,
+            "runs": [
+              34.0,
+              13.0,
+              34.0,
+              34.0,
+              34.0
+            ]
+          },
+          "Morph:segmentMeasureSumMs": {
+            "minimum": 0.58887,
+            "maximum": 2.788904,
+            "median": 0.749104,
+            "coefficientOfVariation": 0.8213619237079421,
+            "runs": [
+              0.728598,
+              2.788904,
+              0.803953,
+              0.58887,
+              0.749104
+            ]
+          },
+          "Morph:segmentSumMs": {
+            "minimum": 0.15556,
+            "maximum": 3.558428,
+            "median": 0.182699,
+            "coefficientOfVariation": 1.7750367331943153,
+            "runs": [
+              0.171958,
+              3.558428,
+              0.192792,
+              0.15556,
+              0.182699
+            ]
+          },
+          "TextLayout:initLayoutCount": {
+            "minimum": 15.0,
+            "maximum": 32.0,
+            "median": 32.0,
+            "coefficientOfVariation": 0.2658262630594156,
+            "runs": [
+              32.0,
+              15.0,
+              32.0,
+              32.0,
+              32.0
+            ]
+          },
+          "TextLayout:initLayoutSumMs": {
+            "minimum": 0.14872,
+            "maximum": 5.469362,
+            "median": 0.185993,
+            "coefficientOfVariation": 1.908828305654783,
+            "runs": [
+              0.224286,
+              5.469362,
+              0.166583,
+              0.14872,
+              0.185993
+            ]
+          }
+        },
+        "traces": [
+          {
+            "type": "PerfettoTrace",
+            "label": "Trace Iteration 0",
+            "filename": "FirstLayoutBenchmark_warmMorph8Auto_iter000_2026-10-31-23-11-41.perfetto-trace"
+          },
+          {
+            "type": "PerfettoTrace",
+            "label": "Trace Iteration 1",
+            "filename": "FirstLayoutBenchmark_warmMorph8Auto_iter001_2026-10-31-23-12-16.perfetto-trace"
+          },
+          {
+            "type": "PerfettoTrace",
+            "label": "Trace Iteration 2",
+            "filename": "FirstLayoutBenchmark_warmMorph8Auto_iter002_2026-10-31-23-12-23.perfetto-trace"
+          },
+          {
+            "type": "PerfettoTrace",
+            "label": "Trace Iteration 3",
+            "filename": "FirstLayoutBenchmark_warmMorph8Auto_iter003_2026-10-31-23-12-28.perfetto-trace"
+          },
+          {
+            "type": "PerfettoTrace",
+            "label": "Trace Iteration 4",
+            "filename": "FirstLayoutBenchmark_warmMorph8Auto_iter004_2026-10-31-23-12-34.perfetto-trace"
+          }
+        ],
+        "excludedReason": "Iteration 1 has no outer first-measure/first-apply markers; whole AUTO capture replaced by a five-iteration recheck, not filtered by speed."
+      }
+    }
+  }
+}

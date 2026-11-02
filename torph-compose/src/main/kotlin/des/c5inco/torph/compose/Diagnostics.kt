@@ -42,6 +42,7 @@ internal class MorphTimings {
 
     var boxCalls = 0
     var placeCalls = 0
+    // Per-state misses; a request can still hit the shared TextMeasurer LRU.
     var layoutMisses = 0
 
     fun reset() {
@@ -55,7 +56,7 @@ internal class MorphTimings {
             "$phase chars=$chars segs=$segments (p=$persist e=$enter x=$exit) " +
                 "total=${ms(totalNs)} | measureText=${ms(measureText)} segment=${ms(segment)} " +
                 "diff=${ms(diff)} place=${ms(place)} (box=${ms(box)} over $boxCalls chars, " +
-                "$placeCalls calls) segLayout=${ms(segmentLayout)} ($layoutMisses miss) " +
+                "$placeCalls calls) segLayout=${ms(segmentLayout)} ($layoutMisses local miss) " +
                 "anim=${ms(animation)}",
         )
     }
