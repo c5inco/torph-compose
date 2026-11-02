@@ -1,0 +1,296 @@
+{
+  "device": "Pixel 7/API 37",
+  "protocol": "8 fresh labels in warm process; 5 samples per case; full compilation; device settings verified/restored",
+  "beforeSourceSha256": "a22382ea302158a3e2d0dd3a734679d66023cfaad9be0ac00be06552e1cda72b",
+  "afterSourceSha256": "a60fe28735f6d112bc03ae091bf12141e656a377af5b3f87daa591a3b1ab48e4",
+  "markerValidation": "All 40 included iterations have one Labels:firstMeasure and expected 8/0 Morph:firstApply markers.",
+  "rechecks": [
+    {
+      "phase": "before",
+      "case": "warmPlainBidi8",
+      "reason": "Original iteration 2 had no Labels:firstMeasure marker; replaced the entire five-iteration case."
+    },
+    {
+      "phase": "after",
+      "case": "warmPlain8",
+      "reason": "Original iteration 3 had no Labels:firstMeasure marker; replaced the entire five-iteration case."
+    }
+  ],
+  "rows": [
+    {
+      "name": "warmMorph8",
+      "label": "ASCII morph",
+      "before": {
+        "samplesMs": [
+          2.94519,
+          2.624837,
+          2.805257,
+          2.656698,
+          2.739502
+        ],
+        "medianMs": 2.739502,
+        "minimumMs": 2.624837,
+        "maximumMs": 2.94519,
+        "platformLayoutCounts": [
+          45.0,
+          45.0,
+          45.0,
+          45.0,
+          45.0
+        ],
+        "source": "/tmp/torph-bidi-20261031/pixel7-before/connected_android_test_additional_output/benchmark/connected/Pixel 7 - 17/des.c5inco.torph.benchmark-benchmarkData.json"
+      },
+      "after": {
+        "samplesMs": [
+          2.92745,
+          2.464193,
+          2.670817,
+          2.910523,
+          2.925171
+        ],
+        "medianMs": 2.910523,
+        "minimumMs": 2.464193,
+        "maximumMs": 2.92745,
+        "platformLayoutCounts": [
+          45.0,
+          45.0,
+          45.0,
+          45.0,
+          45.0
+        ],
+        "source": "/tmp/torph-bidi-20261031/pixel7-after/connected_android_test_additional_output/benchmark/connected/Pixel 7 - 17/des.c5inco.torph.benchmark-benchmarkData.json"
+      },
+      "medianDeltaMs": 0.1710210000000001,
+      "medianDeltaPercent": 6.242776971872994
+    },
+    {
+      "name": "warmBidi8",
+      "label": "Bidi morph",
+      "before": {
+        "samplesMs": [
+          4.845378,
+          5.366903,
+          5.743326,
+          5.966674,
+          5.388346
+        ],
+        "medianMs": 5.388346,
+        "minimumMs": 4.845378,
+        "maximumMs": 5.966674,
+        "platformLayoutCounts": [
+          50.0,
+          50.0,
+          50.0,
+          50.0,
+          50.0
+        ],
+        "source": "/tmp/torph-bidi-20261031/pixel7-before/connected_android_test_additional_output/benchmark/connected/Pixel 7 - 17/des.c5inco.torph.benchmark-benchmarkData.json"
+      },
+      "after": {
+        "samplesMs": [
+          7.119914,
+          8.086344,
+          8.654785,
+          6.755696,
+          8.427612
+        ],
+        "medianMs": 8.086344,
+        "minimumMs": 6.755696,
+        "maximumMs": 8.654785,
+        "platformLayoutCounts": [
+          53.0,
+          53.0,
+          53.0,
+          53.0,
+          53.0
+        ],
+        "source": "/tmp/torph-bidi-20261031/pixel7-after/connected_android_test_additional_output/benchmark/connected/Pixel 7 - 17/des.c5inco.torph.benchmark-benchmarkData.json"
+      },
+      "medianDeltaMs": 2.697998,
+      "medianDeltaPercent": 50.07098653278761
+    },
+    {
+      "name": "warmPlain8",
+      "label": "ASCII plain Text",
+      "before": {
+        "samplesMs": [
+          0.839599,
+          0.608643,
+          0.552897,
+          0.616536,
+          1.300497
+        ],
+        "medianMs": 0.616536,
+        "minimumMs": 0.552897,
+        "maximumMs": 1.300497,
+        "platformLayoutCounts": [
+          8.0,
+          8.0,
+          8.0,
+          8.0,
+          8.0
+        ],
+        "source": "/tmp/torph-bidi-20261031/pixel7-before/connected_android_test_additional_output/benchmark/connected/Pixel 7 - 17/des.c5inco.torph.benchmark-benchmarkData.json"
+      },
+      "after": {
+        "samplesMs": [
+          0.626994,
+          1.11438,
+          0.528402,
+          0.545125,
+          0.625203
+        ],
+        "medianMs": 0.625203,
+        "minimumMs": 0.528402,
+        "maximumMs": 1.11438,
+        "platformLayoutCounts": [
+          8.0,
+          8.0,
+          8.0,
+          8.0,
+          8.0
+        ],
+        "source": "/tmp/torph-bidi-20261031/pixel7-after-plain-ascii-recheck/connected_android_test_additional_output/benchmark/connected/Pixel 7 - 17/des.c5inco.torph.benchmark-benchmarkData.json"
+      },
+      "medianDeltaMs": 0.00866699999999998,
+      "medianDeltaPercent": 1.4057573280392355
+    },
+    {
+      "name": "warmPlainBidi8",
+      "label": "Bidi plain Text",
+      "before": {
+        "samplesMs": [
+          1.752442,
+          1.772868,
+          2.1309,
+          1.746826,
+          1.6663
+        ],
+        "medianMs": 1.752442,
+        "minimumMs": 1.6663,
+        "maximumMs": 2.1309,
+        "platformLayoutCounts": [
+          8.0,
+          8.0,
+          8.0,
+          8.0,
+          8.0
+        ],
+        "source": "/tmp/torph-bidi-20261031/pixel7-before-plain-bidi-recheck/connected_android_test_additional_output/benchmark/connected/Pixel 7 - 17/des.c5inco.torph.benchmark-benchmarkData.json"
+      },
+      "after": {
+        "samplesMs": [
+          1.660767,
+          1.652507,
+          1.763061,
+          1.566529,
+          1.906494
+        ],
+        "medianMs": 1.660767,
+        "minimumMs": 1.566529,
+        "maximumMs": 1.906494,
+        "platformLayoutCounts": [
+          8.0,
+          8.0,
+          8.0,
+          8.0,
+          8.0
+        ],
+        "source": "/tmp/torph-bidi-20261031/pixel7-after/connected_android_test_additional_output/benchmark/connected/Pixel 7 - 17/des.c5inco.torph.benchmark-benchmarkData.json"
+      },
+      "medianDeltaMs": -0.09167499999999995,
+      "medianDeltaPercent": -5.231271562767838
+    }
+  ],
+  "medianIterationCpu": {
+    "before": [
+      {
+        "name": "Labels:firstMeasure",
+        "n": "1",
+        "wall_ms": "5.388346",
+        "cpu_ms": "5.313720"
+      },
+      {
+        "name": "Morph:firstApply",
+        "n": "8",
+        "wall_ms": "5.100017",
+        "cpu_ms": "5.100017"
+      },
+      {
+        "name": "Morph:fullMeasure",
+        "n": "8",
+        "wall_ms": "1.499350",
+        "cpu_ms": "1.499350"
+      },
+      {
+        "name": "Morph:prepareSnap",
+        "n": "8",
+        "wall_ms": "3.160523",
+        "cpu_ms": "3.160523"
+      },
+      {
+        "name": "Morph:segment",
+        "n": "8",
+        "wall_ms": "0.271159",
+        "cpu_ms": "0.271159"
+      },
+      {
+        "name": "Morph:segmentMeasure",
+        "n": "113",
+        "wall_ms": "2.108441",
+        "cpu_ms": "2.108441"
+      },
+      {
+        "name": "TextLayout:initLayout",
+        "n": "50",
+        "wall_ms": "1.243325",
+        "cpu_ms": "1.243325"
+      }
+    ],
+    "after": [
+      {
+        "name": "Labels:firstMeasure",
+        "n": "1",
+        "wall_ms": "8.086344",
+        "cpu_ms": "7.545898"
+      },
+      {
+        "name": "Morph:firstApply",
+        "n": "8",
+        "wall_ms": "7.585735",
+        "cpu_ms": "7.263510"
+      },
+      {
+        "name": "Morph:fullMeasure",
+        "n": "8",
+        "wall_ms": "1.524820",
+        "cpu_ms": "1.524820"
+      },
+      {
+        "name": "Morph:prepareSnap",
+        "n": "8",
+        "wall_ms": "5.586100",
+        "cpu_ms": "5.263875"
+      },
+      {
+        "name": "Morph:segment",
+        "n": "8",
+        "wall_ms": "0.300456",
+        "cpu_ms": "0.300456"
+      },
+      {
+        "name": "Morph:segmentMeasure",
+        "n": "122",
+        "wall_ms": "2.738074",
+        "cpu_ms": "2.415849"
+      },
+      {
+        "name": "TextLayout:initLayout",
+        "n": "53",
+        "wall_ms": "1.330239",
+        "cpu_ms": "1.330239"
+      }
+    ]
+  },
+  "limits": "Performance measured on Pixel 7 only. Five samples; ASCII ranges overlap. No FPS, startup or warm-change throughput claim."
+}

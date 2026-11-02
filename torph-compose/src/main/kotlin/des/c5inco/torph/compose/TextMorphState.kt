@@ -17,6 +17,7 @@ import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.TextMeasurer
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.text.style.ResolvedTextDirection
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.IntSize
@@ -33,6 +34,7 @@ import des.c5inco.torph.core.segmentText
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import java.text.Bidi
 import java.util.Locale
 import kotlin.math.ceil
 
@@ -92,6 +94,10 @@ public class TextMorphState internal constructor(
     private var nextId = 0L
     private var lastKey: LayoutKey? = null
     private val layoutCache = HashMap<String, TextLayoutResult>()
+    // Created only for bidi content. The same neutral text can resolve in opposite directions
+    // within one paragraph, so it must not reuse the other run's standalone layout.
+    private var bidiLtrLayoutCache: HashMap<String, TextLayoutResult>? = null
+    private var bidiRtlLayoutCache: HashMap<String, TextLayoutResult>? = null
     private var cacheStyle: TextStyle? = null
     private var cacheDirection: LayoutDirection? = null
     /** Per-character (left, top, right, bottom) boxes of [charBoxesFor], filled once per layout for [place]. */
@@ -99,6 +105,8 @@ public class TextMorphState internal constructor(
     private var charBoxesFor: TextLayoutResult? = null
     private var boundaryLayout: TextLayoutResult? = null
     private var useSegmentBoundaries = false
+    private var useBidiSelectionBounds = false
+    private var bidiRangeBounds: BidiRangeBounds? = null
     private var boundaryBoxes = FloatArray(0)
     private var boundaryPositions = FloatArray(0)
 
@@ -160,8 +168,11 @@ public class TextMorphState internal constructor(
         layoutResult = full
         // Text that keeps introducing new words would otherwise grow the cache without bound. Live
         // segments hold their own layouts, so clearing only costs re-measuring the next change.
-        if (cacheStyle != key.style || cacheDirection != key.direction || layoutCache.size > MAX_CACHED_LAYOUTS) {
+        if (cacheStyle != key.style || cacheDirection != key.direction ||
+            layoutCache.size + (bidiLtrLayoutCache?.size ?: 0) + (bidiRtlLayoutCache?.size ?: 0) > MAX_CACHED_LAYOUTS) {
             layoutCache.clear()
+            bidiLtrLayoutCache?.clear()
+            bidiRtlLayoutCache?.clear()
             cacheStyle = key.style
             cacheDirection = key.direction
         }
@@ -246,9 +257,23 @@ public class TextMorphState internal constructor(
             ls.segment = new
             // A font may complete in the same pass as a text change. Persisting segments must
             // pick up the fresh layout too; otherwise only enters would use the loaded font.
-            if (ls.layout.multiParagraph.intrinsics.hasStaleResolvedFonts) {
-                ls.layout = segmentLayout(new)
-                ls.strip = ls.strip?.map { cachedSegmentLayout(it.layoutInput.text.text) }
+            val direction = segmentLayoutDirection(new)
+            val textDirection = if (useBidiSelectionBounds) {
+                if (direction == LayoutDirection.Rtl) TextDirection.Rtl else TextDirection.Ltr
+            } else style.textDirection
+            if (ls.layout.multiParagraph.intrinsics.hasStaleResolvedFonts ||
+                ls.layout.layoutInput.layoutDirection != direction ||
+                ls.layout.layoutInput.style.textDirection != textDirection) {
+                val replacement = segmentLayout(new)
+                // Keep the current visual origin/baseline when a retained neutral changes run.
+                // Its standalone RTL inset may differ even though the logical text is unchanged.
+                if (ls.layout.layoutInput.layoutDirection != direction ||
+                    ls.layout.layoutInput.style.textDirection != textDirection) {
+                    ls.x.snapTo(ls.x.value + ls.layout.getLineLeft(0) - replacement.getLineLeft(0), ls.x.velocityAt(now))
+                    ls.y.snapTo(ls.y.value + ls.layout.firstBaseline - replacement.firstBaseline, ls.y.velocityAt(now))
+                }
+                ls.layout = replacement
+                ls.strip = ls.strip?.map { cachedSegmentLayout(it.layoutInput.text.text, direction) }
             }
             ls.cell = cell
             if (ls.strip == null) { ls.entering = false; ls.clip = null }
@@ -444,6 +469,13 @@ public class TextMorphState internal constructor(
             val previous = boundaryLayout
             val previouslyUsedBoundaries = useSegmentBoundaries
             boundaryLayout = full
+            val content = full.layoutInput.text.text
+            // A bidi caret has two possible horizontal edges. Character boxes can select the
+            // wrong one at a run boundary (even yielding positive but oversized boxes).
+            // Selection paths use the paragraph's visual runs instead. Keep mirrored transforms
+            // on the legacy signed-box path until their drawing semantics are independently tested.
+            useBidiSelectionBounds = (full.layoutInput.style.textGeometricTransform?.scaleX ?: 1f) > 0f &&
+                content.any { it >= '\u0590' } && Bidi.requiresBidi(content.toCharArray(), 0, content.length)
             // ASCII has no bidi controls or combining sequences. Restrict the shortcut to
             // nonnegative spacing and positive horizontal scale so positions remain monotonic.
             useSegmentBoundaries = textLen > segments.size * 2 &&
@@ -455,6 +487,18 @@ public class TextMorphState internal constructor(
                 if (boundaryPositions.size < textLen + 1) boundaryPositions = boundaryPositions.copyOf(textLen + 1)
                 boundaryPositions.fill(Float.NaN, reused, textLen + 1)
             }
+        }
+        if (useBidiSelectionBounds) {
+            val ranges = bidiRangeBounds ?: BidiRangeBounds().also { bidiRangeBounds = it }
+            val selection = ranges.bounds(full, start, end)
+            val seg = segmentLayout(s)
+            // Align actual line origins, not the rounded integer layout widths. A standalone
+            // RTL line can have a fractional inset even when the paragraph's selection is exact.
+            val x = selection.left - seg.getLineLeft(0)
+            val y = baseline - seg.firstBaseline
+            val cell = if (selection.top == lineTop && selection.bottom == lineBottom) selection
+                else Rect(selection.left, lineTop, selection.right, lineBottom)
+            return Offset(x, y) to cell
         }
         val bounds = if (useSegmentBoundaries) asciiSegmentBounds(full, start, end, line, boundaryPositions) else null
         var left = bounds?.left ?: Float.POSITIVE_INFINITY
@@ -520,24 +564,50 @@ public class TextMorphState internal constructor(
         return charBoxes
     }
 
-    private fun segmentLayout(s: Segment): TextLayoutResult =
-        cachedSegmentLayout(if (s.kind == SegmentKind.NEWLINE) "" else s.text)
+    private fun segmentLayoutDirection(s: Segment): LayoutDirection {
+        val full = layoutResult
+        return if (useBidiSelectionBounds && full != null && s.index < full.layoutInput.text.length) {
+            var resolved = full.getBidiRunDirection(s.index)
+            // A whole ICU word may span opposite-direction runs. Giving that entire word
+            // its first run's direction reorders its other runs (e.g. abcאב in an RTL
+            // paragraph). Preserve the paragraph base in that case; a single-run neutral
+            // still needs its resolved run direction for bracket mirroring.
+            var offset = s.index + 1
+            while (offset < s.end) {
+                if (full.getBidiRunDirection(offset) != resolved) {
+                    resolved = full.getParagraphDirection(s.index)
+                    break
+                }
+                offset++
+            }
+            if (resolved == ResolvedTextDirection.Rtl) LayoutDirection.Rtl else LayoutDirection.Ltr
+        } else lastKey?.direction ?: LayoutDirection.Ltr
+    }
 
-    private fun cachedSegmentLayout(text: String): TextLayoutResult {
-        layoutCache[text]?.let { if (!it.multiParagraph.intrinsics.hasStaleResolvedFonts) return it }
+    private fun segmentLayout(s: Segment): TextLayoutResult =
+        cachedSegmentLayout(if (s.kind == SegmentKind.NEWLINE) "" else s.text, segmentLayoutDirection(s))
+
+    private fun cachedSegmentLayout(text: String, direction: LayoutDirection = lastKey?.direction ?: LayoutDirection.Ltr): TextLayoutResult {
+        val cache = if (!useBidiSelectionBounds) layoutCache else if (direction == LayoutDirection.Rtl) {
+            bidiRtlLayoutCache ?: HashMap<String, TextLayoutResult>().also { bidiRtlLayoutCache = it }
+        } else {
+            bidiLtrLayoutCache ?: HashMap<String, TextLayoutResult>().also { bidiLtrLayoutCache = it }
+        }
+        cache[text]?.let { if (!it.multiParagraph.intrinsics.hasStaleResolvedFonts) return it }
         val diag = TextMorphDiagnostics.logTimings
         val t0 = if (diag) System.nanoTime() else 0L
         val measured = morphTrace("Morph:segmentMeasure") {
             textMeasurer.measure(
                 text = AnnotatedString(text),
-                style = style,
+                style = if (useBidiSelectionBounds) style.copy(textDirection =
+                    if (direction == LayoutDirection.Rtl) TextDirection.Rtl else TextDirection.Ltr) else style,
                 softWrap = false,
                 maxLines = 1,
-                layoutDirection = lastKey?.direction ?: LayoutDirection.Ltr,
+                layoutDirection = direction,
             )
         }
         if (diag) { timings.segmentLayout += System.nanoTime() - t0; timings.layoutMisses++ }
-        layoutCache[text] = measured
+        cache[text] = measured
         return measured
     }
 
@@ -551,7 +621,7 @@ public class TextMorphState internal constructor(
         for (k in 0..steps) {
             val d = if (roll > 0) (a + k) % 10 else (a - k + 10) % 10
             val ch = (zero + d).toString()
-            out.add(cachedSegmentLayout(ch))
+            out.add(cachedSegmentLayout(ch, if (useBidiSelectionBounds) LayoutDirection.Ltr else lastKey?.direction ?: LayoutDirection.Ltr))
         }
         return out
     }

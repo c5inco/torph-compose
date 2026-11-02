@@ -373,7 +373,6 @@ internal fun typographyCases(): List<TypographyCase> {
             "newlines" to "words wrap here\nnext line", "wrapped-lines" to "words wrapping across lines\nnext line", "wrapped-word" to "Supercalifragilisticexpialidocious",
         )) {
             val knownDifference = when {
-                id in listOf("bidi", "bidi-isolates") -> "Legacy segment placement differs at bidi boundaries; independently recorded finding"
                 id == "kerning" -> "Inter-segment kerning/word placement differs from the full paragraph"
                 mode == Segmentation.GRAPHEME && id in listOf("ligatures", "arabic") -> "Grapheme splitting loses full-paragraph shaping context"
                 mode == Segmentation.WORD && id == "wrapped-word" -> "A word crossing full-paragraph lines is drawn as one unwrapped segment"
