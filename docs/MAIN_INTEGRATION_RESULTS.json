@@ -1,0 +1,1805 @@
+{
+  "mainAtAudit": "2cd4a7e3bfc669041e922fbcaae6341490dcb5e7",
+  "integrationBeforeAuditDocumentation": "b5ac21e752e7481e1491bfb9611bd580f902901c",
+  "reviewedImplementation": "c5668e62ec5a05b7986c294a718ea7b808c9e85b",
+  "identicalTree": "cd1daaf57883a40e1afecff20ab6166a43183b90",
+  "prs": [
+    {
+      "pr": 4,
+      "base": "main",
+      "merge": "2cd4a7e3bfc669041e922fbcaae6341490dcb5e7",
+      "inMainAtAudit": true
+    },
+    {
+      "pr": 5,
+      "base": "issue3/01-test-foundation",
+      "merge": "36db2f51132eef9580791d0c6d523fa3eead6f57",
+      "inMainAtAudit": false
+    },
+    {
+      "pr": 6,
+      "base": "issue3/02-shared-layout-cache",
+      "merge": "72afcb4e59edbfd8ef1c9b11d3b5e919b757ee16",
+      "inMainAtAudit": false
+    },
+    {
+      "pr": 7,
+      "base": "issue3/03-bidi-geometry",
+      "merge": "d7db47b29bcce92d640370388cfc6368c5c5c870",
+      "inMainAtAudit": false
+    }
+  ],
+  "validation": {
+    "actual-main": {
+      "suite": {
+        "tests": "29",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0",
+        "time": "0.000",
+        "timestamp": "2026-11-02T04:17:11",
+        "hostname": "localhost"
+      },
+      "reports": {
+        "oracle-self-check": {
+          "MATCH": 1,
+          "KNOWN_DIFFERENCE": 1
+        },
+        "corpus": {
+          "MATCH": 37,
+          "KNOWN_DIFFERENCE": 14
+        }
+      },
+      "sourceHashes": {
+        "torph-compose/src/androidTest/kotlin/des/c5inco/torph/compose/SegmentBoundsTest.kt": "0f1ea071c87db9a4b2f9ca7884520e574d8d829cbf81ece37eb235ff8728466c",
+        "torph-compose/src/androidTest/kotlin/des/c5inco/torph/compose/DrawAllocationTest.kt": "b2f84014e6235d59dcd039cab8c1b2537670867cb6b112505249119bd2e0f162",
+        "torph-compose/src/androidTest/kotlin/des/c5inco/torph/compose/MorphParityHarness.kt": "b1b9ef6b00cd6c091ac75b97cdb941f4181236efb3013d0ffec757d7908f26d8",
+        "torph-compose/src/androidTest/kotlin/des/c5inco/torph/compose/TypographyReferenceTest.kt": "eae153bd227f9929d1ec644f546447cdeb607a914f20603a356051b1c3ea551d",
+        "torph-compose/src/androidTest/kotlin/des/c5inco/torph/compose/ReusableBoxPrefixTest.kt": "ba3580123f1e978045bf51044ef91353c05f4479f28f54e103992b336ce654fd",
+        "torph-compose/src/androidTest/kotlin/des/c5inco/torph/compose/MorphClipDrawTest.kt": "d480236895bf893ba5773ca4e4551b1a6fd06ad8c3dc4f5e276e573cee7f9530",
+        "torph-compose/src/androidTest/kotlin/des/c5inco/torph/compose/RedrawIsolationTest.kt": "59112240f1c5e92fdfc4b3795cd3b5d4f1babcdadd867f46d1cfd83708d90803",
+        "torph-compose/src/androidTest/kotlin/des/c5inco/torph/compose/TextMorphTest.kt": "a4b5e37ece3ea247315f9f0fcadbdd0b6bbefb728126705a4eb853a2eaac96f9",
+        "torph-compose/src/androidTest/kotlin/des/c5inco/torph/compose/MorphRegressionTest.kt": "56866af05440ac768d982c14e39f969401ad5efe627e0a83fe7a16262dd6f6bd",
+        "torph-compose/src/androidTest/kotlin/des/c5inco/torph/compose/FirstLayoutInvestigationTest.kt": "13784133dd855b3e181abd06b3de67eec0065a7bf31cbab272970e1edfac8c06",
+        "torph-compose/src/test/kotlin/des/c5inco/torph/compose/MorphClipTest.kt": "9344b58f087fd30d199201f91279325a2c5251b29c6f1289b65591ad74aa0ab7",
+        "torph-compose/src/main/AndroidManifest.xml": "571f2735faf5e857752ee057ac8ef63425576a721616c60b86ee5d4c0a2d682f",
+        "torph-compose/src/main/generated/baselineProfiles/baseline-prof.txt": "b2ca4af57fe068e8201b3555b2bce0f54788b04a0bbff3017347a2786672521f",
+        "torph-compose/src/main/kotlin/des/c5inco/torph/compose/TextMorph.kt": "6751c0cf340ab72ce15ae5a3a87c9dca75fb81185f388b25835e89c23b8ad7ed",
+        "torph-compose/src/main/kotlin/des/c5inco/torph/compose/MorphOptions.kt": "3fa4703d51417e00ce5514f0a7ec9c1b0d75cc36c6ef93374197a2c4fefc9de1",
+        "torph-compose/src/main/kotlin/des/c5inco/torph/compose/IcuSegmenter.kt": "48c11f3f050865cb1fd4557c2f6eda060994f33f6a85354b923158f318543b9c",
+        "torph-compose/src/main/kotlin/des/c5inco/torph/compose/MorphDraw.kt": "934fcc2b6e11ab9bb97f99a00e9828d0ebbedb838f4fa075913a93f591953528",
+        "torph-compose/src/main/kotlin/des/c5inco/torph/compose/ReducedMotion.kt": "c8f4f1e376436722296ab0475a3c47facfa105de4324feb527e6d0adc94b2127",
+        "torph-compose/src/main/kotlin/des/c5inco/torph/compose/TextMorphState.kt": "b08e7d4119835656fc3eb05978946137efb44993c1f47ac6f7f1f3e2e563c2b1",
+        "torph-compose/src/main/kotlin/des/c5inco/torph/compose/LiveSegment.kt": "4d8a8240c8899d0c4cf585a8441620b57b0f7fa1f3decfc94240b7c3bb4dd17c",
+        "torph-compose/src/main/kotlin/des/c5inco/torph/compose/Diagnostics.kt": "5d95d6b8361204e7a3722403e73c8727661a17295e7aaebe9fece6978af7d061",
+        "torph-compose/src/main/kotlin/des/c5inco/torph/compose/MorphLayout.kt": "dcb2c148119c28891491971c886dfdacdfb2656fa79e71a8ba721a4ad9f580f9",
+        "torph-compose/src/main/kotlin/des/c5inco/torph/compose/Channel.kt": "064e8fe927a01e4f82a0e94db25c171681162c63f796de29608ee308b5e19a6c",
+        "torph-compose/src/main/kotlin/des/c5inco/torph/compose/Easing.kt": "8b06fd532e97c1b4d06be054153d911ca1481a4925c875154107a3e2a85cab53",
+        "torph-core/src/test/kotlin/des/c5inco/torph/core/SpringTest.kt": "acf9fea420f7d13d0f18c524e9624dce29e1c69ae3f619b5f597c5505a04f28e",
+        "torph-core/src/test/kotlin/des/c5inco/torph/core/NumberMatcherTest.kt": "e75e422c035af8e665f56c4ecbfc22516358da9356827d55fa7aefd18b0bd30e",
+        "torph-core/src/test/kotlin/des/c5inco/torph/core/DiffTest.kt": "f1c0c8a2b6bc9c39a886e335b331054d9a0fb07ecb45fdad8d2f8a469a7711db",
+        "torph-core/src/main/kotlin/des/c5inco/torph/core/Spring.kt": "abf34953b728dba604c34e85e40ec18284e3d8f7234061b639f8cf572ca7051f",
+        "torph-core/src/main/kotlin/des/c5inco/torph/core/Diff.kt": "f30ae3092dad3fe9c2aa1157fa975873f805c9cf48aa5657647c34edae57ebf5",
+        "torph-core/src/main/kotlin/des/c5inco/torph/core/Locale.kt": "5bac96f4930bdd4fc4626c05728f157cfc0625c56f1f2e48f3135176c806e54e",
+        "torph-core/src/main/kotlin/des/c5inco/torph/core/Segmenter.kt": "f8d68a72b6ff311d8c28c8b32f2022e558b9f59fc336eb4e2a64cc9a38a44882",
+        "torph-core/src/main/kotlin/des/c5inco/torph/core/Segmentation.kt": "00ca9239ef324f711978b15f93425cc171af51c3ea8eef4a40c70d01819a4614",
+        "torph-core/src/main/kotlin/des/c5inco/torph/core/Segment.kt": "f283c5d3cd518316a8e6798b8194b8def77d90ab7b725898624bfd59b7c1cb28",
+        "torph-core/src/main/kotlin/des/c5inco/torph/core/NumberMatcher.kt": "593e855a9730d9d4a46e960397edde81a518ffdec650998dbd9bbbb7b40e61f3",
+        "demo/src/main/AndroidManifest.xml": "375c70c05b6ffa450cece2d166e948ea15532820d8a26f8f18c9cd66bf2fcc93",
+        "demo/src/main/res/values/themes.xml": "1027144d84656279d24bbb5540a60cc80b7d8150a8250c66443a3c561ce8510d",
+        "demo/src/main/res/font/geist.ttf": "73894e0448cae90a92b6c2f8732b7bb9acb7b94c418bff559dad4a18e1de9659",
+        "demo/src/main/res/font/geist_mono.ttf": "d00e590b8eb3a59acc329b2d044fd143ae935090b7da33199ebee27cc7de8196",
+        "demo/src/main/res/font/bitcount_single.ttf": "007608c704d41cfff140892070b71f31971ec6d85b9f8ad5fdd0d2625f517c70",
+        "demo/src/main/kotlin/des/c5inco/torph/demo/MainActivity.kt": "78f748fc1dd27717c84788efbe7b7c5959c62312f6d679891ff7141cef30a53a",
+        "demo/src/main/kotlin/des/c5inco/torph/demo/DemoType.kt": "48e6b8cb5d4c4f4fbac0492764dd6ed5c2ba44c6a774af73a1dc6465ec6dce6b",
+        "demo/src/main/kotlin/des/c5inco/torph/demo/Ui.kt": "adac0e3c2c1c69209603bfd2f13eb153a865537f25ca487cc323c94a558bcaa9",
+        "demo/src/main/kotlin/des/c5inco/torph/demo/DemoApp.kt": "4c53a39d93def610eaf2425f376f9d7d0258c66ddd8554486c1be148939d7ac4",
+        "demo/src/main/kotlin/des/c5inco/torph/demo/screens/MultiLineScreen.kt": "b441fcbe83695b949830558bab5b994cc400d3877b5a1b21f96bb65336a7845e",
+        "demo/src/main/kotlin/des/c5inco/torph/demo/screens/NumbersScreen.kt": "fd37a56ccc95bdb50b44a0dd0d34747385588d9fda6486f9dad057146aa0995e",
+        "demo/src/main/kotlin/des/c5inco/torph/demo/screens/FirstLayoutScreen.kt": "aedea5f0589e0ff13e8944cbdc3849d0af073c5924d7e7d2e2f56e55e188260e",
+        "demo/src/main/kotlin/des/c5inco/torph/demo/screens/TypingScreen.kt": "947d38f193371b47a94b06a11bf1768a53db49f6896cb872ba11fa13ef174198",
+        "demo/src/main/kotlin/des/c5inco/torph/demo/screens/InterruptionScreen.kt": "a5efa48572bedf99de484e294202cd1a1e6d374ff64ffb7c977eb37ef2b3d9eb",
+        "demo/src/main/kotlin/des/c5inco/torph/demo/screens/PlaygroundScreen.kt": "cfde0f3f2c6ed239ddbdb76bd9bae45709e74c89dbdc0e700faa033881f7324d",
+        "demo/src/main/kotlin/des/c5inco/torph/demo/screens/DebugScreen.kt": "cb555781debce6588a6838ac47c20100b0b347d0252e0d1de459fbecb25f2e80",
+        "demo/src/main/kotlin/des/c5inco/torph/demo/screens/PerfScreen.kt": "64dfeb44a066b009e30de850d511c0fd78465b831a9a2ab9183c3d5326997221",
+        "demo/src/main/kotlin/des/c5inco/torph/demo/screens/ScriptsScreen.kt": "76a4ee6e6486fa775e3dd3ff6ec19911afe433c19e19681ad749e50f1ef08808",
+        "benchmark/src/main/AndroidManifest.xml": "571f2735faf5e857752ee057ac8ef63425576a721616c60b86ee5d4c0a2d682f",
+        "benchmark/src/main/kotlin/des/c5inco/torph/benchmark/PerfScreenBenchmark.kt": "7f6fee5309f5b7dc8339b45899684841e5b3f0c7a7629ba31ef6c45aaf04d8b0",
+        "benchmark/src/main/kotlin/des/c5inco/torph/benchmark/BaselineProfileGenerator.kt": "6baa30af0f515249b4b542ec2b147f590e0c08541f4919516b8eadefca73bb0d",
+        "benchmark/src/main/kotlin/des/c5inco/torph/benchmark/BenchmarkDeviceState.kt": "b4f1a930f4eaabb95831cd88f2e8094d8c5effab2db50624e74025c78448865d",
+        "benchmark/src/main/kotlin/des/c5inco/torph/benchmark/GeometryWorkload.kt": "016ead04fd73e067763bc8fcfe5410485421f19f96805e93ab0893de9f5c54bc",
+        "benchmark/src/main/kotlin/des/c5inco/torph/benchmark/ColdChangeBenchmark.kt": "dd5184660ca8cdd14e4a6fe85a98ec3c89545f970f98a8897c3745465f62da88",
+        "benchmark/src/main/kotlin/des/c5inco/torph/benchmark/FirstLayoutBenchmark.kt": "ab91f200bbc79ae6f55216f138969061541c8d0d2d2bb8e5bf6c9ad4a9d2c280",
+        "benchmark/src/main/kotlin/des/c5inco/torph/benchmark/FeatureBenchmark.kt": "41f6cb175ac07da1d3cade17590587269cca93a8b3fa056b8b071afa775eae71"
+      }
+    },
+    "candidate-pixel7": {
+      "suite": {
+        "tests": "56",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0",
+        "time": "0.000",
+        "timestamp": "2026-11-02T04:24:14",
+        "hostname": "localhost"
+      },
+      "reports": {
+        "oracle-self-check": {
+          "MATCH": 1,
+          "KNOWN_DIFFERENCE": 1
+        },
+        "bidi-animation": {
+          "MATCH": 6
+        },
+        "corpus": {
+          "MATCH": 43,
+          "KNOWN_DIFFERENCE": 8
+        },
+        "deferred-fragment-targets": {
+          "MATCH": 13
+        },
+        "bidi-mixed-word": {
+          "MATCH": 19
+        },
+        "deferred-initial-corpus": {
+          "MATCH": 48,
+          "KNOWN_DIFFERENCE": 3
+        },
+        "bidi-geometry": {
+          "MATCH": 30
+        },
+        "deferred-disjoint-runs": {
+          "MATCH": 2
+        }
+      },
+      "sourceHashes": {
+        "torph-compose/src/androidTest/kotlin/des/c5inco/torph/compose/SegmentBoundsTest.kt": "27d5160e1f7e843692eb2bf85f39b0eb698d6802f659aaca952b2e6125f7239c",
+        "torph-compose/src/androidTest/kotlin/des/c5inco/torph/compose/BidiGeometryTest.kt": "7826f88a64d93456aefd1cf3cdb59ca06e19591a0099d218600ed107a6caad0f",
+        "torph-compose/src/androidTest/kotlin/des/c5inco/torph/compose/DrawAllocationTest.kt": "81a0be265979b430c4b3422611435bdde03c0fa50f244d6d74ed7ef6fa104a10",
+        "torph-compose/src/androidTest/kotlin/des/c5inco/torph/compose/MorphParityHarness.kt": "957ab22a9c58d85cad0d5239d2888baa4d5ce8d404f4f0a63409796e394e207c",
+        "torph-compose/src/androidTest/kotlin/des/c5inco/torph/compose/SharedTextMeasurerTest.kt": "cd0e6605ba4324178010804e59d252e7a97edd67f3a94fb0ca662b36813edf57",
+        "torph-compose/src/androidTest/kotlin/des/c5inco/torph/compose/TypographyReferenceTest.kt": "c259a72a586a6ef24ff049a1310948ea7a866b716eb9299d674c0866871cefc2",
+        "torph-compose/src/androidTest/kotlin/des/c5inco/torph/compose/DeferredPreparationTest.kt": "a1048a0ed1dbcc61b4c8bb48b4c63b4a65fa6c5eaaa2e330ee918c81ba4e3576",
+        "torph-compose/src/androidTest/kotlin/des/c5inco/torph/compose/ReusableBoxPrefixTest.kt": "ba3580123f1e978045bf51044ef91353c05f4479f28f54e103992b336ce654fd",
+        "torph-compose/src/androidTest/kotlin/des/c5inco/torph/compose/DeferredFragmentHardwareTest.kt": "e91a58fdb72032c6c4ba67ccfb7f6b2ad4bef186e182cae3236f516081d8ce42",
+        "torph-compose/src/androidTest/kotlin/des/c5inco/torph/compose/MorphClipDrawTest.kt": "d480236895bf893ba5773ca4e4551b1a6fd06ad8c3dc4f5e276e573cee7f9530",
+        "torph-compose/src/androidTest/kotlin/des/c5inco/torph/compose/DeferredTestFont.kt": "040a65ae02bdb456575820c1477cf620011e6a112054442be6909c42d432f246",
+        "torph-compose/src/androidTest/kotlin/des/c5inco/torph/compose/RedrawIsolationTest.kt": "59112240f1c5e92fdfc4b3795cd3b5d4f1babcdadd867f46d1cfd83708d90803",
+        "torph-compose/src/androidTest/kotlin/des/c5inco/torph/compose/BidiRangeBoundsTest.kt": "a1db9c28f7f687d0bea7c5678d2a2569dc83539e38823f08350d4e63f763ec4a",
+        "torph-compose/src/androidTest/kotlin/des/c5inco/torph/compose/MorphFontAndMotionTest.kt": "e75d020719ce6159bcbad8e424f7f10e851757d7749f65b68cacef1a2290839d",
+        "torph-compose/src/androidTest/kotlin/des/c5inco/torph/compose/TextMorphTest.kt": "a4b5e37ece3ea247315f9f0fcadbdd0b6bbefb728126705a4eb853a2eaac96f9",
+        "torph-compose/src/androidTest/kotlin/des/c5inco/torph/compose/MorphRegressionTest.kt": "1d2aa59a64113f1239962de149fad7f1883feea564557a298d615219291592a3",
+        "torph-compose/src/androidTest/kotlin/des/c5inco/torph/compose/FirstLayoutInvestigationTest.kt": "3d8a0eff3eb4f97aa5c65062a6ee48f699137de656c12806993134674230dbe7",
+        "torph-compose/src/test/kotlin/des/c5inco/torph/compose/MorphClipTest.kt": "9344b58f087fd30d199201f91279325a2c5251b29c6f1289b65591ad74aa0ab7",
+        "torph-compose/src/main/AndroidManifest.xml": "571f2735faf5e857752ee057ac8ef63425576a721616c60b86ee5d4c0a2d682f",
+        "torph-compose/src/main/generated/baselineProfiles/baseline-prof.txt": "b2ca4af57fe068e8201b3555b2bce0f54788b04a0bbff3017347a2786672521f",
+        "torph-compose/src/main/kotlin/des/c5inco/torph/compose/TextMorph.kt": "6a14960f05931b697a86083a1de8eccc15e2be677c10b5b906041dad58e3712c",
+        "torph-compose/src/main/kotlin/des/c5inco/torph/compose/MorphOptions.kt": "3fa4703d51417e00ce5514f0a7ec9c1b0d75cc36c6ef93374197a2c4fefc9de1",
+        "torph-compose/src/main/kotlin/des/c5inco/torph/compose/IcuSegmenter.kt": "48c11f3f050865cb1fd4557c2f6eda060994f33f6a85354b923158f318543b9c",
+        "torph-compose/src/main/kotlin/des/c5inco/torph/compose/MorphDraw.kt": "9acf5ff300167b842bac3c5925efdc23aa3169037fbf8b585292f28201d46e3c",
+        "torph-compose/src/main/kotlin/des/c5inco/torph/compose/ReducedMotion.kt": "c8f4f1e376436722296ab0475a3c47facfa105de4324feb527e6d0adc94b2127",
+        "torph-compose/src/main/kotlin/des/c5inco/torph/compose/TextMorphState.kt": "de9c81e42cc4e6f0e5c73dfd9ea2bf8b5221a5671974d9400a02df57a041a447",
+        "torph-compose/src/main/kotlin/des/c5inco/torph/compose/BidiRangeBounds.kt": "01172a0ab8e2cfee6bc491adf3332f0a4a70dd6f0e7c6e34338dbca3df564c94",
+        "torph-compose/src/main/kotlin/des/c5inco/torph/compose/LiveSegment.kt": "ac56c4da2e2bbc667a50e461b9c171f67941e4079b60b8a1a3b1c19c8d846c27",
+        "torph-compose/src/main/kotlin/des/c5inco/torph/compose/Diagnostics.kt": "39db7fc9c113aa100bc0613a1b7c6bcd9d21d55199e7f847d70911b99061ffd4",
+        "torph-compose/src/main/kotlin/des/c5inco/torph/compose/MorphLayout.kt": "dcb2c148119c28891491971c886dfdacdfb2656fa79e71a8ba721a4ad9f580f9",
+        "torph-compose/src/main/kotlin/des/c5inco/torph/compose/Channel.kt": "064e8fe927a01e4f82a0e94db25c171681162c63f796de29608ee308b5e19a6c",
+        "torph-compose/src/main/kotlin/des/c5inco/torph/compose/Easing.kt": "8b06fd532e97c1b4d06be054153d911ca1481a4925c875154107a3e2a85cab53",
+        "torph-compose/src/main/kotlin/des/c5inco/torph/compose/SharedTextMeasurer.kt": "7083fb068dbd79b78916677af4a09542a53c70fcbd4c0ebabf0452ee8c6668d6",
+        "torph-core/src/test/kotlin/des/c5inco/torph/core/SpringTest.kt": "acf9fea420f7d13d0f18c524e9624dce29e1c69ae3f619b5f597c5505a04f28e",
+        "torph-core/src/test/kotlin/des/c5inco/torph/core/NumberMatcherTest.kt": "e75e422c035af8e665f56c4ecbfc22516358da9356827d55fa7aefd18b0bd30e",
+        "torph-core/src/test/kotlin/des/c5inco/torph/core/DiffTest.kt": "f1c0c8a2b6bc9c39a886e335b331054d9a0fb07ecb45fdad8d2f8a469a7711db",
+        "torph-core/src/main/kotlin/des/c5inco/torph/core/Spring.kt": "abf34953b728dba604c34e85e40ec18284e3d8f7234061b639f8cf572ca7051f",
+        "torph-core/src/main/kotlin/des/c5inco/torph/core/Diff.kt": "f30ae3092dad3fe9c2aa1157fa975873f805c9cf48aa5657647c34edae57ebf5",
+        "torph-core/src/main/kotlin/des/c5inco/torph/core/Locale.kt": "5bac96f4930bdd4fc4626c05728f157cfc0625c56f1f2e48f3135176c806e54e",
+        "torph-core/src/main/kotlin/des/c5inco/torph/core/Segmenter.kt": "f8d68a72b6ff311d8c28c8b32f2022e558b9f59fc336eb4e2a64cc9a38a44882",
+        "torph-core/src/main/kotlin/des/c5inco/torph/core/Segmentation.kt": "00ca9239ef324f711978b15f93425cc171af51c3ea8eef4a40c70d01819a4614",
+        "torph-core/src/main/kotlin/des/c5inco/torph/core/Segment.kt": "f283c5d3cd518316a8e6798b8194b8def77d90ab7b725898624bfd59b7c1cb28",
+        "torph-core/src/main/kotlin/des/c5inco/torph/core/NumberMatcher.kt": "593e855a9730d9d4a46e960397edde81a518ffdec650998dbd9bbbb7b40e61f3",
+        "demo/src/main/AndroidManifest.xml": "375c70c05b6ffa450cece2d166e948ea15532820d8a26f8f18c9cd66bf2fcc93",
+        "demo/src/main/res/values/themes.xml": "1027144d84656279d24bbb5540a60cc80b7d8150a8250c66443a3c561ce8510d",
+        "demo/src/main/res/font/geist.ttf": "73894e0448cae90a92b6c2f8732b7bb9acb7b94c418bff559dad4a18e1de9659",
+        "demo/src/main/res/font/geist_mono.ttf": "d00e590b8eb3a59acc329b2d044fd143ae935090b7da33199ebee27cc7de8196",
+        "demo/src/main/res/font/bitcount_single.ttf": "007608c704d41cfff140892070b71f31971ec6d85b9f8ad5fdd0d2625f517c70",
+        "demo/src/main/kotlin/des/c5inco/torph/demo/MainActivity.kt": "e090e4edde48105131311ea0594f57c887a506bb3d7f67763e95b00cb2528cdd",
+        "demo/src/main/kotlin/des/c5inco/torph/demo/DemoType.kt": "48e6b8cb5d4c4f4fbac0492764dd6ed5c2ba44c6a774af73a1dc6465ec6dce6b",
+        "demo/src/main/kotlin/des/c5inco/torph/demo/Ui.kt": "adac0e3c2c1c69209603bfd2f13eb153a865537f25ca487cc323c94a558bcaa9",
+        "demo/src/main/kotlin/des/c5inco/torph/demo/DemoApp.kt": "4c53a39d93def610eaf2425f376f9d7d0258c66ddd8554486c1be148939d7ac4",
+        "demo/src/main/kotlin/des/c5inco/torph/demo/screens/MultiLineScreen.kt": "b441fcbe83695b949830558bab5b994cc400d3877b5a1b21f96bb65336a7845e",
+        "demo/src/main/kotlin/des/c5inco/torph/demo/screens/NumbersScreen.kt": "fd37a56ccc95bdb50b44a0dd0d34747385588d9fda6486f9dad057146aa0995e",
+        "demo/src/main/kotlin/des/c5inco/torph/demo/screens/FirstLayoutScreen.kt": "9f4f1f181efa01033e45311a0a4de4b86b0b4763b0a59a26141d9a61c4f881f5",
+        "demo/src/main/kotlin/des/c5inco/torph/demo/screens/TypingScreen.kt": "947d38f193371b47a94b06a11bf1768a53db49f6896cb872ba11fa13ef174198",
+        "demo/src/main/kotlin/des/c5inco/torph/demo/screens/InterruptionScreen.kt": "a5efa48572bedf99de484e294202cd1a1e6d374ff64ffb7c977eb37ef2b3d9eb",
+        "demo/src/main/kotlin/des/c5inco/torph/demo/screens/PlaygroundScreen.kt": "cfde0f3f2c6ed239ddbdb76bd9bae45709e74c89dbdc0e700faa033881f7324d",
+        "demo/src/main/kotlin/des/c5inco/torph/demo/screens/DebugScreen.kt": "cb555781debce6588a6838ac47c20100b0b347d0252e0d1de459fbecb25f2e80",
+        "demo/src/main/kotlin/des/c5inco/torph/demo/screens/PerfScreen.kt": "64dfeb44a066b009e30de850d511c0fd78465b831a9a2ab9183c3d5326997221",
+        "demo/src/main/kotlin/des/c5inco/torph/demo/screens/ScriptsScreen.kt": "76a4ee6e6486fa775e3dd3ff6ec19911afe433c19e19681ad749e50f1ef08808",
+        "benchmark/src/main/AndroidManifest.xml": "571f2735faf5e857752ee057ac8ef63425576a721616c60b86ee5d4c0a2d682f",
+        "benchmark/src/main/kotlin/des/c5inco/torph/benchmark/PerfScreenBenchmark.kt": "7f6fee5309f5b7dc8339b45899684841e5b3f0c7a7629ba31ef6c45aaf04d8b0",
+        "benchmark/src/main/kotlin/des/c5inco/torph/benchmark/BaselineProfileGenerator.kt": "6baa30af0f515249b4b542ec2b147f590e0c08541f4919516b8eadefca73bb0d",
+        "benchmark/src/main/kotlin/des/c5inco/torph/benchmark/BenchmarkDeviceState.kt": "b4f1a930f4eaabb95831cd88f2e8094d8c5effab2db50624e74025c78448865d",
+        "benchmark/src/main/kotlin/des/c5inco/torph/benchmark/GeometryWorkload.kt": "016ead04fd73e067763bc8fcfe5410485421f19f96805e93ab0893de9f5c54bc",
+        "benchmark/src/main/kotlin/des/c5inco/torph/benchmark/ColdChangeBenchmark.kt": "dd5184660ca8cdd14e4a6fe85a98ec3c89545f970f98a8897c3745465f62da88",
+        "benchmark/src/main/kotlin/des/c5inco/torph/benchmark/FirstLayoutBenchmark.kt": "ab53d86da852f7a92e846679f50d083c3ca83f43b12ef50db0bf2bcb01dc95f2",
+        "benchmark/src/main/kotlin/des/c5inco/torph/benchmark/FeatureBenchmark.kt": "41f6cb175ac07da1d3cade17590587269cca93a8b3fa056b8b071afa775eae71"
+      }
+    },
+    "candidate-pixel4xl": {
+      "suite": {
+        "tests": "56",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0",
+        "time": "0.000",
+        "timestamp": "2026-11-02T04:19:40",
+        "hostname": "localhost"
+      },
+      "reports": {
+        "oracle-self-check": {
+          "MATCH": 1,
+          "KNOWN_DIFFERENCE": 1
+        },
+        "bidi-animation": {
+          "MATCH": 6
+        },
+        "corpus": {
+          "MATCH": 43,
+          "KNOWN_DIFFERENCE": 8
+        },
+        "deferred-fragment-targets": {
+          "MATCH": 13
+        },
+        "bidi-mixed-word": {
+          "MATCH": 19
+        },
+        "deferred-initial-corpus": {
+          "MATCH": 48,
+          "KNOWN_DIFFERENCE": 3
+        },
+        "bidi-geometry": {
+          "MATCH": 30
+        },
+        "deferred-disjoint-runs": {
+          "MATCH": 2
+        }
+      },
+      "sourceHashes": {
+        "torph-compose/src/androidTest/kotlin/des/c5inco/torph/compose/SegmentBoundsTest.kt": "27d5160e1f7e843692eb2bf85f39b0eb698d6802f659aaca952b2e6125f7239c",
+        "torph-compose/src/androidTest/kotlin/des/c5inco/torph/compose/BidiGeometryTest.kt": "7826f88a64d93456aefd1cf3cdb59ca06e19591a0099d218600ed107a6caad0f",
+        "torph-compose/src/androidTest/kotlin/des/c5inco/torph/compose/DrawAllocationTest.kt": "81a0be265979b430c4b3422611435bdde03c0fa50f244d6d74ed7ef6fa104a10",
+        "torph-compose/src/androidTest/kotlin/des/c5inco/torph/compose/MorphParityHarness.kt": "957ab22a9c58d85cad0d5239d2888baa4d5ce8d404f4f0a63409796e394e207c",
+        "torph-compose/src/androidTest/kotlin/des/c5inco/torph/compose/SharedTextMeasurerTest.kt": "cd0e6605ba4324178010804e59d252e7a97edd67f3a94fb0ca662b36813edf57",
+        "torph-compose/src/androidTest/kotlin/des/c5inco/torph/compose/TypographyReferenceTest.kt": "c259a72a586a6ef24ff049a1310948ea7a866b716eb9299d674c0866871cefc2",
+        "torph-compose/src/androidTest/kotlin/des/c5inco/torph/compose/DeferredPreparationTest.kt": "a1048a0ed1dbcc61b4c8bb48b4c63b4a65fa6c5eaaa2e330ee918c81ba4e3576",
+        "torph-compose/src/androidTest/kotlin/des/c5inco/torph/compose/ReusableBoxPrefixTest.kt": "ba3580123f1e978045bf51044ef91353c05f4479f28f54e103992b336ce654fd",
+        "torph-compose/src/androidTest/kotlin/des/c5inco/torph/compose/DeferredFragmentHardwareTest.kt": "e91a58fdb72032c6c4ba67ccfb7f6b2ad4bef186e182cae3236f516081d8ce42",
+        "torph-compose/src/androidTest/kotlin/des/c5inco/torph/compose/MorphClipDrawTest.kt": "d480236895bf893ba5773ca4e4551b1a6fd06ad8c3dc4f5e276e573cee7f9530",
+        "torph-compose/src/androidTest/kotlin/des/c5inco/torph/compose/DeferredTestFont.kt": "040a65ae02bdb456575820c1477cf620011e6a112054442be6909c42d432f246",
+        "torph-compose/src/androidTest/kotlin/des/c5inco/torph/compose/RedrawIsolationTest.kt": "59112240f1c5e92fdfc4b3795cd3b5d4f1babcdadd867f46d1cfd83708d90803",
+        "torph-compose/src/androidTest/kotlin/des/c5inco/torph/compose/BidiRangeBoundsTest.kt": "a1db9c28f7f687d0bea7c5678d2a2569dc83539e38823f08350d4e63f763ec4a",
+        "torph-compose/src/androidTest/kotlin/des/c5inco/torph/compose/MorphFontAndMotionTest.kt": "e75d020719ce6159bcbad8e424f7f10e851757d7749f65b68cacef1a2290839d",
+        "torph-compose/src/androidTest/kotlin/des/c5inco/torph/compose/TextMorphTest.kt": "a4b5e37ece3ea247315f9f0fcadbdd0b6bbefb728126705a4eb853a2eaac96f9",
+        "torph-compose/src/androidTest/kotlin/des/c5inco/torph/compose/MorphRegressionTest.kt": "1d2aa59a64113f1239962de149fad7f1883feea564557a298d615219291592a3",
+        "torph-compose/src/androidTest/kotlin/des/c5inco/torph/compose/FirstLayoutInvestigationTest.kt": "3d8a0eff3eb4f97aa5c65062a6ee48f699137de656c12806993134674230dbe7",
+        "torph-compose/src/test/kotlin/des/c5inco/torph/compose/MorphClipTest.kt": "9344b58f087fd30d199201f91279325a2c5251b29c6f1289b65591ad74aa0ab7",
+        "torph-compose/src/main/AndroidManifest.xml": "571f2735faf5e857752ee057ac8ef63425576a721616c60b86ee5d4c0a2d682f",
+        "torph-compose/src/main/generated/baselineProfiles/baseline-prof.txt": "b2ca4af57fe068e8201b3555b2bce0f54788b04a0bbff3017347a2786672521f",
+        "torph-compose/src/main/kotlin/des/c5inco/torph/compose/TextMorph.kt": "6a14960f05931b697a86083a1de8eccc15e2be677c10b5b906041dad58e3712c",
+        "torph-compose/src/main/kotlin/des/c5inco/torph/compose/MorphOptions.kt": "3fa4703d51417e00ce5514f0a7ec9c1b0d75cc36c6ef93374197a2c4fefc9de1",
+        "torph-compose/src/main/kotlin/des/c5inco/torph/compose/IcuSegmenter.kt": "48c11f3f050865cb1fd4557c2f6eda060994f33f6a85354b923158f318543b9c",
+        "torph-compose/src/main/kotlin/des/c5inco/torph/compose/MorphDraw.kt": "9acf5ff300167b842bac3c5925efdc23aa3169037fbf8b585292f28201d46e3c",
+        "torph-compose/src/main/kotlin/des/c5inco/torph/compose/ReducedMotion.kt": "c8f4f1e376436722296ab0475a3c47facfa105de4324feb527e6d0adc94b2127",
+        "torph-compose/src/main/kotlin/des/c5inco/torph/compose/TextMorphState.kt": "de9c81e42cc4e6f0e5c73dfd9ea2bf8b5221a5671974d9400a02df57a041a447",
+        "torph-compose/src/main/kotlin/des/c5inco/torph/compose/BidiRangeBounds.kt": "01172a0ab8e2cfee6bc491adf3332f0a4a70dd6f0e7c6e34338dbca3df564c94",
+        "torph-compose/src/main/kotlin/des/c5inco/torph/compose/LiveSegment.kt": "ac56c4da2e2bbc667a50e461b9c171f67941e4079b60b8a1a3b1c19c8d846c27",
+        "torph-compose/src/main/kotlin/des/c5inco/torph/compose/Diagnostics.kt": "39db7fc9c113aa100bc0613a1b7c6bcd9d21d55199e7f847d70911b99061ffd4",
+        "torph-compose/src/main/kotlin/des/c5inco/torph/compose/MorphLayout.kt": "dcb2c148119c28891491971c886dfdacdfb2656fa79e71a8ba721a4ad9f580f9",
+        "torph-compose/src/main/kotlin/des/c5inco/torph/compose/Channel.kt": "064e8fe927a01e4f82a0e94db25c171681162c63f796de29608ee308b5e19a6c",
+        "torph-compose/src/main/kotlin/des/c5inco/torph/compose/Easing.kt": "8b06fd532e97c1b4d06be054153d911ca1481a4925c875154107a3e2a85cab53",
+        "torph-compose/src/main/kotlin/des/c5inco/torph/compose/SharedTextMeasurer.kt": "7083fb068dbd79b78916677af4a09542a53c70fcbd4c0ebabf0452ee8c6668d6",
+        "torph-core/src/test/kotlin/des/c5inco/torph/core/SpringTest.kt": "acf9fea420f7d13d0f18c524e9624dce29e1c69ae3f619b5f597c5505a04f28e",
+        "torph-core/src/test/kotlin/des/c5inco/torph/core/NumberMatcherTest.kt": "e75e422c035af8e665f56c4ecbfc22516358da9356827d55fa7aefd18b0bd30e",
+        "torph-core/src/test/kotlin/des/c5inco/torph/core/DiffTest.kt": "f1c0c8a2b6bc9c39a886e335b331054d9a0fb07ecb45fdad8d2f8a469a7711db",
+        "torph-core/src/main/kotlin/des/c5inco/torph/core/Spring.kt": "abf34953b728dba604c34e85e40ec18284e3d8f7234061b639f8cf572ca7051f",
+        "torph-core/src/main/kotlin/des/c5inco/torph/core/Diff.kt": "f30ae3092dad3fe9c2aa1157fa975873f805c9cf48aa5657647c34edae57ebf5",
+        "torph-core/src/main/kotlin/des/c5inco/torph/core/Locale.kt": "5bac96f4930bdd4fc4626c05728f157cfc0625c56f1f2e48f3135176c806e54e",
+        "torph-core/src/main/kotlin/des/c5inco/torph/core/Segmenter.kt": "f8d68a72b6ff311d8c28c8b32f2022e558b9f59fc336eb4e2a64cc9a38a44882",
+        "torph-core/src/main/kotlin/des/c5inco/torph/core/Segmentation.kt": "00ca9239ef324f711978b15f93425cc171af51c3ea8eef4a40c70d01819a4614",
+        "torph-core/src/main/kotlin/des/c5inco/torph/core/Segment.kt": "f283c5d3cd518316a8e6798b8194b8def77d90ab7b725898624bfd59b7c1cb28",
+        "torph-core/src/main/kotlin/des/c5inco/torph/core/NumberMatcher.kt": "593e855a9730d9d4a46e960397edde81a518ffdec650998dbd9bbbb7b40e61f3",
+        "demo/src/main/AndroidManifest.xml": "375c70c05b6ffa450cece2d166e948ea15532820d8a26f8f18c9cd66bf2fcc93",
+        "demo/src/main/res/values/themes.xml": "1027144d84656279d24bbb5540a60cc80b7d8150a8250c66443a3c561ce8510d",
+        "demo/src/main/res/font/geist.ttf": "73894e0448cae90a92b6c2f8732b7bb9acb7b94c418bff559dad4a18e1de9659",
+        "demo/src/main/res/font/geist_mono.ttf": "d00e590b8eb3a59acc329b2d044fd143ae935090b7da33199ebee27cc7de8196",
+        "demo/src/main/res/font/bitcount_single.ttf": "007608c704d41cfff140892070b71f31971ec6d85b9f8ad5fdd0d2625f517c70",
+        "demo/src/main/kotlin/des/c5inco/torph/demo/MainActivity.kt": "e090e4edde48105131311ea0594f57c887a506bb3d7f67763e95b00cb2528cdd",
+        "demo/src/main/kotlin/des/c5inco/torph/demo/DemoType.kt": "48e6b8cb5d4c4f4fbac0492764dd6ed5c2ba44c6a774af73a1dc6465ec6dce6b",
+        "demo/src/main/kotlin/des/c5inco/torph/demo/Ui.kt": "adac0e3c2c1c69209603bfd2f13eb153a865537f25ca487cc323c94a558bcaa9",
+        "demo/src/main/kotlin/des/c5inco/torph/demo/DemoApp.kt": "4c53a39d93def610eaf2425f376f9d7d0258c66ddd8554486c1be148939d7ac4",
+        "demo/src/main/kotlin/des/c5inco/torph/demo/screens/MultiLineScreen.kt": "b441fcbe83695b949830558bab5b994cc400d3877b5a1b21f96bb65336a7845e",
+        "demo/src/main/kotlin/des/c5inco/torph/demo/screens/NumbersScreen.kt": "fd37a56ccc95bdb50b44a0dd0d34747385588d9fda6486f9dad057146aa0995e",
+        "demo/src/main/kotlin/des/c5inco/torph/demo/screens/FirstLayoutScreen.kt": "9f4f1f181efa01033e45311a0a4de4b86b0b4763b0a59a26141d9a61c4f881f5",
+        "demo/src/main/kotlin/des/c5inco/torph/demo/screens/TypingScreen.kt": "947d38f193371b47a94b06a11bf1768a53db49f6896cb872ba11fa13ef174198",
+        "demo/src/main/kotlin/des/c5inco/torph/demo/screens/InterruptionScreen.kt": "a5efa48572bedf99de484e294202cd1a1e6d374ff64ffb7c977eb37ef2b3d9eb",
+        "demo/src/main/kotlin/des/c5inco/torph/demo/screens/PlaygroundScreen.kt": "cfde0f3f2c6ed239ddbdb76bd9bae45709e74c89dbdc0e700faa033881f7324d",
+        "demo/src/main/kotlin/des/c5inco/torph/demo/screens/DebugScreen.kt": "cb555781debce6588a6838ac47c20100b0b347d0252e0d1de459fbecb25f2e80",
+        "demo/src/main/kotlin/des/c5inco/torph/demo/screens/PerfScreen.kt": "64dfeb44a066b009e30de850d511c0fd78465b831a9a2ab9183c3d5326997221",
+        "demo/src/main/kotlin/des/c5inco/torph/demo/screens/ScriptsScreen.kt": "76a4ee6e6486fa775e3dd3ff6ec19911afe433c19e19681ad749e50f1ef08808",
+        "benchmark/src/main/AndroidManifest.xml": "571f2735faf5e857752ee057ac8ef63425576a721616c60b86ee5d4c0a2d682f",
+        "benchmark/src/main/kotlin/des/c5inco/torph/benchmark/PerfScreenBenchmark.kt": "7f6fee5309f5b7dc8339b45899684841e5b3f0c7a7629ba31ef6c45aaf04d8b0",
+        "benchmark/src/main/kotlin/des/c5inco/torph/benchmark/BaselineProfileGenerator.kt": "6baa30af0f515249b4b542ec2b147f590e0c08541f4919516b8eadefca73bb0d",
+        "benchmark/src/main/kotlin/des/c5inco/torph/benchmark/BenchmarkDeviceState.kt": "b4f1a930f4eaabb95831cd88f2e8094d8c5effab2db50624e74025c78448865d",
+        "benchmark/src/main/kotlin/des/c5inco/torph/benchmark/GeometryWorkload.kt": "016ead04fd73e067763bc8fcfe5410485421f19f96805e93ab0893de9f5c54bc",
+        "benchmark/src/main/kotlin/des/c5inco/torph/benchmark/ColdChangeBenchmark.kt": "dd5184660ca8cdd14e4a6fe85a98ec3c89545f970f98a8897c3745465f62da88",
+        "benchmark/src/main/kotlin/des/c5inco/torph/benchmark/FirstLayoutBenchmark.kt": "ab53d86da852f7a92e846679f50d083c3ca83f43b12ef50db0bf2bcb01dc95f2",
+        "benchmark/src/main/kotlin/des/c5inco/torph/benchmark/FeatureBenchmark.kt": "41f6cb175ac07da1d3cade17590587269cca93a8b3fa056b8b071afa775eae71"
+      }
+    }
+  },
+  "focusedFirstLayoutBenchmark": {
+    "sourceCommit": "b5ac21e752e7481e1491bfb9611bd580f902901c",
+    "reviewedSourceEquivalent": "c5668e62ec5a05b7986c294a718ea7b808c9e85b",
+    "context": {
+      "build": {
+        "brand": "google",
+        "device": "coral",
+        "fingerprint": "google/coral/coral:13/TP1A.221005.002.B2/9382335:user/release-keys",
+        "id": "TP1A.221005.002.B2",
+        "model": "Pixel 4 XL",
+        "type": "user",
+        "version": {
+          "codename": "REL",
+          "sdk": 33
+        }
+      },
+      "cpuCoreCount": 8,
+      "cpuLocked": true,
+      "cpuMaxFreqHz": 2841600000,
+      "memTotalBytes": 5730906112,
+      "sustainedPerformanceModeEnabled": false,
+      "artMainlineVersion": 330443000,
+      "osCodenameAbbreviated": "T",
+      "compilationMode": "run-from-apk",
+      "payload": {}
+    },
+    "allWorkloadMarkersValid": true,
+    "rows": [
+      {
+        "name": "warmMorph8AutoLazy",
+        "medianMeasureMs": 1.345885,
+        "nativeLayouts": [
+          8.0,
+          8.0,
+          8.0,
+          8.0,
+          8.0
+        ],
+        "metrics": {
+          "Labels:firstMeasureCount": {
+            "minimum": 1.0,
+            "maximum": 1.0,
+            "median": 1.0,
+            "coefficientOfVariation": 0.0,
+            "runs": [
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ]
+          },
+          "Labels:firstMeasureSumMs": {
+            "minimum": 1.188646,
+            "maximum": 4.192188,
+            "median": 1.345885,
+            "coefficientOfVariation": 0.6840720121105043,
+            "runs": [
+              4.192188,
+              1.188646,
+              1.218281,
+              1.345885,
+              1.505521
+            ]
+          },
+          "Labels:firstUpdateCount": {
+            "minimum": 0.0,
+            "maximum": 0.0,
+            "median": 0.0,
+            "coefficientOfVariation": 0.0,
+            "runs": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          "Labels:firstUpdateSumMs": {
+            "minimum": 0.0,
+            "maximum": 0.0,
+            "median": 0.0,
+            "coefficientOfVariation": 0.0,
+            "runs": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          "Morph:applyCount": {
+            "minimum": 0.0,
+            "maximum": 0.0,
+            "median": 0.0,
+            "coefficientOfVariation": 0.0,
+            "runs": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          "Morph:applySumMs": {
+            "minimum": 0.0,
+            "maximum": 0.0,
+            "median": 0.0,
+            "coefficientOfVariation": 0.0,
+            "runs": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          "Morph:firstApplyCount": {
+            "minimum": 8.0,
+            "maximum": 8.0,
+            "median": 8.0,
+            "coefficientOfVariation": 0.0,
+            "runs": [
+              8.0,
+              8.0,
+              8.0,
+              8.0,
+              8.0
+            ]
+          },
+          "Morph:firstApplySumMs": {
+            "minimum": 0.922658,
+            "maximum": 1.199321,
+            "median": 1.068279,
+            "coefficientOfVariation": 0.10886650623782622,
+            "runs": [
+              1.076406,
+              0.922658,
+              0.939376,
+              1.068279,
+              1.199321
+            ]
+          },
+          "Morph:fullMeasureCount": {
+            "minimum": 8.0,
+            "maximum": 8.0,
+            "median": 8.0,
+            "coefficientOfVariation": 0.0,
+            "runs": [
+              8.0,
+              8.0,
+              8.0,
+              8.0,
+              8.0
+            ]
+          },
+          "Morph:fullMeasureSumMs": {
+            "minimum": 0.476251,
+            "maximum": 0.620936,
+            "median": 0.551771,
+            "coefficientOfVariation": 0.10995105293499656,
+            "runs": [
+              0.593908,
+              0.476251,
+              0.503228,
+              0.551771,
+              0.620936
+            ]
+          },
+          "Morph:prepareDeferredCount": {
+            "minimum": 0.0,
+            "maximum": 0.0,
+            "median": 0.0,
+            "coefficientOfVariation": 0.0,
+            "runs": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          "Morph:prepareDeferredSumMs": {
+            "minimum": 0.0,
+            "maximum": 0.0,
+            "median": 0.0,
+            "coefficientOfVariation": 0.0,
+            "runs": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          "Morph:prepareSnapCount": {
+            "minimum": 8.0,
+            "maximum": 8.0,
+            "median": 8.0,
+            "coefficientOfVariation": 0.0,
+            "runs": [
+              8.0,
+              8.0,
+              8.0,
+              8.0,
+              8.0
+            ]
+          },
+          "Morph:prepareSnapSumMs": {
+            "minimum": 0.050417,
+            "maximum": 0.068282,
+            "median": 0.060416,
+            "coefficientOfVariation": 0.1386728054438199,
+            "runs": [
+              0.060416,
+              0.051093,
+              0.050417,
+              0.06573,
+              0.068282
+            ]
+          },
+          "Morph:segmentCount": {
+            "minimum": 8.0,
+            "maximum": 8.0,
+            "median": 8.0,
+            "coefficientOfVariation": 0.0,
+            "runs": [
+              8.0,
+              8.0,
+              8.0,
+              8.0,
+              8.0
+            ]
+          },
+          "Morph:segmentMeasureCount": {
+            "minimum": 0.0,
+            "maximum": 0.0,
+            "median": 0.0,
+            "coefficientOfVariation": 0.0,
+            "runs": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          "Morph:segmentMeasureSumMs": {
+            "minimum": 0.0,
+            "maximum": 0.0,
+            "median": 0.0,
+            "coefficientOfVariation": 0.0,
+            "runs": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          "Morph:segmentSumMs": {
+            "minimum": 0.258281,
+            "maximum": 0.347396,
+            "median": 0.284949,
+            "coefficientOfVariation": 0.1243306084317645,
+            "runs": [
+              0.284949,
+              0.266356,
+              0.258281,
+              0.313333,
+              0.347396
+            ]
+          },
+          "TextLayout:initLayoutCount": {
+            "minimum": 8.0,
+            "maximum": 8.0,
+            "median": 8.0,
+            "coefficientOfVariation": 0.0,
+            "runs": [
+              8.0,
+              8.0,
+              8.0,
+              8.0,
+              8.0
+            ]
+          },
+          "TextLayout:initLayoutSumMs": {
+            "minimum": 0.043126,
+            "maximum": 0.052397,
+            "median": 0.048439,
+            "coefficientOfVariation": 0.07856898799683035,
+            "runs": [
+              0.050573,
+              0.043126,
+              0.048439,
+              0.045365,
+              0.052397
+            ]
+          },
+          "frameCount": {
+            "minimum": 2.0,
+            "maximum": 2.0,
+            "median": 2.0,
+            "coefficientOfVariation": 0.0,
+            "runs": [
+              2.0,
+              2.0,
+              2.0,
+              2.0,
+              2.0
+            ]
+          }
+        }
+      },
+      {
+        "name": "warmMorph8",
+        "medianMeasureMs": 4.177865,
+        "nativeLayouts": [
+          45.0,
+          45.0,
+          45.0,
+          45.0,
+          45.0
+        ],
+        "metrics": {
+          "Labels:firstMeasureCount": {
+            "minimum": 1.0,
+            "maximum": 1.0,
+            "median": 1.0,
+            "coefficientOfVariation": 0.0,
+            "runs": [
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ]
+          },
+          "Labels:firstMeasureSumMs": {
+            "minimum": 3.046771,
+            "maximum": 5.084792,
+            "median": 4.177865,
+            "coefficientOfVariation": 0.19249210627525737,
+            "runs": [
+              4.806667,
+              4.177865,
+              3.046771,
+              3.847396,
+              5.084792
+            ]
+          },
+          "Labels:firstUpdateCount": {
+            "minimum": 0.0,
+            "maximum": 0.0,
+            "median": 0.0,
+            "coefficientOfVariation": 0.0,
+            "runs": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          "Labels:firstUpdateSumMs": {
+            "minimum": 0.0,
+            "maximum": 0.0,
+            "median": 0.0,
+            "coefficientOfVariation": 0.0,
+            "runs": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          "Morph:applyCount": {
+            "minimum": 0.0,
+            "maximum": 0.0,
+            "median": 0.0,
+            "coefficientOfVariation": 0.0,
+            "runs": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          "Morph:applySumMs": {
+            "minimum": 0.0,
+            "maximum": 0.0,
+            "median": 0.0,
+            "coefficientOfVariation": 0.0,
+            "runs": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          "Morph:firstApplyCount": {
+            "minimum": 8.0,
+            "maximum": 8.0,
+            "median": 8.0,
+            "coefficientOfVariation": 0.0,
+            "runs": [
+              8.0,
+              8.0,
+              8.0,
+              8.0,
+              8.0
+            ]
+          },
+          "Morph:firstApplySumMs": {
+            "minimum": 2.78276,
+            "maximum": 4.488386,
+            "median": 3.898437,
+            "coefficientOfVariation": 0.18357419677125314,
+            "runs": [
+              4.437813,
+              3.898437,
+              2.78276,
+              3.555,
+              4.488386
+            ]
+          },
+          "Morph:fullMeasureCount": {
+            "minimum": 8.0,
+            "maximum": 8.0,
+            "median": 8.0,
+            "coefficientOfVariation": 0.0,
+            "runs": [
+              8.0,
+              8.0,
+              8.0,
+              8.0,
+              8.0
+            ]
+          },
+          "Morph:fullMeasureSumMs": {
+            "minimum": 0.395936,
+            "maximum": 0.551666,
+            "median": 0.486302,
+            "coefficientOfVariation": 0.12746494623462587,
+            "runs": [
+              0.432345,
+              0.496615,
+              0.395936,
+              0.486302,
+              0.551666
+            ]
+          },
+          "Morph:prepareDeferredCount": {
+            "minimum": 0.0,
+            "maximum": 0.0,
+            "median": 0.0,
+            "coefficientOfVariation": 0.0,
+            "runs": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          "Morph:prepareDeferredSumMs": {
+            "minimum": 0.0,
+            "maximum": 0.0,
+            "median": 0.0,
+            "coefficientOfVariation": 0.0,
+            "runs": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          "Morph:prepareSnapCount": {
+            "minimum": 8.0,
+            "maximum": 8.0,
+            "median": 8.0,
+            "coefficientOfVariation": 0.0,
+            "runs": [
+              8.0,
+              8.0,
+              8.0,
+              8.0,
+              8.0
+            ]
+          },
+          "Morph:prepareSnapSumMs": {
+            "minimum": 1.994793,
+            "maximum": 3.555261,
+            "median": 2.849999,
+            "coefficientOfVariation": 0.21652125080667692,
+            "runs": [
+              3.555261,
+              2.849999,
+              1.994793,
+              2.588749,
+              3.345676
+            ]
+          },
+          "Morph:segmentCount": {
+            "minimum": 8.0,
+            "maximum": 8.0,
+            "median": 8.0,
+            "coefficientOfVariation": 0.0,
+            "runs": [
+              8.0,
+              8.0,
+              8.0,
+              8.0,
+              8.0
+            ]
+          },
+          "Morph:segmentMeasureCount": {
+            "minimum": 79.0,
+            "maximum": 79.0,
+            "median": 79.0,
+            "coefficientOfVariation": 0.0,
+            "runs": [
+              79.0,
+              79.0,
+              79.0,
+              79.0,
+              79.0
+            ]
+          },
+          "Morph:segmentMeasureSumMs": {
+            "minimum": 1.339065,
+            "maximum": 2.843233,
+            "median": 2.028911,
+            "coefficientOfVariation": 0.27354808227368976,
+            "runs": [
+              2.843233,
+              2.028911,
+              1.339065,
+              1.768228,
+              2.239846
+            ]
+          },
+          "Morph:segmentSumMs": {
+            "minimum": 0.262083,
+            "maximum": 0.396977,
+            "median": 0.319426,
+            "coefficientOfVariation": 0.17050653841673888,
+            "runs": [
+              0.296927,
+              0.396977,
+              0.262083,
+              0.319426,
+              0.379375
+            ]
+          },
+          "TextLayout:initLayoutCount": {
+            "minimum": 45.0,
+            "maximum": 45.0,
+            "median": 45.0,
+            "coefficientOfVariation": 0.0,
+            "runs": [
+              45.0,
+              45.0,
+              45.0,
+              45.0,
+              45.0
+            ]
+          },
+          "TextLayout:initLayoutSumMs": {
+            "minimum": 0.196615,
+            "maximum": 0.274641,
+            "median": 0.242973,
+            "coefficientOfVariation": 0.1459935920103483,
+            "runs": [
+              0.196615,
+              0.242973,
+              0.198436,
+              0.274641,
+              0.248853
+            ]
+          },
+          "frameCount": {
+            "minimum": 2.0,
+            "maximum": 2.0,
+            "median": 2.0,
+            "coefficientOfVariation": 0.0,
+            "runs": [
+              2.0,
+              2.0,
+              2.0,
+              2.0,
+              2.0
+            ]
+          }
+        }
+      },
+      {
+        "name": "warmMorph8Auto",
+        "medianMeasureMs": 2.948386,
+        "nativeLayouts": [
+          32.0,
+          32.0,
+          32.0,
+          32.0,
+          32.0
+        ],
+        "metrics": {
+          "Labels:firstMeasureCount": {
+            "minimum": 1.0,
+            "maximum": 1.0,
+            "median": 1.0,
+            "coefficientOfVariation": 0.0,
+            "runs": [
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ]
+          },
+          "Labels:firstMeasureSumMs": {
+            "minimum": 2.460678,
+            "maximum": 3.140937,
+            "median": 2.948386,
+            "coefficientOfVariation": 0.09025904247208111,
+            "runs": [
+              2.948386,
+              2.86599,
+              2.460678,
+              3.034636,
+              3.140937
+            ]
+          },
+          "Labels:firstUpdateCount": {
+            "minimum": 0.0,
+            "maximum": 0.0,
+            "median": 0.0,
+            "coefficientOfVariation": 0.0,
+            "runs": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          "Labels:firstUpdateSumMs": {
+            "minimum": 0.0,
+            "maximum": 0.0,
+            "median": 0.0,
+            "coefficientOfVariation": 0.0,
+            "runs": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          "Morph:applyCount": {
+            "minimum": 0.0,
+            "maximum": 0.0,
+            "median": 0.0,
+            "coefficientOfVariation": 0.0,
+            "runs": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          "Morph:applySumMs": {
+            "minimum": 0.0,
+            "maximum": 0.0,
+            "median": 0.0,
+            "coefficientOfVariation": 0.0,
+            "runs": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          "Morph:firstApplyCount": {
+            "minimum": 8.0,
+            "maximum": 8.0,
+            "median": 8.0,
+            "coefficientOfVariation": 0.0,
+            "runs": [
+              8.0,
+              8.0,
+              8.0,
+              8.0,
+              8.0
+            ]
+          },
+          "Morph:firstApplySumMs": {
+            "minimum": 2.128491,
+            "maximum": 2.867395,
+            "median": 2.624949,
+            "coefficientOfVariation": 0.10523880022971045,
+            "runs": [
+              2.624949,
+              2.575207,
+              2.128491,
+              2.646512,
+              2.867395
+            ]
+          },
+          "Morph:fullMeasureCount": {
+            "minimum": 8.0,
+            "maximum": 8.0,
+            "median": 8.0,
+            "coefficientOfVariation": 0.0,
+            "runs": [
+              8.0,
+              8.0,
+              8.0,
+              8.0,
+              8.0
+            ]
+          },
+          "Morph:fullMeasureSumMs": {
+            "minimum": 0.391511,
+            "maximum": 0.553905,
+            "median": 0.474426,
+            "coefficientOfVariation": 0.12181527038080713,
+            "runs": [
+              0.474063,
+              0.474426,
+              0.391511,
+              0.494582,
+              0.553905
+            ]
+          },
+          "Morph:prepareDeferredCount": {
+            "minimum": 0.0,
+            "maximum": 0.0,
+            "median": 0.0,
+            "coefficientOfVariation": 0.0,
+            "runs": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          "Morph:prepareDeferredSumMs": {
+            "minimum": 0.0,
+            "maximum": 0.0,
+            "median": 0.0,
+            "coefficientOfVariation": 0.0,
+            "runs": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          "Morph:prepareSnapCount": {
+            "minimum": 8.0,
+            "maximum": 8.0,
+            "median": 8.0,
+            "coefficientOfVariation": 0.0,
+            "runs": [
+              8.0,
+              8.0,
+              8.0,
+              8.0,
+              8.0
+            ]
+          },
+          "Morph:prepareSnapSumMs": {
+            "minimum": 1.387552,
+            "maximum": 1.888699,
+            "median": 1.738488,
+            "coefficientOfVariation": 0.1090531886460904,
+            "runs": [
+              1.742501,
+              1.704844,
+              1.387552,
+              1.738488,
+              1.888699
+            ]
+          },
+          "Morph:segmentCount": {
+            "minimum": 8.0,
+            "maximum": 8.0,
+            "median": 8.0,
+            "coefficientOfVariation": 0.0,
+            "runs": [
+              8.0,
+              8.0,
+              8.0,
+              8.0,
+              8.0
+            ]
+          },
+          "Morph:segmentMeasureCount": {
+            "minimum": 34.0,
+            "maximum": 34.0,
+            "median": 34.0,
+            "coefficientOfVariation": 0.0,
+            "runs": [
+              34.0,
+              34.0,
+              34.0,
+              34.0,
+              34.0
+            ]
+          },
+          "Morph:segmentMeasureSumMs": {
+            "minimum": 0.884584,
+            "maximum": 1.221408,
+            "median": 1.103954,
+            "coefficientOfVariation": 0.1132203209489725,
+            "runs": [
+              1.103954,
+              1.102964,
+              0.884584,
+              1.116927,
+              1.221408
+            ]
+          },
+          "Morph:segmentSumMs": {
+            "minimum": 0.23026,
+            "maximum": 0.290468,
+            "median": 0.276926,
+            "coefficientOfVariation": 0.08886090889234871,
+            "runs": [
+              0.276926,
+              0.255782,
+              0.23026,
+              0.277812,
+              0.290468
+            ]
+          },
+          "TextLayout:initLayoutCount": {
+            "minimum": 32.0,
+            "maximum": 32.0,
+            "median": 32.0,
+            "coefficientOfVariation": 0.0,
+            "runs": [
+              32.0,
+              32.0,
+              32.0,
+              32.0,
+              32.0
+            ]
+          },
+          "TextLayout:initLayoutSumMs": {
+            "minimum": 0.133075,
+            "maximum": 0.19229,
+            "median": 0.18641,
+            "coefficientOfVariation": 0.14015752876691778,
+            "runs": [
+              0.19073,
+              0.18641,
+              0.133075,
+              0.19229,
+              0.179896
+            ]
+          },
+          "frameCount": {
+            "minimum": 1.0,
+            "maximum": 2.0,
+            "median": 2.0,
+            "coefficientOfVariation": 0.24845199749997668,
+            "runs": [
+              2.0,
+              2.0,
+              2.0,
+              2.0,
+              1.0
+            ]
+          }
+        }
+      },
+      {
+        "name": "warmMorph8Lazy",
+        "medianMeasureMs": 1.340417,
+        "nativeLayouts": [
+          8.0,
+          8.0,
+          8.0,
+          8.0,
+          8.0
+        ],
+        "metrics": {
+          "Labels:firstMeasureCount": {
+            "minimum": 1.0,
+            "maximum": 1.0,
+            "median": 1.0,
+            "coefficientOfVariation": 0.0,
+            "runs": [
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ]
+          },
+          "Labels:firstMeasureSumMs": {
+            "minimum": 1.192083,
+            "maximum": 1.608854,
+            "median": 1.340417,
+            "coefficientOfVariation": 0.12368616603219747,
+            "runs": [
+              1.503698,
+              1.192083,
+              1.268333,
+              1.608854,
+              1.340417
+            ]
+          },
+          "Labels:firstUpdateCount": {
+            "minimum": 0.0,
+            "maximum": 0.0,
+            "median": 0.0,
+            "coefficientOfVariation": 0.0,
+            "runs": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          "Labels:firstUpdateSumMs": {
+            "minimum": 0.0,
+            "maximum": 0.0,
+            "median": 0.0,
+            "coefficientOfVariation": 0.0,
+            "runs": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          "Morph:applyCount": {
+            "minimum": 0.0,
+            "maximum": 0.0,
+            "median": 0.0,
+            "coefficientOfVariation": 0.0,
+            "runs": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          "Morph:applySumMs": {
+            "minimum": 0.0,
+            "maximum": 0.0,
+            "median": 0.0,
+            "coefficientOfVariation": 0.0,
+            "runs": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          "Morph:firstApplyCount": {
+            "minimum": 8.0,
+            "maximum": 8.0,
+            "median": 8.0,
+            "coefficientOfVariation": 0.0,
+            "runs": [
+              8.0,
+              8.0,
+              8.0,
+              8.0,
+              8.0
+            ]
+          },
+          "Morph:firstApplySumMs": {
+            "minimum": 0.964376,
+            "maximum": 1.286876,
+            "median": 1.049531,
+            "coefficientOfVariation": 0.13042174378131838,
+            "runs": [
+              1.202136,
+              0.964376,
+              0.975573,
+              1.286876,
+              1.049531
+            ]
+          },
+          "Morph:fullMeasureCount": {
+            "minimum": 8.0,
+            "maximum": 8.0,
+            "median": 8.0,
+            "coefficientOfVariation": 0.0,
+            "runs": [
+              8.0,
+              8.0,
+              8.0,
+              8.0,
+              8.0
+            ]
+          },
+          "Morph:fullMeasureSumMs": {
+            "minimum": 0.485574,
+            "maximum": 0.64323,
+            "median": 0.546303,
+            "coefficientOfVariation": 0.12025489173041738,
+            "runs": [
+              0.61198,
+              0.485574,
+              0.507814,
+              0.64323,
+              0.546303
+            ]
+          },
+          "Morph:prepareDeferredCount": {
+            "minimum": 0.0,
+            "maximum": 0.0,
+            "median": 0.0,
+            "coefficientOfVariation": 0.0,
+            "runs": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          "Morph:prepareDeferredSumMs": {
+            "minimum": 0.0,
+            "maximum": 0.0,
+            "median": 0.0,
+            "coefficientOfVariation": 0.0,
+            "runs": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          "Morph:prepareSnapCount": {
+            "minimum": 8.0,
+            "maximum": 8.0,
+            "median": 8.0,
+            "coefficientOfVariation": 0.0,
+            "runs": [
+              8.0,
+              8.0,
+              8.0,
+              8.0,
+              8.0
+            ]
+          },
+          "Morph:prepareSnapSumMs": {
+            "minimum": 0.054323,
+            "maximum": 0.067237,
+            "median": 0.059116,
+            "coefficientOfVariation": 0.08422302318710319,
+            "runs": [
+              0.059116,
+              0.054323,
+              0.055886,
+              0.067237,
+              0.059373
+            ]
+          },
+          "Morph:segmentCount": {
+            "minimum": 8.0,
+            "maximum": 8.0,
+            "median": 8.0,
+            "coefficientOfVariation": 0.0,
+            "runs": [
+              8.0,
+              8.0,
+              8.0,
+              8.0,
+              8.0
+            ]
+          },
+          "Morph:segmentMeasureCount": {
+            "minimum": 0.0,
+            "maximum": 0.0,
+            "median": 0.0,
+            "coefficientOfVariation": 0.0,
+            "runs": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          "Morph:segmentMeasureSumMs": {
+            "minimum": 0.0,
+            "maximum": 0.0,
+            "median": 0.0,
+            "coefficientOfVariation": 0.0,
+            "runs": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          "Morph:segmentSumMs": {
+            "minimum": 0.268855,
+            "maximum": 0.402761,
+            "median": 0.29177,
+            "coefficientOfVariation": 0.18967204320034425,
+            "runs": [
+              0.381247,
+              0.282814,
+              0.268855,
+              0.402761,
+              0.29177
+            ]
+          },
+          "TextLayout:initLayoutCount": {
+            "minimum": 8.0,
+            "maximum": 8.0,
+            "median": 8.0,
+            "coefficientOfVariation": 0.0,
+            "runs": [
+              8.0,
+              8.0,
+              8.0,
+              8.0,
+              8.0
+            ]
+          },
+          "TextLayout:initLayoutSumMs": {
+            "minimum": 0.041147,
+            "maximum": 0.060314,
+            "median": 0.046978,
+            "coefficientOfVariation": 0.14947737088848598,
+            "runs": [
+              0.045315,
+              0.046978,
+              0.041147,
+              0.047134,
+              0.060314
+            ]
+          },
+          "frameCount": {
+            "minimum": 1.0,
+            "maximum": 2.0,
+            "median": 2.0,
+            "coefficientOfVariation": 0.24845199749997668,
+            "runs": [
+              2.0,
+              2.0,
+              1.0,
+              2.0,
+              2.0
+            ]
+          }
+        }
+      },
+      {
+        "name": "warmPlain8",
+        "medianMeasureMs": 0.667292,
+        "nativeLayouts": [
+          8.0,
+          8.0,
+          8.0,
+          8.0,
+          8.0
+        ],
+        "metrics": {
+          "Labels:firstMeasureCount": {
+            "minimum": 1.0,
+            "maximum": 1.0,
+            "median": 1.0,
+            "coefficientOfVariation": 0.0,
+            "runs": [
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ]
+          },
+          "Labels:firstMeasureSumMs": {
+            "minimum": 0.628333,
+            "maximum": 0.774844,
+            "median": 0.667292,
+            "coefficientOfVariation": 0.08474634530714538,
+            "runs": [
+              0.774844,
+              0.731875,
+              0.628333,
+              0.667292,
+              0.665312
+            ]
+          },
+          "Labels:firstUpdateCount": {
+            "minimum": 0.0,
+            "maximum": 0.0,
+            "median": 0.0,
+            "coefficientOfVariation": 0.0,
+            "runs": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          "Labels:firstUpdateSumMs": {
+            "minimum": 0.0,
+            "maximum": 0.0,
+            "median": 0.0,
+            "coefficientOfVariation": 0.0,
+            "runs": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          "Morph:applyCount": {
+            "minimum": 0.0,
+            "maximum": 0.0,
+            "median": 0.0,
+            "coefficientOfVariation": 0.0,
+            "runs": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          "Morph:applySumMs": {
+            "minimum": 0.0,
+            "maximum": 0.0,
+            "median": 0.0,
+            "coefficientOfVariation": 0.0,
+            "runs": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          "Morph:firstApplyCount": {
+            "minimum": 0.0,
+            "maximum": 0.0,
+            "median": 0.0,
+            "coefficientOfVariation": 0.0,
+            "runs": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          "Morph:firstApplySumMs": {
+            "minimum": 0.0,
+            "maximum": 0.0,
+            "median": 0.0,
+            "coefficientOfVariation": 0.0,
+            "runs": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          "Morph:fullMeasureCount": {
+            "minimum": 0.0,
+            "maximum": 0.0,
+            "median": 0.0,
+            "coefficientOfVariation": 0.0,
+            "runs": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          "Morph:fullMeasureSumMs": {
+            "minimum": 0.0,
+            "maximum": 0.0,
+            "median": 0.0,
+            "coefficientOfVariation": 0.0,
+            "runs": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          "Morph:prepareDeferredCount": {
+            "minimum": 0.0,
+            "maximum": 0.0,
+            "median": 0.0,
+            "coefficientOfVariation": 0.0,
+            "runs": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          "Morph:prepareDeferredSumMs": {
+            "minimum": 0.0,
+            "maximum": 0.0,
+            "median": 0.0,
+            "coefficientOfVariation": 0.0,
+            "runs": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          "Morph:prepareSnapCount": {
+            "minimum": 0.0,
+            "maximum": 0.0,
+            "median": 0.0,
+            "coefficientOfVariation": 0.0,
+            "runs": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          "Morph:prepareSnapSumMs": {
+            "minimum": 0.0,
+            "maximum": 0.0,
+            "median": 0.0,
+            "coefficientOfVariation": 0.0,
+            "runs": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          "Morph:segmentCount": {
+            "minimum": 0.0,
+            "maximum": 0.0,
+            "median": 0.0,
+            "coefficientOfVariation": 0.0,
+            "runs": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          "Morph:segmentMeasureCount": {
+            "minimum": 0.0,
+            "maximum": 0.0,
+            "median": 0.0,
+            "coefficientOfVariation": 0.0,
+            "runs": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          "Morph:segmentMeasureSumMs": {
+            "minimum": 0.0,
+            "maximum": 0.0,
+            "median": 0.0,
+            "coefficientOfVariation": 0.0,
+            "runs": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          "Morph:segmentSumMs": {
+            "minimum": 0.0,
+            "maximum": 0.0,
+            "median": 0.0,
+            "coefficientOfVariation": 0.0,
+            "runs": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          "TextLayout:initLayoutCount": {
+            "minimum": 8.0,
+            "maximum": 8.0,
+            "median": 8.0,
+            "coefficientOfVariation": 0.0,
+            "runs": [
+              8.0,
+              8.0,
+              8.0,
+              8.0,
+              8.0
+            ]
+          },
+          "TextLayout:initLayoutSumMs": {
+            "minimum": 0.041303,
+            "maximum": 0.048125,
+            "median": 0.044062,
+            "coefficientOfVariation": 0.060879367739278656,
+            "runs": [
+              0.041303,
+              0.042448,
+              0.044062,
+              0.04573,
+              0.048125
+            ]
+          },
+          "frameCount": {
+            "minimum": 1.0,
+            "maximum": 2.0,
+            "median": 2.0,
+            "coefficientOfVariation": 0.24845199749997668,
+            "runs": [
+              2.0,
+              2.0,
+              2.0,
+              1.0,
+              2.0
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "coreUnitResults": {
+    "tests": 18,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  }
+}

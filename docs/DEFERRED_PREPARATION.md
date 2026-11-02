@@ -231,3 +231,7 @@ correction and its new regression test are recorded in the linked follow-up.
 The initial extracted tree (`026e714`) passed the full **55-test suite on both physical phones**,
 zero failures/errors/skips. At that point all 69 source/resource files matched the measured implementation.
 See the linked stack validation for the new per-device logs and structured source hashes.
+
+A fresh post-review Pixel 4 XL eight-label first-layout check is recorded in
+[the main integration audit](MAIN_INTEGRATION_VALIDATION.md). Other historical timing matrices
+are not superseded or relabeled as current by that focused run.
