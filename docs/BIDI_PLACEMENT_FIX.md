@@ -1,5 +1,8 @@
 # Bidi placement correction
 
+Latest correction and validation: [mixed-script word review follow-up](BIDI_REVIEW_FOLLOWUP.md).
+The original counts and performance measurements below predate that review correction.
+
 The six original mixed-direction typography cases now require exact `BasicText` parity rather
 than being diagnostic exceptions. The fix uses the full paragraph's selection geometry and
 resolved run directions when preparing bidi segments. ASCII retains its existing geometry path.

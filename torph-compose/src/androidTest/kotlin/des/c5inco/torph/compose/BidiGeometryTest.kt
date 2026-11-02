@@ -17,6 +17,46 @@ class BidiGeometryTest {
 
     @Before fun prepare() = prepareTypographyDevice(rule)
 
+    @Test fun mixedScriptWordPreservesParagraphOrderingAndRetargeting() {
+        val h = TypographyReferenceHarness(rule, "bidi-mixed-word")
+        h.mount()
+        val baseStyle = TypographyCase("", "").style
+        for (text in listOf("abcאב", "אבabc")) {
+            for (paragraph in listOf(androidx.compose.ui.text.style.TextDirection.Rtl,
+                    androidx.compose.ui.text.style.TextDirection.Ltr)) {
+                for (container in LayoutDirection.entries) for (mode in listOf(Segmentation.WORD, Segmentation.AUTO)) {
+                    val case = TypographyCase("mixed-$text-$paragraph-$container-$mode", text, mode = mode,
+                        direction = container, style = baseStyle.copy(textDirection = paragraph))
+                    h.compare(case)
+                    rule.runOnIdle {
+                        if (mode == Segmentation.WORD) {
+                            assertEquals("The regression requires one word spanning both runs", listOf(text), h.state.segments.map { it.text })
+                        }
+                        assertNotEquals(h.plain.getBidiRunDirection(0), h.plain.getBidiRunDirection(text.lastIndex))
+                    }
+                }
+            }
+        }
+        // The same word can persist while a leading RTL word changes the paragraph base.
+        var case = TypographyCase("mixed-retarget-initial", "prefix abcאב", mode = Segmentation.AUTO)
+        h.compare(case)
+        val before = h.state.live.single { it.segment.text == "abcאב" }
+        val id = before.id
+        val origin = before.x.value + before.layout.getLineLeft(0)
+        val baseline = before.y.value + before.layout.firstBaseline
+        case = case.copy(id = "mixed-retarget-final", text = "שלום abcאב")
+        h.retargetForAnimation(case)
+        rule.runOnIdle {
+            val retained = h.state.live.single { it.id == id }
+            assertEquals(origin, retained.x.value + retained.layout.getLineLeft(0), 0f)
+            assertEquals(baseline, retained.y.value + retained.layout.firstBaseline, 0f)
+        }
+        rule.mainClock.advanceTimeBy(1000)
+        rule.waitForIdle()
+        h.compare(case)
+        h.compare(case.copy(id = "mixed-retarget-return", text = "prefix abcאב"))
+    }
+
     @Test fun rollingRetargetPreservesOriginsAndSettlesToIndependentReference() {
         val h = TypographyReferenceHarness(rule, "bidi-animation")
         h.mount()

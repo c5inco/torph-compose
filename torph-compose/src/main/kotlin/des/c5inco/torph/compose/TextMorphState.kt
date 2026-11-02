@@ -567,7 +567,20 @@ public class TextMorphState internal constructor(
     private fun segmentLayoutDirection(s: Segment): LayoutDirection {
         val full = layoutResult
         return if (useBidiSelectionBounds && full != null && s.index < full.layoutInput.text.length) {
-            if (full.getBidiRunDirection(s.index) == ResolvedTextDirection.Rtl) LayoutDirection.Rtl else LayoutDirection.Ltr
+            var resolved = full.getBidiRunDirection(s.index)
+            // A whole ICU word may span opposite-direction runs. Giving that entire word
+            // its first run's direction reorders its other runs (e.g. abcאב in an RTL
+            // paragraph). Preserve the paragraph base in that case; a single-run neutral
+            // still needs its resolved run direction for bracket mirroring.
+            var offset = s.index + 1
+            while (offset < s.end) {
+                if (full.getBidiRunDirection(offset) != resolved) {
+                    resolved = full.getParagraphDirection(s.index)
+                    break
+                }
+                offset++
+            }
+            if (resolved == ResolvedTextDirection.Rtl) LayoutDirection.Rtl else LayoutDirection.Ltr
         } else lastKey?.direction ?: LayoutDirection.Ltr
     }
 
