@@ -11,6 +11,8 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.drawscope.scale
+import androidx.compose.ui.graphics.drawscope.clipRect
+import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.TextMeasurer
@@ -22,6 +24,39 @@ import des.c5inco.torph.core.SegmentKind
 /** Per-frame draw: N cached `drawText` calls, no measurement, no allocation on the hot path. */
 internal fun TextMorphState.draw(scope: DrawScope) = with(scope) {
     frameTick.intValue // subscribe to the frame loop
+    deferredLayout?.let {
+        drawText(it)
+        return@with
+    }
+    if (useParagraphFragments && !isAnimating && !options.debug) {
+        layoutResult?.let { drawText(it) }
+        return@with
+    }
+    val source = handoffSource
+    if (source != null && handoffProgress.value == 0f) {
+        drawText(source)
+        return@with
+    }
+    if (source == null) {
+        drawLiveSegments(this)
+    } else {
+        // Interpolate complete images in an isolated layer. Fading individual overlapping
+        // glyphs would change their compositing; ordinary source-over crossfades dim shared ink.
+        drawIntoCanvas { canvas ->
+            canvas.saveLayer(handoffBounds, layerPaint)
+            handoffPaint.alpha = handoffProgress.value
+            canvas.saveLayer(handoffBounds, handoffPaint)
+            drawLiveSegments(this)
+            canvas.restore()
+            drawText(source, alpha = 1f - handoffProgress.value, blendMode = BlendMode.Plus)
+            canvas.restore()
+        }
+    }
+}
+
+private val handoffPaint = Paint()
+
+internal fun TextMorphState.drawLiveSegments(scope: DrawScope) = with(scope) {
     val list = live
     val debug = options.debug
     val clipSpec = options.clip
@@ -64,10 +99,31 @@ internal fun TextMorphState.draw(scope: DrawScope) = with(scope) {
 
 private fun DrawScope.drawSegment(ls: LiveSegment, x: Float, y: Float, sc: Float, alpha: Float) {
     if (sc == 1f) {
-        drawText(ls.layout, topLeft = Offset(x, y), alpha = alpha)
+        drawSegmentContent(ls, x, y, alpha)
     } else {
         scale(sc, sc, pivot = Offset(x + ls.width / 2f, y + ls.height / 2f)) {
-            drawText(ls.layout, topLeft = Offset(x, y), alpha = alpha)
+            drawSegmentContent(ls, x, y, alpha)
+        }
+    }
+}
+
+private fun DrawScope.drawSegmentContent(ls: LiveSegment, x: Float, y: Float, alpha: Float) {
+    val slice = ls.paragraphSlice
+    if (slice == null) {
+        drawText(ls.layout, topLeft = Offset(x, y), alpha = alpha)
+    } else {
+        translate(x - slice.bounds.left, y - slice.bounds.top) {
+            val rect = slice.clipRect
+            if (rect != null) {
+                clipRect(rect.left, rect.top, rect.right, rect.bottom) { drawText(ls.layout, alpha = alpha) }
+            } else {
+                val intervals = checkNotNull(slice.clipIntervals)
+                var i = 0
+                while (i < intervals.size) {
+                    clipRect(intervals[i], -1_000_000f, intervals[i + 1], 1_000_000f) { drawText(ls.layout, alpha = alpha) }
+                    i += 2
+                }
+            }
         }
     }
 }
@@ -81,8 +137,15 @@ private fun DrawScope.drawStrip(ls: LiveSegment, strip: List<TextLayoutResult>, 
     var k = first
     while (k <= last) {
         val layout = strip[k]
-        val dy = y + ls.stripRoll * (k - progress) * h
-        drawText(layout, topLeft = Offset(centerX - layout.size.width / 2f, dy), alpha = alpha)
+        val slice = ls.paragraphSlice
+        val dy = y + (slice?.baseline?.minus(layout.firstBaseline) ?: 0f) + ls.stripRoll * (k - progress) * h
+        val dx = if (slice == null) centerX - layout.size.width / 2f
+            else centerX - (layout.getLineRight(0) - layout.getLineLeft(0)) / 2f - layout.getLineLeft(0)
+        if (slice != null && k == strip.lastIndex) {
+            drawSegmentContent(ls, x, y + ls.stripRoll * (k - progress) * h, alpha)
+        } else {
+            drawText(layout, topLeft = Offset(dx, dy), alpha = alpha)
+        }
         k++
     }
 }

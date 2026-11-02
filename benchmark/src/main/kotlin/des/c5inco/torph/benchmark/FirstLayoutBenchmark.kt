@@ -40,15 +40,24 @@ class FirstLayoutBenchmark {
     @FirstAppearanceEight
     @BidiPlacementWorkload
     @AsciiPlainControl
+    @DeferredFirstLayoutWorkload
+    @DeferredEightLabelWorkload
+    @DeferredValidationWorkload
     @Test fun warmPlain8() = first("plain", 8, warm = true)
     @FirstAppearanceWarm
     @FirstAppearanceEight
     @BidiPlacementWorkload
     @BidiAsciiMorphControl
+    @DeferredFirstLayoutWorkload
+    @DeferredEightLabelWorkload
+    @DeferredValidationWorkload
     @Test fun warmMorph8() = first("morph", 8, warm = true)
     @FirstAppearanceWarm
     @FirstAppearanceEight
     @FirstAppearanceAutoEight
+    @DeferredFirstLayoutWorkload
+    @DeferredEightLabelWorkload
+    @DeferredValidationWorkload
     @Test fun warmMorph8Auto() = first("morphAuto", 8, warm = true)
     @FirstAppearanceWarm
     @Test fun warmPlain16() = first("plain", 16, warm = true)
@@ -79,18 +88,55 @@ class FirstLayoutBenchmark {
     @Test fun plain8Repeated() = first("plain", 8, true)
     @Test fun morph8Repeated() = first("morph", 8, true)
 
+    @DeferredFirstLayoutWorkload
+    @DeferredEightLabelWorkload
+    @DeferredValidationWorkload
+    @DeferredMarkerRecheck
+    @Test fun warmMorph8Lazy() = first("morphLazy", 8, warm = true)
+    @DeferredFirstLayoutWorkload
+    @DeferredEightLabelWorkload
+    @DeferredValidationWorkload
+    @Test fun warmMorph8AutoLazy() = first("morphAutoLazy", 8, warm = true)
+    @DeferredFirstUpdateWorkload
+    @DeferredEightLabelWorkload
+    @DeferredValidationWorkload
     @Test fun firstUpdate8() = first("morphChange", 8, warm = true)
+    @DeferredFirstUpdateWorkload
+    @DeferredEightLabelWorkload
+    @DeferredValidationWorkload
+    @Test fun firstUpdate8Lazy() = first("morphLazyChange", 8, warm = true)
+    @DeferredFirstUpdateWorkload
+    @DeferredEightLabelWorkload
+    @DeferredValidationWorkload
     @Test fun firstUpdate8Auto() = first("morphAutoChange", 8, warm = true)
+    @DeferredFirstUpdateWorkload
+    @DeferredEightLabelWorkload
+    @DeferredValidationWorkload
+    @Test fun firstUpdate8AutoLazy() = first("morphAutoLazyChange", 8, warm = true)
 
+    @DeferredBidiUpdateWorkload
+    @DeferredValidationWorkload
     @Test fun firstUpdate8AutoBidi() = first("morphAutoChangeBidi", 8, warm = true)
+    @DeferredBidiUpdateWorkload
+    @DeferredValidationWorkload
+    @Test fun firstUpdate8AutoBidiLazy() = first("morphAutoLazyChangeBidi", 8, warm = true)
 
+    @DeferredValidationWorkload
+    @DeferredMarkerRecheck
     @Test fun warmPlain16Distinct() = first("plainUnique", 16, warm = true)
+    @DeferredValidationWorkload
     @Test fun warmMorph16Distinct() = first("morphUnique", 16, warm = true)
+    @DeferredValidationWorkload
     @Test fun warmMorph16AutoDistinct() = first("morphAutoUnique", 16, warm = true)
+    @DeferredValidationWorkload
+    @DeferredMarkerRecheck
+    @Test fun warmMorph16LazyDistinct() = first("morphLazyUnique", 16, warm = true)
+    @DeferredValidationWorkload
+    @Test fun warmMorph16AutoLazyDistinct() = first("morphAutoLazyUnique", 16, warm = true)
 
     private fun first(mode: String, count: Int, repeated: Boolean = false, warm: Boolean = false) = rule.measureRepeated(
         packageName = "des.c5inco.torph.demo.benchmark",
-        metrics = listOf(FrameTimingMetric()) + listOf("Labels:firstMeasure", "Labels:firstUpdate", "Morph:firstApply", "Morph:apply", "Morph:fullMeasure",
+        metrics = listOf(FrameTimingMetric()) + listOf("Labels:firstMeasure", "Labels:firstUpdate", "Morph:firstApply", "Morph:apply", "Morph:prepareDeferred", "Morph:fullMeasure",
             "Morph:segment", "Morph:prepareSnap", "Morph:segmentMeasure", "TextLayout:initLayout").map {
             TraceSectionMetric(it, TraceSectionMetric.Mode.Sum)
         },
@@ -165,3 +211,33 @@ annotation class BidiMorphControl
 @Target(AnnotationTarget.FUNCTION)
 @Retention(AnnotationRetention.RUNTIME)
 annotation class BidiAsciiMorphControl
+
+/** Matched eager/lazy/plain first appearances in the same APK. */
+@Target(AnnotationTarget.FUNCTION)
+@Retention(AnnotationRetention.RUNTIME)
+annotation class DeferredFirstLayoutWorkload
+
+/** First update after two frames, including deferred preparation and rendering. */
+@Target(AnnotationTarget.FUNCTION)
+@Retention(AnnotationRetention.RUNTIME)
+annotation class DeferredFirstUpdateWorkload
+
+/** Bidi default-mode first appearance and immediate update. */
+@Target(AnnotationTarget.FUNCTION)
+@Retention(AnnotationRetention.RUNTIME)
+annotation class DeferredBidiUpdateWorkload
+
+/** Complete first-appearance/first-update matrix for final evidence. */
+@Target(AnnotationTarget.FUNCTION)
+@Retention(AnnotationRetention.RUNTIME)
+annotation class DeferredValidationWorkload
+
+/** Eight-label initial and first-update matrix for second-device timing. */
+@Target(AnnotationTarget.FUNCTION)
+@Retention(AnnotationRetention.RUNTIME)
+annotation class DeferredEightLabelWorkload
+
+/** Whole-case replacements for missing markers in the final Pixel 7 matrix. */
+@Target(AnnotationTarget.FUNCTION)
+@Retention(AnnotationRetention.RUNTIME)
+annotation class DeferredMarkerRecheck
