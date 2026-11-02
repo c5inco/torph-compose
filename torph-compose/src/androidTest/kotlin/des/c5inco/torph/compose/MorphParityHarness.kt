@@ -63,8 +63,7 @@ internal fun interface MorphSubject {
 internal val sharedSubject = MorphSubject { rememberTextMorphState() }
 internal val uncachedSubject = MorphSubject {
     val measurer = rememberTextMeasurer(cacheSize = 0)
-    val scope = androidx.compose.runtime.rememberCoroutineScope()
-    androidx.compose.runtime.remember(measurer) { TextMorphState(measurer, scope, IcuSegmenter()) }
+    rememberTextMorphState(measurer)
 }
 
 /**

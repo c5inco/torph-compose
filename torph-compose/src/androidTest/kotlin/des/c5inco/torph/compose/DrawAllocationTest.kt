@@ -47,9 +47,12 @@ class DrawAllocationTest {
             )
         }
         rule.mainClock.advanceTimeByFrame()
+        rule.waitForIdle()
         text = b
         // Warm-up: the diff frame plus a few animated frames (JIT, caches).
         repeat(10) { rule.mainClock.advanceTimeByFrame() }
+        rule.waitForIdle() // Android measure/layout is outside the virtual frame clock.
+        assertTrue("morph must start before allocation sampling", state.isAnimating)
         Runtime.getRuntime().gc()
         val frames = 60
         val before = allocatedBytes()
