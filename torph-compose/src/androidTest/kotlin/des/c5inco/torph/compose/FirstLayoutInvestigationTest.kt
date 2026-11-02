@@ -40,6 +40,7 @@ class FirstLayoutInvestigationTest {
         rule.runOnIdle {
             fun state(text: String, style: TextStyle = TextStyle(fontSize = 24.sp)) =
                 TextMorphState(measurer, scope, IcuSegmenter()).also {
+                    it.deferInitialPreparation = false // Explicit legacy segment-layout probe.
                     it.text = text; it.style = style
                     it.options = MorphOptions(segmentation = Segmentation.GRAPHEME)
                     it.measure(Constraints(maxWidth = 300), LayoutDirection.Ltr)
