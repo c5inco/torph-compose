@@ -5,11 +5,15 @@ import androidx.compose.runtime.remember
 import java.awt.GraphicsEnvironment
 import java.awt.Toolkit
 
-internal fun isDesktopReducedMotion(): Boolean {
-    if (GraphicsEnvironment.isHeadless()) return false
+internal fun isDesktopReducedMotion(
+    isHeadless: Boolean = GraphicsEnvironment.isHeadless(),
+    desktopProperty: (String) -> Any? = { Toolkit.getDefaultToolkit().getDesktopProperty(it) },
+): Boolean {
+    if (isHeadless) return false
     return try {
-        val gnomeAnimations = Toolkit.getDefaultToolkit().getDesktopProperty("gnome.Net/EnableAnimations")
-        gnomeAnimations == false || gnomeAnimations == 0
+        val gtkAnimations = desktopProperty("gnome.Gtk/EnableAnimations")
+            ?: desktopProperty("gnome.Net/EnableAnimations")
+        gtkAnimations == false || gtkAnimations == 0
     } catch (_: Exception) {
         false
     }
@@ -17,8 +21,9 @@ internal fun isDesktopReducedMotion(): Boolean {
 
 /**
  * Reads the desktop reduced-motion setting when exposed by the toolkit (such as
- * `gnome.Net/EnableAnimations` on Linux), defaulting to `false` elsewhere; call [TextMorph] with
- * `respectReducedMotion = false` or `disabled = true` to override it explicitly.
+ * `gnome.Gtk/EnableAnimations` or `gnome.Net/EnableAnimations` on Linux), defaulting to `false`
+ * elsewhere; call [TextMorph] with `respectReducedMotion = false` or `disabled = true` to override
+ * it explicitly.
  */
 @Composable
 public actual fun rememberReducedMotion(): Boolean = remember { isDesktopReducedMotion() }

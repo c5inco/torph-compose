@@ -57,6 +57,29 @@ class DesktopTextMorphTest {
     val rule = createComposeRule()
 
     @Test
+    fun desktopReducedMotionReadsGtkAndNetAnimationProperties() {
+        assertTrue(
+            isDesktopReducedMotion(
+                isHeadless = false,
+                desktopProperty = { key -> if (key == "gnome.Gtk/EnableAnimations") 0 else null },
+            ),
+        )
+        assertTrue(
+            isDesktopReducedMotion(
+                isHeadless = false,
+                desktopProperty = { key -> if (key == "gnome.Net/EnableAnimations") false else null },
+            ),
+        )
+        assertEquals(
+            false,
+            isDesktopReducedMotion(
+                isHeadless = false,
+                desktopProperty = { key -> if (key == "gnome.Gtk/EnableAnimations") 1 else null },
+            ),
+        )
+    }
+
+    @Test
     fun icuSegmenterHandlesGraphemeClustersAndComplexScripts() {
         val segmenter = IcuSegmenter()
         assertEquals(
