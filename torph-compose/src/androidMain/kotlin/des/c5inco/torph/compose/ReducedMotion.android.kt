@@ -19,7 +19,7 @@ public fun isReducedMotion(context: Context): Boolean {
 
 /** Reads the reduced-motion setting once per context; call [TextMorph] with `respectReducedMotion = false` to ignore it. */
 @Composable
-public fun rememberReducedMotion(): Boolean {
+public actual fun rememberReducedMotion(): Boolean {
     val context = LocalContext.current
     return remember(context) { isReducedMotion(context) }
 }

@@ -1,13 +1,10 @@
 package des.c5inco.torph.compose
 
-import android.os.Looper
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFontFamilyResolver
 import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.TextMeasurer
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.intl.LocaleList
@@ -20,7 +17,7 @@ internal const val SHARED_LAYOUT_CAPACITY = 256
 
 /**
  * Small LRU of environments, not layouts. Weak owners, resolvers and measurers prevent this
- * registry from extending the lifetime of a view or its text resources after its states disappear.
+ * registry from extending the lifetime of a view/window or its text resources after its states disappear.
  * Eviction only loses future sharing: existing states still own their measurer and live layouts.
  */
 internal class TextMeasurerPool(private val capacity: Int = 16) {
@@ -52,7 +49,7 @@ internal class TextMeasurerPool(private val capacity: Int = 16) {
         direction: LayoutDirection,
         locales: LocaleList,
     ): TextMeasurer {
-        check(Looper.myLooper() == Looper.getMainLooper()) { "Shared text measurers are main-thread confined" }
+        check(isMainUiThread()) { "Shared text measurers are main-thread confined" }
         entries.removeAll { it.owner.get() == null || it.resolver.get() == null || it.measurer.get() == null }
         val index = entries.indexOfFirst {
             it.owner.get() === owner && it.resolver.get() === resolver && it.density.get() == density &&
@@ -77,21 +74,25 @@ internal class TextMeasurerPool(private val capacity: Int = 16) {
 
 private val textMeasurerPool = TextMeasurerPool()
 
-/** Sharing is automatic within one Compose view and matching measurement environment. */
+/** Sharing is automatic within one Compose host surface and matching measurement environment. */
 @Composable
 internal fun rememberSharedTextMeasurer(): TextMeasurer {
-    val view = LocalView.current
+    val owner = currentMeasurerOwner()
     val resolver = LocalFontFamilyResolver.current
     val density = LocalDensity.current
     val direction = LocalLayoutDirection.current
-    LocalConfiguration.current // Re-read platform default locales when configuration changes.
     val locales = LocaleList.current
-    return remember(view, resolver, density, density.density, density.fontScale, direction, locales) {
-        if (Looper.myLooper() == Looper.getMainLooper()) {
-            textMeasurerPool.get(view, resolver, density, direction, locales)
+    return remember(owner, resolver, density, density.density, density.fontScale, direction, locales) {
+        if (isMainUiThread()) {
+            textMeasurerPool.get(owner, resolver, density, direction, locales)
         } else {
             // Background composition must not borrow a measurer that the UI thread may be using.
             TextMeasurer(resolver, density, direction, cacheSize = SHARED_LAYOUT_CAPACITY)
         }
     }
 }
+
+internal expect fun isMainUiThread(): Boolean
+
+@Composable
+internal expect fun currentMeasurerOwner(): Any

@@ -1,7 +1,5 @@
 package des.c5inco.torph.compose
 
-import android.util.Log
-
 /**
  * Opt-in timing breakdown for first layout, snaps, and text changes in [TextMorph].
  *
@@ -11,6 +9,8 @@ import android.util.Log
  * ```
  * adb logcat -s TextMorphPerf
  * ```
+ *
+ * On Desktop, breakdown lines are printed to standard output prefixed with [TAG].
  *
  * Off by default and effectively free when off (one boolean read per phase). Leave it off in
  * production: when on it calls [System.nanoTime] around every segment placement.
@@ -25,7 +25,7 @@ public object TextMorphDiagnostics {
     /** Controlled eager-renderer baseline for profiling. Captured when a state is created. */
     public var forceEagerPreparation: Boolean = false
 
-    /** Logcat tag for the breakdown lines. */
+    /** Tag for the breakdown lines. */
     public const val TAG: String = "TextMorphPerf"
 }
 
@@ -56,7 +56,7 @@ internal class MorphTimings {
     }
 
     fun log(totalNs: Long, chars: Int, segments: Int, persist: Int, enter: Int, exit: Int, phase: String = "change") {
-        Log.d(
+        logMorphDebug(
             TextMorphDiagnostics.TAG,
             "$phase chars=$chars segs=$segments (p=$persist e=$enter x=$exit) " +
                 "total=${ms(totalNs)} | measureText=${ms(measureText)} segment=${ms(segment)} " +
@@ -72,6 +72,12 @@ internal class MorphTimings {
 /** Separate from logging so trace benchmarks avoid log formatting and logcat overhead. */
 internal inline fun <T> morphTrace(name: String, block: () -> T): T {
     if (!TextMorphDiagnostics.traceSections) return block()
-    android.os.Trace.beginSection(name)
-    return try { block() } finally { android.os.Trace.endSection() }
+    beginMorphTrace(name)
+    return try { block() } finally { endMorphTrace() }
 }
+
+internal expect fun logMorphDebug(tag: String, message: String)
+
+internal expect fun beginMorphTrace(name: String)
+
+internal expect fun endMorphTrace()

@@ -24,8 +24,10 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
       - name: Core tests
         run: ./gradlew :torph-core:test
+      - name: Compose Desktop tests
+        run: ./gradlew :torph-compose:desktopTest
       - name: Build libraries, demo and benchmark
-        run: ./gradlew :torph-compose:assembleRelease :demo:assembleDebug :benchmark:assembleBenchmark
+        run: ./gradlew :torph-compose:assembleRelease :torph-compose:desktopJar :demo:assembleDebug :benchmark:assembleBenchmark
       # Publishing for real also validates the POMs, and keeps the source-build path
       # people are told to use in the README working.
       - name: Validate publishing

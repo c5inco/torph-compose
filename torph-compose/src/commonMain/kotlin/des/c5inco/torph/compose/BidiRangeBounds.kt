@@ -53,7 +53,10 @@ internal class BidiRangeBounds {
         val text = full.layoutInput.text.text
         // Keep native selection for line resets, non-monotonic spacing and replacement-span
         // candidates. These can change the relation between source offsets and visual runs.
-        if (full.lineCount != 1 || full.layoutInput.style.letterSpacing.value < 0f || text.isEmpty() ||
+        // Skiko's SkiaParagraph.getHorizontalPosition also ignores usePrimaryDirection when the
+        // preceding run matches the paragraph direction (such as level-2 LTR digits before level-1
+        // RTL spaces), so Desktop uses native getPathForRange directly.
+        if (!supportsSplitCaretHorizontalPosition || full.lineCount != 1 || full.layoutInput.style.letterSpacing.value < 0f || text.isEmpty() ||
             text.any { it.isSurrogate() || it == '\u200D' || it == '\uFE0E' || it == '\uFE0F' || it == '\u20E3' }) return
         baseLevel = if (full.getParagraphDirection(0) == ResolvedTextDirection.Rtl) 1 else 0
         val resolved = Bidi(text, if (baseLevel == 1) Bidi.DIRECTION_RIGHT_TO_LEFT else Bidi.DIRECTION_LEFT_TO_RIGHT)
@@ -100,3 +103,5 @@ internal class BidiRangeBounds {
         return if (downstream) leading[offset] else trailing[offset]
     }
 }
+
+internal expect val supportsSplitCaretHorizontalPosition: Boolean

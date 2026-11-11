@@ -7,6 +7,7 @@ issue before starting anything large.
 
 ```bash
 ./gradlew :torph-core:test          # pure-Kotlin tests, no device or Android SDK needed
+./gradlew :torph-compose:desktopTest # headless Compose UI tests on Desktop JVM
 ./gradlew :demo:installDebug        # the demo app
 ./gradlew publishLocal              # both libraries into ~/.m2, to try them in another project
 ```
