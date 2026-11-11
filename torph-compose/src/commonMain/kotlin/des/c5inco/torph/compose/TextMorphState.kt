@@ -767,7 +767,7 @@ public class TextMorphState internal constructor(
                 val diag = TextMorphDiagnostics.logTimings
                 val t0 = if (diag) System.nanoTime() else 0L
                 if (boundaryBoxes.size < (end - start) * 4) boundaryBoxes = FloatArray((end - start) * 4)
-                full.multiParagraph.fillBoundingBoxes(TextRange(start, end), boundaryBoxes, 0)
+                fillCharacterBoundingBoxes(full, TextRange(start, end), boundaryBoxes, 0)
                 if (diag) { timings.box += System.nanoTime() - t0; timings.boxCalls += end - start }
                 boxes = boundaryBoxes
                 boxStart = start
@@ -813,7 +813,7 @@ public class TextMorphState internal constructor(
         val reused = charBoxesFor?.let { reusableBoxPrefix(it, full) } ?: 0
         // copyOf keeps the reused prefix, which sits at the same indices in the new text.
         if (charBoxes.size < textLen * 4) charBoxes = charBoxes.copyOf(textLen * 4)
-        if (reused < textLen) full.multiParagraph.fillBoundingBoxes(TextRange(reused, textLen), charBoxes, reused * 4)
+        if (reused < textLen) fillCharacterBoundingBoxes(full, TextRange(reused, textLen), charBoxes, reused * 4)
         charBoxesFor = full
         if (diag) { timings.box += System.nanoTime() - t0; timings.boxCalls += textLen - reused }
         return charBoxes

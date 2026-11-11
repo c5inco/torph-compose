@@ -61,8 +61,8 @@ Note:
 
 ### Requirements
 
-- `minSdk` 24+, `compileSdk` 37+, AGP 9.1+, and Java 17 bytecode.
-- Built against Compose BOM `2026.09.00` (Compose 1.12); depends only on `foundation`, `animation`, `ui`, and `ui-text` (not Material).
+- Android (`minSdk` 24+, `compileSdk` 37+, AGP 9.1+) or Compose for Desktop (JVM 17+).
+- Built against Compose 1.12 (Compose BOM `2026.09.00` on Android, Compose Multiplatform `1.12.2` on Desktop); depends only on `foundation`, `animation`, `ui`, and `ui-text` (not Material).
 - `:torph-core` (`des.c5inco.torph:torph-core`) is pure Kotlin/JVM if you only want segmentation and diffing.
 
 ## Modules
@@ -70,7 +70,7 @@ Note:
 | Module | What | Depends on |
 | --- | --- | --- |
 | `:torph-core` | Pure Kotlin/JVM: segmentation, place-value number matching, diff, spring math. Unit-tested. | nothing |
-| `:torph-compose` | Android library: `TextMorph`, `rememberTextMorphState`, `Modifier.textMorph`, easing helpers. | core, Compose foundation/animation/ui-text |
+| `:torph-compose` | Kotlin Multiplatform library (Android + Desktop JVM): `TextMorph`, `rememberTextMorphState`, `Modifier.textMorph`, easing helpers. | core, Compose foundation/animation/ui-text |
 | `:demo` | Material 3 app mirroring torph.lochie.me: Playground, Numbers, Typing, Multi-line, Scripts, Interruption, Debug, Perf. | compose, Material 3 |
 
 ## API
@@ -161,6 +161,7 @@ Requires a JDK (uses a Java 17 toolchain) and, for Android modules, an Android S
 | `./gradlew torphCoordinates` | Print the Maven coordinates this checkout publishes. |
 | `./gradlew publishLocal` | Build both libraries into `~/.m2/repository`. |
 | `./gradlew :torph-core:test` | Core unit tests (pure JVM, no SDK needed). |
+| `./gradlew :torph-compose:desktopTest` | Compose UI and rendering tests on Desktop (headless JVM, no emulator needed). |
 | `./gradlew :torph-compose:assembleRelease` | Build the Android library AAR. |
 | `./gradlew :demo:installDebug` | Install the demo app on a connected device or emulator. |
 | `./gradlew :torph-compose:connectedDebugAndroidTest` | Compose instrumentation tests (includes `DrawAllocationTest`). |
